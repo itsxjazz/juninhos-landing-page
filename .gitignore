@@ -1,0 +1,16 @@
+# sistemas operacionais (arquivos inúteis de cache)
+.DS_Store
+Thumbs.db
+
+# configurações do editor
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# se utilizar node.js no projeto futuramente
+node_modules/
+dist/
+.env
