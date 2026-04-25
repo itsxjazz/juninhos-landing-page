@@ -10,7 +10,7 @@ Thumbs.db
 *.njsproj
 *.sln
 
-# se utilizar node.js no projeto futuramente
+#node.js 
 node_modules/
 dist/
 .env
