@@ -100,14 +100,14 @@ const Renderers = { // Funções para renderizar dados na tela, incluindo skelet
                         <h3>${p.titulo}</h3>
                         <p>${p.descricao}</p>
                         
-                        <div style="margin-top: 1rem; font-size: 0.85rem; color: var(--text-muted);">
+                        <div class="project-stack">
                             <strong>Stack:</strong> ${p.stack.join(', ')}
                         </div>
-                        <div style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-muted);">
+                        <div class="project-members">
                             <strong>Membros:</strong> ${p.membros.join(', ')}
                         </div>
 
-                        <div class="card-footer" style="margin-top: 1.5rem; border-top: 1px solid var(--border); padding-top: 1rem;">
+                        <div class="card-footer">
                             ${p.links.deploy ? `<a href="${p.links.deploy}" target="_blank" class="link-btn primary">Deploy</a>` : ''}
                             ${p.links.github ? `<a href="${p.links.github}" target="_blank" class="link-btn secondary">GitHub</a>` : ''}
                         </div>
@@ -168,8 +168,8 @@ const Handlers = { // Funções para lidar com eventos e formulários
             formWrapper.innerHTML = `
                 <div class="success-state">
                     <h3>Tudo certo!</h3>
-                    <p>${res.message}</p>
-                    <button class="nav-cta" style="width:100%; margin-top:2rem;" onclick="ModalLogic.close()">Entendido</button>
+                    <p class="success-msg">${res.message}</p>
+                    <button class="nav-cta btn-success-close" onclick="ModalLogic.close()">Entendido</button>
                 </div>
             `;
         } catch (err) {
