@@ -5,69 +5,83 @@ const { google } = require('googleapis');
 const mongoose = require('mongoose');
 const nodemailer = require('nodemailer');
 const Waitlist = require('./models/Waitlist');
+const User = require('./models/User');
+const authController = require('./controllers/authController');
 const path = require('path');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-mongoose.connect(process.env.MONGO_URI, { // Configurações de conexão para evitar timeouts
-    serverSelectionTimeoutMS: 15000,
-    connectTimeoutMS: 15000,
-})
+mongoose
+    .connect(process.env.MONGO_URI, {
+        // Configurações de conexão para evitar timeouts
+        serverSelectionTimeoutMS: 15000,
+        connectTimeoutMS: 15000
+    })
     .then(() => console.log('Conectado ao MongoDB Atlas'))
-    .catch(err => console.error('Erro ao conectar ao MongoDB:', err.message));
+    .catch((err) => console.error('Erro ao conectar ao MongoDB:', err.message));
 
-const auth = new google.auth.GoogleAuth({ // Configurações para autenticação com a API do Google Sheets
+const auth = new google.auth.GoogleAuth({
+    // Configurações para autenticação com a API do Google Sheets
     keyFile: path.join(__dirname, 'credentials.json'),
-    scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
+    scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly']
 });
 
-async function getSheetsClient() { // Função para obter o cliente autenticado do Google Sheets
+async function getSheetsClient() {
+    // Função para obter o cliente autenticado do Google Sheets
     const authClient = await auth.getClient();
     return google.sheets({ version: 'v4', auth: authClient });
 }
 
-async function getSheetData(range) { // Função para buscar dados da planilha de projetos e aulas, com tratamento de erros 
+async function getSheetData(range) {
+    // Função para buscar dados da planilha de projetos e aulas, com tratamento de erros
     try {
-        const sheets = await getSheetsClient(); 
+        const sheets = await getSheetsClient();
         const response = await sheets.spreadsheets.values.get({
             spreadsheetId: process.env.GOOGLE_SHEET_ID,
-            range: range,
+            range: range
         });
         return response.data.values || [];
     } catch (error) {
-        console.error(`Erro ao buscar dados da planilha (${range}):`, error.message);
-        if (error.message.includes('Method doesn\'t allow unregistered callers')) {
+        console.error(
+            `Erro ao buscar dados da planilha (${range}):`,
+            error.message
+        );
+        if (
+            error.message.includes("Method doesn't allow unregistered callers")
+        ) {
         }
         return [];
     }
 }
 
-const transporter = nodemailer.createTransport({ // Configurações para envio de e-mails usando o Nodemailer
+const transporter = nodemailer.createTransport({
+    // Configurações para envio de e-mails usando o Nodemailer
     service: 'gmail',
     auth: {
         user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-    },
+        pass: process.env.EMAIL_PASS
+    }
 });
 
-app.get('/api/projects', async (req, res) => { // Endpoint para buscar os projetos da planilha, com tratamento de erros e resposta adequada
+app.get('/api/projects', async (req, res) => {
+    // Endpoint para buscar os projetos da planilha, com tratamento de erros e resposta adequada
     try {
         const rows = await getSheetData('Gestão de Projetos!A2:H');
         const projects = rows
-            .filter(row => row[0]) 
-            .map(row => ({
+            .filter((row) => row[0])
+            .map((row) => ({
                 titulo: row[0] || 'Sem título',
                 descricao: row[1] || '',
                 status: row[2] || 'Em andamento',
                 links: {
                     imagem: row[3] || '',
                     deploy: row[4] || '',
-                    github: row[5] || '',
+                    github: row[5] || ''
                 },
-                stack: row[6] ? row[6].split(',').map(s => s.trim()) : [],
-                membros: row[7] ? row[7].split(',').map(m => m.trim()) : [],
+                stack: row[6] ? row[6].split(',').map((s) => s.trim()) : [],
+                membros: row[7] ? row[7].split(',').map((m) => m.trim()) : []
             }));
         res.json(projects);
     } catch (error) {
@@ -79,15 +93,15 @@ app.get('/api/classes', async (req, res) => {
     try {
         const rows = await getSheetData('Gestão de Aula!A2:G');
         const classes = rows
-            .filter(row => row[0]) // Ignora linhas sem título
-            .map(row => ({
+            .filter((row) => row[0]) // Ignora linhas sem título
+            .map((row) => ({
                 titulo: row[0] || 'Sem título',
                 desc: row[1] || '',
                 mentor: row[2] || '',
                 data: row[3] || '',
                 status: row[4] || 'Próxima',
                 canal: row[5] || '',
-                link: row[6] || '',
+                link: row[6] || ''
             }));
         res.json(classes);
     } catch (error) {
@@ -95,40 +109,62 @@ app.get('/api/classes', async (req, res) => {
     }
 });
 
-app.post('/api/waitlist', async (req, res) => { // Endpoint para processar a inscrição na lista de espera
+app.post('/api/waitlist', async (req, res) => {
+    // Endpoint para processar a inscrição na lista de espera
     try {
         const { name, phone, level, areas, technologies } = req.body;
 
-        res.status(201).json({ message: 'Inscrição realizada com sucesso! Nossa equipe logo entrará em contato.' });
+        res.status(201).json({
+            message:
+                'Inscrição realizada com sucesso! Nossa equipe logo entrará em contato.'
+        });
 
         const mailOptions = {
             from: process.env.EMAIL_USER,
             to: process.env.NOTIFY_EMAIL,
             subject: 'Novo Interessado na Juninhos!',
-            text: `Novo cadastro realizado!\n\n` +
+            text:
+                `Novo cadastro realizado!\n\n` +
                 `Nome: ${name}\n` +
                 `Telefone: ${phone}\n` +
                 `Nível: ${level}\n` +
                 `Áreas: ${areas.join(', ')}\n` +
-                `Tecnologias: ${technologies}`,
+                `Tecnologias: ${technologies}`
         };
 
-        transporter.sendMail(mailOptions, (error, info) => { // Callback para logar o resultado do envio de e-mail
+        transporter.sendMail(mailOptions, (error, info) => {
+            // Callback para logar o resultado do envio de e-mail
             if (error) console.error(' Erro ao enviar e-mail:', error);
             else console.log('E-mail enviado com sucesso:', info.response);
         });
 
-        const newLead = new Waitlist({ name, phone, level, areas, technologies });
-        newLead.save()
+        const newLead = new Waitlist({
+            name,
+            phone,
+            level,
+            areas,
+            technologies
+        });
+        newLead
+            .save()
             .then(() => console.log('Lead salvo no MongoDB'))
-            .catch(err => console.error('Erro MongoDB:', err.message));
-
+            .catch((err) => console.error('Erro MongoDB:', err.message));
     } catch (error) {
         console.error('Erro crítico:', error);
         if (!res.headersSent) {
             res.status(500).json({ error: 'Erro ao processar sua inscrição.' });
         }
     }
+});
+
+app.post('/api/auth/register', async (req, res) => {
+    // Endpoint para registro de novos usuários, delegando a lógica para o authController
+    await authController.register(req, res);
+});
+
+app.post('/api/auth/login', async (req, res) => {
+    // Endpoint para login de usuários, delegando a lógica para o authController
+    await authController.login(req, res);
 });
 
 const PORT = process.env.PORT || 5000; // Inicia o servidor na porta definida nas variáveis de ambiente ou na porta 5000 por padrão

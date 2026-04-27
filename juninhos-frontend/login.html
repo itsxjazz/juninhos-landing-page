@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Login - Juninhos</title>
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <!-- Nav -->
+        <header class="main-header">
+            <div class="header-content container">
+                <div class="logo">Juninhos</div>
+                <nav aria-label="Navegação principal">
+                    <ul class="nav-menu">
+                        <li><a href="index.html#about">Sobre</a></li>
+                        <li><a href="index.html#ecosystem">Ecossistema</a></li>
+                        <li><a href="index.html#projects">Projetos</a></li>
+                        <li><a href="index.html#corporate">Empresas</a></li>
+                        <li>
+                            <a href="index.html#community">Redes Sociais</a>
+                        </li>
+                        <li>
+                            <button class="btn-open-modal nav-cta">
+                                Entrar na Lista
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <main>
+            <section id="login" class="login-section container">
+                <h1 class="section-title">Login</h1>
+                <form id="login-form" class="login-form">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required />
+
+                    <label for="password">Senha:</label>
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        required
+                    />
+
+                    <button type="submit" class="btn-submit">Entrar</button>
+                </form>
+
+                <div id="forgot-password" class="forgot-password">
+                    <a href="#">Esqueci minha senha</a>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="main-footer">
+            <div class="container footer-grid">
+                <div class="footer-brand">
+                    <div class="logo">Juninhos</div>
+                    <p>
+                        A comunidade onde a teoria encontra a prática através do
+                        código e da colaboração coletiva.
+                    </p>
+                </div>
+
+                <div class="footer-links">
+                    <h4>Navegação</h4>
+                    <ul>
+                        <li><a href="#about">Sobre</a></li>
+                        <li><a href="#ecosystem">Ecossistema</a></li>
+                        <li><a href="#projects">Projetos</a></li>
+                        <li><a href="#corporate">Empresas</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-socials">
+                    <h4>Redes Sociais</h4>
+                    <ul>
+                        <li>
+                            <a
+                                href="https://linkedin.com/company/juninhos"
+                                target="_blank"
+                                >LinkedIn</a
+                            >
+                        </li>
+                        <li>
+                            <a href="https://x.com/devsjuninhos" target="_blank"
+                                >Twitter (X)</a
+                            >
+                        </li>
+                        <li>
+                            <a
+                                href="https://www.instagram.com/devsjuninhos/"
+                                target="_blank"
+                                >Instagram</a
+                            >
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom container">
+                <p>&copy; 2026 Juninhos. Desenvolvido pela nossa comunidade.</p>
+            </div>
+
+            <div id="loading" class="loading-overlay hidden">
+                <div class="spinner"></div>
+                <p>Carregando...</p>
+            </div>
+
+            <script src="main.js"></script>
+        </footer>
+    </body>
+</html>
