@@ -1,0 +1,10 @@
+*{
+    font-family: Poppins;
+    font-size: medium;
+    
+}
+
+div.logo{
+    color: white;
+    background-color: black;
+}
