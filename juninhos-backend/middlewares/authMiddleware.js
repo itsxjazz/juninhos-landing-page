@@ -2,40 +2,50 @@ const jwt = require('jsonwebtoken');
 
 // Middleware de autenticação para proteger rotas que exigem autenticação, verificando a presença e validade do token JWT
 const authMiddleware = (req, res, next) => {
-    const authHeader = req.headers.authorization;
-
-    // Verifica se o token de autenticação está presente no cabeçalho da requisição
-    if (!authHeader) {
-        return res
-            .status(401)
-            .json({
-                error: 'ACESSO NEGADO. Token de autenticação não fornecido.'
-            });
-    }
-
-    // Extrai o token do cabeçalho (formato "Bearer <token>")
-    const token = authHeader.split(' ')[1];
-
-    if (!token) {
-        return res
-            .status(401)
-            .json({ error: 'ACESSO NEGADO. Token mal formado.' });
-    }
-
     try {
-        // Verifica a validade do token usando a chave secreta definida nas variáveis de ambiente
-        const JWT_SECRET = process.env.JWT_SECRET;
-        const verified = jwt.verify(token, JWT_SECRET);
+        let token;
+        const authHeader = req.headers.authorization;
+
+        // Verifica se o token de autenticação está presente no cabeçalho da requisição
+        // e se começa com 'Bearer '
+        if (authHeader && authHeader.startsWith('Bearer ')) {
+            // Extrai o token do cabeçalho (formato "Bearer <token>")
+            token = authHeader.split(' ')[1];
+        }
+
+        // Valida se o token foi extraído corretamente
+        if (!token) {
+            return res.status(401).json({
+                message: 'Acesso NEGADO. Token não fornecido.'
+            });
+        }
+
+        // Verifica se é válido ou não expirado e decodifica o token
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+        // Busca usuário no banco
+        // Verificando para caso tenha sido deletado ou desativado
+        const user = User.findById(decoded.sub).select('-password');
+
+        // Valida se encontrou o usuário
+        if (!user) {
+            return res.status(401).json({
+                message: 'Usuário não encontrado.'
+            });
+        }
 
         // Se o token for válido, adiciona as informações do usuário à requisição e chama o próximo middleware ou rota
         req.user = verified;
         next();
     } catch (error) {
-        return res
-            .status(401)
-            .json({
-                error: 'ACESSO NEGADO. Token de autenticação inválido ou expirado.'
-            });
+        if (err.name == 'TokenExpiredError') {
+            return res.status(401).json({ message: 'Token expirado' });
+        }
+
+        if (err.name === 'JsonWebTokenError') {
+            return res.status(401).json({ message: 'Token inválido' });
+        }
+        res.status(500).json({ message: 'Erro interno' });
     }
 };
 
