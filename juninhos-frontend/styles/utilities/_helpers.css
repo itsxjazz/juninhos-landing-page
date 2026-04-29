@@ -1,0 +1,13 @@
+/* Utilizado amplamente no JS para alternar visibilidade */
+.hidden {
+    display: none !important;
+}
+
+/* Utilitários extras de texto */
+.text-center {
+    text-align: center;
+}
+
+.mt-2 {
+    margin-top: 2rem;
+}

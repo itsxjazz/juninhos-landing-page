@@ -1,0 +1,40 @@
+.main-header {
+    background-color: var(--clr-surface);
+    box-shadow: var(--shadow-sm);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 80px;
+}
+
+.logo img {
+    height: 40px;
+}
+
+.nav-menu {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.nav-menu a {
+    font-weight: 500;
+    color: var(--clr-text-muted);
+    transition: color var(--transition-fast);
+}
+
+.nav-menu a:hover {
+    color: var(--clr-primary);
+}
+
+@media (max-width: 768px) {
+    .nav-menu {
+        display: none; /* Em um projeto real, aqui entraria um menu hambúrguer */
+    }
+}

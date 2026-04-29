@@ -1,0 +1,33 @@
+:root {
+    /* Cores Principais */
+    --clr-primary: #6C63FF;
+    --clr-primary-dark: #5046e5;
+    --clr-secondary: #2A2D34;
+    --clr-accent: #00E676;
+    
+    /* Backgrounds e Superfícies */
+    --clr-bg: #F8F9FA;
+    --clr-surface: #FFFFFF;
+    --clr-surface-alt: #E9ECEF;
+    
+    /* Textos */
+    --clr-text-main: #333333;
+    --clr-text-muted: #6C757D;
+    
+    /* Status (Refletindo o JS) */
+    --clr-success: #28a745;
+    --clr-error: #dc3545;
+    
+    /* Tipografia */
+    --font-main: 'Poppins', sans-serif;
+    
+    /* Sombras e Bordas */
+    --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+    --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+    --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    
+    /* Transições */
+    --transition-fast: 0.2s ease-in-out;
+}

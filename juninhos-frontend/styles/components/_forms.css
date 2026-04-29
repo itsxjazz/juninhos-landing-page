@@ -1,0 +1,40 @@
+.form-group {
+    margin-bottom: 1.5rem;
+    border: none;
+}
+
+.form-group label, .form-group legend {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+input[type="text"], input[type="tel"], textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--clr-surface-alt);
+    border-radius: var(--radius-md);
+    font-family: var(--font-main);
+}
+
+.checkbox-grid, .radio-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 0.5rem;
+}
+
+.checkbox-grid label, .radio-group label {
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.form-feedback {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: var(--radius-md);
+    text-align: center;
+}
+.form-feedback.success { background-color: #d4edda; color: var(--clr-success); }
+.form-feedback.error { background-color: #f8d7da; color: var(--clr-error); }
