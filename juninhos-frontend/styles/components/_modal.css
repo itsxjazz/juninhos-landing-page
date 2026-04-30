@@ -31,3 +31,15 @@
     background: transparent;
     color: var(--clr-text-muted);
 }
+
+@media (max-width: 768px) {
+    .modal-content {
+        padding: 1.5rem 1rem; /* Reduz o respiro interno no mobile */
+        max-height: 95vh;
+    }
+    
+    .modal-close {
+        top: 0.5rem;
+        right: 1rem;
+    }
+}

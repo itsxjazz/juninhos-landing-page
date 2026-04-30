@@ -33,8 +33,107 @@
     color: var(--clr-primary);
 }
 
+/* --- ESTILOS DO MENU MOBILE --- */
+.mobile-menu-toggle {
+    display: none; /* Escondido no desktop */
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    z-index: 101; /* Ficar acima do menu aberto */
+}
+
+.hamburger {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background-color: var(--clr-text-main);
+    position: relative;
+    transition: background-color var(--transition-fast);
+}
+
+.hamburger::before, .hamburger::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 3px;
+    background-color: var(--clr-text-main);
+    left: 0;
+    transition: transform var(--transition-fast), top var(--transition-fast);
+}
+
+.hamburger::before { top: -8px; }
+.hamburger::after { top: 8px; }
+
+/* Animação transformando hambúrguer em X */
+.mobile-menu-toggle.active .hamburger { background-color: transparent; }
+.mobile-menu-toggle.active .hamburger::before { transform: rotate(45deg); top: 0; }
+.mobile-menu-toggle.active .hamburger::after { transform: rotate(-45deg); top: 0; }
+
 @media (max-width: 768px) {
+    .mobile-menu-toggle {
+        display: block; /* Mostra o botão no mobile */
+        z-index: 1000;
+        position: relative;
+    }
+    
     .nav-menu {
-        display: none; /* Em um projeto real, aqui entraria um menu hambúrguer */
+        position: fixed;
+        top: 80px; 
+        right: -100%; 
+        width: 100%;
+        height: calc(100vh - 80px);
+        background-color: var(--clr-surface);
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 2rem;
+
+        transition: right 0.3s ease-in-out;
+        z-index: 999;
+    }
+    
+    .nav-menu li {
+        width: 100%;
+        text-align: center;
+    }
+
+    .nav-menu a {
+        font-size: 1.5rem;
+        display: block;
+        width: 100%;
+    }
+    /* Classe adicionada pelo JS para mostrar o menu */
+    .nav-menu.active {
+        right: 0; 
+    }
+
+   
+    .nav-menu .nav-cta {
+        width: min(80%, 300px);
+        margin: 0 auto;
+    }
+    
+    .nav-menu::before {
+        content: '';
+        position: fixed;
+        top: 80px;
+        left: 0;
+        width: 100vw;
+        height: calc(100vh - 80px);
+        background-color: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(2px);
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease-in-out;
+        z-index: -1; 
+    }
+
+    .nav-menu.active::before {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(-100vw); 
     }
 }

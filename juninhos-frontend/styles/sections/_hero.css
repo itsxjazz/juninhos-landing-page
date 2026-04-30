@@ -7,6 +7,12 @@
     justify-content: center;
 }
 
+.hero-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .hero-title {
     font-size: clamp(2rem, 5vw, 3.5rem);
     font-weight: 700;
@@ -19,5 +25,5 @@
     font-size: 1.2rem;
     color: var(--clr-text-muted);
     max-width: 600px;
-    margin-bottom: 2rem;
+    margin-bottom: 0 auto 2rem;
 }

@@ -7,30 +7,43 @@ button {
 }
 
 .primary-cta, .nav-cta, .btn-submit, .link-btn.primary {
-    background-color: var(--clr-primary);
-    color: #fff;
-    padding: 0.75rem 1.5rem;
+    background-color: var(--clr-btn-primary);
+    color: var(--clr-btn-text);
+    padding: 0.8rem 1.8rem;
     border-radius: var(--radius-md);
     font-weight: 600;
     text-align: center;
     display: inline-block;
+    border: 2px solid transparent;
+    transition: all var(--transition-fast);
+    box-shadow: var(--shadow-sm);
 }
 
 .primary-cta:hover, .nav-cta:hover, .btn-submit:hover, .link-btn.primary:hover {
-    background-color: var(--clr-primary-dark);
+    background-color: var(--clr-btn-primary-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--btn-glow, var(--shadow-md));
+}
+
+/* Botão Secundário (ex: GitHub ou links menos importantes) */
+.link-btn.secondary {
+    background-color: var(--clr-btn-secondary);
+    color: var(--clr-text-main);
+    padding: 0.8rem 1.8rem;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    transition: all var(--transition-fast);
+}
+
+.link-btn.secondary:hover {
+    background-color: var(--clr-btn-secondary-hover);
     transform: translateY(-2px);
 }
 
-.btn-submit:disabled {
-    background-color: var(--clr-text-muted);
-    cursor: not-allowed;
-    transform: none;
-}
-
-.link-btn.secondary {
-    background-color: var(--clr-surface-alt);
-    color: var(--clr-text-main);
-    padding: 0.75rem 1.5rem;
-    border-radius: var(--radius-md);
-    font-weight: 600;
+/* Botão de Sucesso (usado no feedback do formulário via JS) */
+.btn-success-close {
+    background-color: var(--clr-accent);
+    color: #0D0B14; /* Texto escuro para alto contraste no verde */
+    margin-top: 1rem;
+    width: 100%;
 }

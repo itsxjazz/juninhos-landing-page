@@ -16,7 +16,11 @@ const UI = { // Cache de elementos do DOM para fácil acesso e manipulação
     formFeedback: document.getElementById('form-feedback'),
     modal: document.getElementById('modal'),
     closeModalBtn: document.getElementById('btn-close-modal'),
-    openModalBtns: document.querySelectorAll('.btn-open-modal')
+    openModalBtns: document.querySelectorAll('.btn-open-modal'),
+    mobileMenuBtn: document.getElementById('btn-mobile-menu'),
+    navMenu: document.getElementById('nav-menu'),
+    navLinks: document.querySelectorAll('.nav-menu a'),
+    phoneInput: document.getElementById('phone')
 };
 
 const AppUtils = { // Funções auxiliares para manipulação de UI e formatação de dados
@@ -183,6 +187,36 @@ const Handlers = { // Funções para lidar com eventos e formulários
     }
 };
 
+const NavLogic ={ // Lóigica de funcionamento do menu para destktop / celular
+    toggleMenu:() =>{
+        UI.navMenu.classList.toggle('active');
+        UI.mobileMenuBtn.classList.toggle('active');
+
+        if (UI.navMenu.classList.contains('active')) {
+            document.body.style.overflow= 'hidden';
+        } else {
+            document.body.style.overflow ='auto';
+        }
+    },
+
+    closeMenu: ()=> {
+        UI.navMenu.classList.remove('active');
+        UI.mobileMenuBtn.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
+
+};
+
+const FormMasks = {
+    phone: (value) => {
+        if (!value) return "";
+        value = value.replace(/\D/g, ""); // Remove tudo que não é número
+        value = value.replace(/(\d{2})(\d)/, "($1) $2"); // Coloca parênteses no DDD
+        value = value.replace(/(\d{5})(\d)/, "$1-$2"); // Coloca o hífen no número
+        return value.substring(0, 15); // Limita ao tamanho máximo
+    }
+};
+
 async function init() { // Função de inicialização para carregar os projetos e aulas, com retry automático em caso de falha
     Renderers.showSkeletons(UI.projectsContainer, 3);
     Renderers.showSkeletons(UI.classesContainer, 2);
@@ -200,4 +234,29 @@ async function init() { // Função de inicialização para carregar os projetos
 UI.openModalBtns.forEach(btn => btn.addEventListener('click', ModalLogic.open));
 UI.closeModalBtn.addEventListener('click', ModalLogic.close);
 UI.waitlistForm.addEventListener('submit', Handlers.handleFormSubmit);
+window.addEventListener('DOMContentLoaded', init);
+
+UI.phoneInput.addEventListener('input', (e) => {
+    e.target.value = FormMasks.phone(e.target.value);
+});
+
+if (UI.mobileMenuBtn) {
+    UI.mobileMenuBtn.addEventListener('click', NavLogic.toggleMenu);
+};
+
+UI.navLinks.forEach(link =>{
+    link.addEventListener('click', NavLogic.closeMenu);
+});
+
+const navCtaBtn = document.querySelector('.nav-menu .nav-cta');
+if (navCtaBtn) {
+    navCtaBtn.addEventListener('click', NavLogic.closeMenu);
+};
+
+UI.navMenu.addEventListener('click',(e)=>{
+    if(e.target=== UI.navMenu){
+        NavLogic.closeMenu();
+    };
+});
+
 window.addEventListener('DOMContentLoaded', init);
