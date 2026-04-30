@@ -9,7 +9,6 @@ body {
     background-color: var(--clr-bg);
     color: var(--clr-text-main);
     line-height: 1.6;
-    -webkit-font-smoothing: antialiased;
 }
 
 img {

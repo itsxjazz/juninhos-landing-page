@@ -40,7 +40,7 @@ section {
 }
 
 .corporate-card p {
-    margin-bottom: 2.5rem; /* Aumenta o padding entre o texto e o botão de e-mail */
+    margin-bottom: 2.5rem; 
     font-size: 1.1rem;
     max-width: 600px;
     margin-left: auto;

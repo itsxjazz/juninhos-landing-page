@@ -34,7 +34,7 @@
 
 @media (max-width: 768px) {
     .modal-content {
-        padding: 1.5rem 1rem; /* Reduz o respiro interno no mobile */
+        padding: 1.5rem 1rem; 
         max-height: 95vh;
     }
     

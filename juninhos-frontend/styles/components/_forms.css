@@ -44,7 +44,6 @@ input[type="text"], input[type="tel"], textarea {
     height: 120px;    
     resize: none;      
     
-    /* Mantendo o padrão visual já estabelecido */
     padding: 0.75rem;
     border: 1px solid var(--clr-surface-alt);
     border-radius: var(--radius-md);
@@ -53,7 +52,6 @@ input[type="text"], input[type="tel"], textarea {
     color: var(--clr-text-main);
 }
 
-/* Opcional: Adicionar um foco visual para destacar a digitação */
 #technologies:focus {
     outline: none;
     border-color: var(--clr-primary);

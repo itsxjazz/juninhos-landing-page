@@ -1,17 +1,17 @@
 :root {
     /* Cores Principais */
-    ---clr-primary: #A855F7; /* Roxo vibrante inspirado no gradiente direito da logo */
+    ---clr-primary: #A855F7; 
     --clr-primary-dark: #8B5CF6;
     --clr-secondary: #13101C;
     --clr-accent: #00FF9D;
     
     /* Backgrounds e Superfícies */
-    --clr-bg: #0D0B14; /* Fundo quase preto, com um leve toque de roxo */
-    --clr-surface: #1E1A29; /* Cards e Header ligeiramente mais claros que o fundo */
+    --clr-bg: #0D0B14; 
+    --clr-surface: #1E1A29; 
     --clr-surface-alt: #2D2442;
     
     /* Textos */
-    --clr-text-main: #F3F4F6; /* Branco gelo para não cansar a vista */
+    --clr-text-main: #F3F4F6; 
     --clr-text-muted: #9CA3AF;
     
     /* Status (Refletindo o JS) */
@@ -38,8 +38,8 @@
     :root {
         /* Cores da Logo - Dark Mode (Efeito Neon) */
         --clr-btn-primary: #A855F7; 
-        --clr-btn-primary-hover: #BC7AFA; /* No escuro, o hover brilha mais */
-        --clr-btn-secondary: #2D2442;     /* Roxo acinzentado profundo */
+        --clr-btn-primary-hover: #BC7AFA; 
+        --clr-btn-secondary: #2D2442;     
         --clr-btn-secondary-hover: #3D3259;
         
         /* Glow effect para o modo escuro */

@@ -43,7 +43,7 @@ button {
 /* Botão de Sucesso (usado no feedback do formulário via JS) */
 .btn-success-close {
     background-color: var(--clr-accent);
-    color: #0D0B14; /* Texto escuro para alto contraste no verde */
+    color: #0D0B14; 
     margin-top: 1rem;
     width: 100%;
 }
