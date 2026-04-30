@@ -203,6 +203,25 @@ const NavLogic ={ // Lóigica de funcionamento do menu para destktop / celular
         UI.navMenu.classList.remove('active');
         UI.mobileMenuBtn.classList.remove('active');
         document.body.style.overflow = 'auto';
+    },
+
+    scrollToSection: (e) => {
+        e.preventDefault();
+        const targetId = e.currentTarget.getAttribute('href');
+        const targetSection = document.querySelector(targetId);
+        
+        if (targetSection) {
+            const headerHeight = 80; 
+            const sectionPosition = targetSection.offsetTop - headerHeight;
+
+            window.scrollTo({
+                top: sectionPosition,
+                behavior: 'smooth'
+            });
+
+            
+            NavLogic.closeMenu();
+        }
     }
 
 };
