@@ -2,43 +2,45 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 
-const UserSchema = new mongoose.Schema({
-    // Define o esquema para a coleção de usuários, que é usada para armazenar informações sobre os usuários do sistema
-    name: {
-        type: String,
-        required: [true, 'Nome é obrigatório'],
-        trim: true,
-        minlength: [2, 'Mínimo 2 caracteres']
-    },
-    email: {
-        type: String,
-        required: [, 'E-mail é obrigatório'],
-        unique: true,
-        lowercase: true,
-        match: [/^\S+@\S+\.\S+$/, 'Email inválido']
-    },
-    password: {
-        type: String,
-        required: [true, 'Senha é obrigatória'],
-        minlength: [6, 'Mínimo 6 caracteres']
-    },
-    role: {
-        type: String,
-        required: true,
-        enum: ['admin', 'user'],
-        default: 'user'
+const UserSchema = new mongoose.Schema(
+    {
+        // Define o esquema para a coleção de usuários, que é usada para armazenar informações sobre os usuários do sistema
+        name: {
+            type: String,
+            required: [true, 'Nome é obrigatório'],
+            trim: true,
+            minlength: [2, 'Mínimo 2 caracteres']
+        },
+        email: {
+            type: String,
+            required: [, 'E-mail é obrigatório'],
+            unique: true,
+            lowercase: true,
+            match: [/^\S+@\S+\.\S+$/, 'Email inválido']
+        },
+        password: {
+            type: String,
+            required: [true, 'Senha é obrigatória'],
+            minlength: [6, 'Mínimo 6 caracteres']
+        },
+        role: {
+            type: String,
+            required: true,
+            enum: ['admin', 'user'],
+            default: 'user'
+        },
+        passwordResetToken: {
+            type: String,
+            select: false
+        },
+        passwordResetExpires: {
+            type: Date,
+            select: false
+        }
     },
     // Cria createdAt e UpdatedAt
-    timestamps: true,
-    passwordResetToken: {
-        type: String,
-        select: false
-    },
-    passwordResetExpires: {
-        type: Date,
-        select: false
-    }
-});
+    { timestamps: true }
+);
 
 UserSchema.pre('save', async function (next) {
     // Middleware para hash da senha antes de salvar o usuário no banco de dados, garantindo segurança das senhas armazenadas

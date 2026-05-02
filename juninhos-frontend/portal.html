@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Portal Juninhos Área Restrita</title>
+
+        <link rel="stylesheet" href="./styles/main.css" />
+    </head>
+    <body>
+        <div id="loading" class="hidden loading-overlay">
+            <div class="spinner"></div>
+            <p>Carregando dados protegidos...</p>
+        </div>
+
+        <header class="portal-header">
+            <div class="logo">Portal</div>
+            <nav>
+                <button id="btn-logout" class="btn-outline">
+                    Sair do Sistema
+                </button>
+            </nav>
+        </header>
+
+        <main class="container">
+            <section class="welcome-section">
+                <h1>Bem-vindo à sua área de membros!</h1>
+                <p>
+                    Aqui estão os materiais exclusivos liberados para o seu
+                    perfil.
+                </p>
+
+                <button class="btn-open-modal btn-primary">
+                    Inscrever-se na Monitoria
+                </button>
+            </section>
+
+            <section class="content-section">
+                <h2>Meus Projetos</h2>
+
+                <div id="projects-container" class="grid-container">
+                </div>
+            </section>
+
+            <section class="content-section">
+                <h2>Aulas ao Vivo e Gravações</h2>
+
+                <div id="classes-container" class="grid-container">
+                </div>
+            </section>
+        </main>
+
+        <div id="modal" class="hidden modal-backdrop">
+            <div class="modal-content form-wrapper">
+                <button id="btn-close-modal" class="close-btn">&times;</button>
+
+                <h2>Lista de Espera</h2>
+                <p>Preencha os dados para entrar na fila da próxima turma.</p>
+
+                <div id="form-feedback" class="hidden form-feedback"></div>
+
+
+        <script src="main.js"></script>
+        <script src="./js/portal.js" defer></script>
+    </body>
+</html>

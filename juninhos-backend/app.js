@@ -4,10 +4,13 @@ const cors = require('cors');
 const { google } = require('googleapis');
 const mongoose = require('mongoose');
 const nodemailer = require('nodemailer');
+const path = require('path');
+
 const Waitlist = require('./models/Waitlist');
 const User = require('./models/User');
+
 const authController = require('./controllers/authController');
-const path = require('path');
+const authMiddleware = require('./middlewares/authMiddleware');
 
 const app = express();
 app.use(cors());
@@ -157,14 +160,35 @@ app.post('/api/waitlist', async (req, res) => {
     }
 });
 
-app.post('/api/auth/register', async (req, res) => {
+app.post('/api/register', async (req, res) => {
     // Endpoint para registro de novos usuários, delegando a lógica para o authController
     await authController.register(req, res);
 });
 
-app.post('/api/auth/login', async (req, res) => {
+app.post('/api/login', async (req, res) => {
     // Endpoint para login de usuários, delegando a lógica para o authController
     await authController.login(req, res);
+});
+
+// Endpoint para buscar os dados e redirecionar para o portal
+
+app.get('/api/portal/auth', authMiddleware.protect, async (req, res) => {
+    try {
+        return res.json({
+            success: true,
+            mensagem: `Bem-vindo(a) ${req.user.name}!`,
+            links: [
+                {
+                    titulo: 'Acesso ao Portal dos Juninhos',
+                    url: 'https://...'
+                }
+            ]
+        });
+    } catch (error) {
+        return res
+            .status(500)
+            .json({ error: 'Erro ao carregar dados do portal.' });
+    }
 });
 
 const PORT = process.env.PORT || 5000; // Inicia o servidor na porta definida nas variáveis de ambiente ou na porta 5000 por padrão

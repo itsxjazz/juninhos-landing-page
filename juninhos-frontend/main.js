@@ -1,5 +1,5 @@
 const CONFIG = {
-    API_BASE_URL: 'http://localhost:5000/api',
+    API_BASE_URL: 'https://localhost:5500/api',
     ENDPOINTS: {
         PROJECTS: '/projects',
         CLASSES: '/classes',
@@ -8,7 +8,27 @@ const CONFIG = {
     RETRY_DELAY: 5000
 };
 
-const UI = { // Cache de elementos do DOM para fácil acesso e manipulação 
+const AuthLogic = {
+    // Gerenciamento de Autenticação
+    TOKEN_KEY: 'auth_token',
+    getToken: () => localStorage.getItem('auth_token'),
+    saveToken: (token) => localStorage.setItem('auth_token', token),
+    removeToken: () => localStorage.removeItem('auth_token'),
+
+    logout: () => {
+        localStorage.removeItem('auth_token');
+        window.location.replace('login.html');
+    },
+
+    checkSession: () => {
+        if (!localStorage.getItem('auth_token')) {
+            window.location.replace('login.html');
+        }
+    }
+};
+
+const UI = {
+    // Cache de elementos do DOM para fácil acesso e manipulação
     projectsContainer: document.getElementById('projects-container'),
     classesContainer: document.getElementById('classes-container'),
     waitlistForm: document.getElementById('waitlist-form'),
@@ -16,15 +36,21 @@ const UI = { // Cache de elementos do DOM para fácil acesso e manipulação
     formFeedback: document.getElementById('form-feedback'),
     modal: document.getElementById('modal'),
     closeModalBtn: document.getElementById('btn-close-modal'),
-    openModalBtns: document.querySelectorAll('.btn-open-modal')
+    openModalBtns: document.querySelectorAll('.btn-open-modal'),
+    logoutBtn: document.getElementById('btn-logout')
 };
 
-const AppUtils = { // Funções auxiliares para manipulação de UI e formatação de dados
+const AppUtils = {
+    // Funções auxiliares para manipulação de UI e formatação de dados
     showLoading: () => UI.loadingOverlay.classList.remove('hidden'),
     hideLoading: () => UI.loadingOverlay.classList.add('hidden'),
     formatStatusClass: (status) => {
         if (!status) return 'default';
-        return status.toLowerCase().replace(/\s+/g, '-').normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        return status
+            .toLowerCase()
+            .replace(/\s+/g, '-')
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '');
     },
     showMessage: (text, type = 'success') => {
         UI.formFeedback.textContent = text;
@@ -33,12 +59,15 @@ const AppUtils = { // Funções auxiliares para manipulação de UI e formataç�
     }
 };
 
-const ModalLogic = { // Lógica para abrir e fechar o modal, incluindo a restauração do conteúdo original do formulário se necessário
-    open: () => { // Abre o modal e impede o scroll do body para focar a atenção do usuário
+const ModalLogic = {
+    // Lógica para abrir e fechar o modal, incluindo a restauração do conteúdo original do formulário se necessário
+    open: () => {
+        // Abre o modal e impede o scroll do body para focar a atenção do usuário
         UI.modal.classList.remove('hidden');
         document.body.style.overflow = 'hidden';
     },
-    close: () => { // Fecha o modal e permite o scroll do body novamente, além de restaurar o conteúdo original do formulário se ele tiver sido modificado
+    close: () => {
+        // Fecha o modal e permite o scroll do body novamente, além de restaurar o conteúdo original do formulário se ele tiver sido modificado
         UI.modal.classList.add('hidden');
         document.body.style.overflow = 'auto';
 
@@ -46,13 +75,38 @@ const ModalLogic = { // Lógica para abrir e fechar o modal, incluindo a restaur
         if (UI.modal.dataset.originalContent) {
             formWrapper.innerHTML = UI.modal.dataset.originalContent;
             UI.waitlistForm = document.getElementById('waitlist-form');
-            UI.waitlistForm.addEventListener('submit', Handlers.handleFormSubmit);
+            UI.waitlistForm.addEventListener(
+                'submit',
+                Handlers.handleFormSubmit
+            );
             delete UI.modal.dataset.originalContent;
         }
     }
 };
 
-const ApiService = { // Funções para fazer requests HTTP e lidar com erros
+const ApiService = {
+    // Funções para fazer requests HTTP e lidar com erros
+    async fetchWithAuth(endpoint, options = {}) {
+        try {
+            const token = AuthLogic.getToken();
+            const headers = {
+                'Content-Type': 'application/json',
+                ...options.headers
+            };
+
+            if (token) headers['Authorization'] = `Bearer ${token}`;
+
+            const response = await fetch(`${CONFIG.API_BASE_URL}${endpoint}`, {
+                ...options,
+                headers
+            });
+            if (!response.ok) throw new Error('Waking up');
+            return await response.json();
+        } catch (error) {
+            return null;
+        }
+    },
+
     async fetchData(endpoint) {
         try {
             const response = await fetch(`${CONFIG.API_BASE_URL}${endpoint}`);
@@ -62,37 +116,50 @@ const ApiService = { // Funções para fazer requests HTTP e lidar com erros
             return null;
         }
     },
-    async postData(endpoint, data) { // Função para enviar dados para o backend, com tratamento de erros e mensagens de feedback
-        const response = await fetch(`${CONFIG.API_BASE_URL}${endpoint}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-        });
+    async postData(endpoint, data) {
+        // Função para enviar dados para o backend, com tratamento de erros e mensagens de feedback
+        const response = await this.fetchWithAuth(
+            `${CONFIG.API_BASE_URL}${endpoint}`,
+            {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            }
+        );
         const result = await response.json();
         if (!response.ok) throw new Error(result.error || 'Erro');
         return result;
     }
 };
 
-const Renderers = { // Funções para renderizar dados na tela, incluindo skeletons de carregamento e formatação de status
+const Renderers = {
+    // Funções para renderizar dados na tela, incluindo skeletons de carregamento e formatação de status
     showSkeletons(container, count = 3) {
-        container.innerHTML = Array(count).fill(`
+        container.innerHTML = Array(count)
+            .fill(
+                `
             <div class="skeleton-card">
                 <div class="skeleton-img skeleton"></div>
                 <div class="skeleton-title skeleton"></div>
                 <div class="skeleton-text skeleton"></div>
             </div>
-        `).join('');
+        `
+            )
+            .join('');
     },
-    renderProjects(projects) { // Função para renderizar os projetos na tela, com tratamento de casos onde não há projetos ou campos faltando
+    renderProjects(projects) {
+        // Função para renderizar os projetos na tela, com tratamento de casos onde não há projetos ou campos faltando
         if (!projects || projects.length === 0) return false;
-        UI.projectsContainer.innerHTML = projects.map(p => {
-            // Se o link da imagem não termina com extensão de imagem, usa um placeholder 
-            const imageSrc = (p.links.imagem && p.links.imagem.match(/\.(jpeg|jpg|gif|png|webp)$/i))
-                ? p.links.imagem
-                : 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=400';
+        UI.projectsContainer.innerHTML = projects
+            .map((p) => {
+                // Se o link da imagem não termina com extensão de imagem, usa um placeholder
+                const imageSrc =
+                    p.links.imagem &&
+                    p.links.imagem.match(/\.(jpeg|jpg|gif|png|webp)$/i)
+                        ? p.links.imagem
+                        : 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=400';
 
-            return `
+                return `
                 <article class="card-item project-card">
                     <div class="project-image"><img src="${imageSrc}" alt="${p.titulo}"></div>
                     <div class="card-body">
@@ -114,12 +181,16 @@ const Renderers = { // Funções para renderizar dados na tela, incluindo skelet
                     </div>
                 </article>
             `;
-        }).join('');
+            })
+            .join('');
         return true;
     },
-    renderClasses(classes) { // Função para renderizar as aulas na tela, com tratamento de casos onde não há aulas ou campos faltando
+    renderClasses(classes) {
+        // Função para renderizar as aulas na tela, com tratamento de casos onde não há aulas ou campos faltando
         if (!classes || classes.length === 0) return false;
-        UI.classesContainer.innerHTML = classes.map(c => `
+        UI.classesContainer.innerHTML = classes
+            .map(
+                (c) => `
             <article class="card-item class-card">
                 <div class="card-body">
                     <span class="status-badge ${AppUtils.formatStatusClass(c.status)}">${c.status}</span>
@@ -131,12 +202,15 @@ const Renderers = { // Funções para renderizar dados na tela, incluindo skelet
                     </div>
                 </div>
             </article>
-        `).join('');
+        `
+            )
+            .join('');
         return true;
     }
 };
 
-const Handlers = { // Funções para lidar com eventos e formulários
+const Handlers = {
+    // Funções para lidar com eventos e formulários
     async handleFormSubmit(e) {
         e.preventDefault();
 
@@ -152,18 +226,24 @@ const Handlers = { // Funções para lidar com eventos e formulários
             name: document.getElementById('name').value,
             phone: document.getElementById('phone').value,
             level: document.querySelector('input[name="level"]:checked')?.value,
-            areas: Array.from(document.querySelectorAll('input[name="areas"]:checked')).map(cb => cb.value),
+            areas: Array.from(
+                document.querySelectorAll('input[name="areas"]:checked')
+            ).map((cb) => cb.value),
             technologies: document.getElementById('technologies').value
         };
 
-        if (!formData.level || formData.areas.length === 0) return AppUtils.showMessage('Campos obrigatórios!', 'error');
+        if (!formData.level || formData.areas.length === 0)
+            return AppUtils.showMessage('Campos obrigatórios!', 'error');
 
         submitBtn.disabled = true;
         submitBtn.textContent = 'Enviando...';
         AppUtils.showLoading();
 
         try {
-            const res = await ApiService.postData(CONFIG.ENDPOINTS.WAITLIST, formData);
+            const res = await ApiService.postData(
+                CONFIG.ENDPOINTS.WAITLIST,
+                formData
+            );
 
             formWrapper.innerHTML = `
                 <div class="success-state">
@@ -183,7 +263,9 @@ const Handlers = { // Funções para lidar com eventos e formulários
     }
 };
 
-async function init() { // Função de inicialização para carregar os projetos e aulas, com retry automático em caso de falha
+async function init() {
+    // Função de inicialização para carregar os projetos e aulas, com retry automático em caso de falha
+    AuthLogic.checkSession();
     Renderers.showSkeletons(UI.projectsContainer, 3);
     Renderers.showSkeletons(UI.classesContainer, 2);
 
@@ -197,7 +279,13 @@ async function init() { // Função de inicialização para carregar os projetos
     load();
 }
 
-UI.openModalBtns.forEach(btn => btn.addEventListener('click', ModalLogic.open));
-UI.closeModalBtn.addEventListener('click', ModalLogic.close);
-UI.waitlistForm.addEventListener('submit', Handlers.handleFormSubmit);
+UI.openModalBtns.forEach((btn) =>
+    btn.addEventListener('click', ModalLogic.open)
+);
+if (UI.closeModalBtn)
+    UI.closeModalBtn.addEventListener('click', ModalLogic.close);
+if (UI.waitlistForm)
+    UI.waitlistForm.addEventListener('submit', Handlers.handleFormSubmit);
+if (UI.logoutBtn) UI.logoutBtn.addEventListener('click', AuthLogic.logout);
+
 window.addEventListener('DOMContentLoaded', init);

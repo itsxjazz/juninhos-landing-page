@@ -1,291 +1,518 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-br">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Juninhos</title>
+        <link rel="stylesheet" href="./styles/main.css" />
+    </head>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Juninhos</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-
-<body>
-    <!-- Nav -->
-    <header class="main-header">
-        <div class="header-content container">
-            <div class="logo">Juninhos</div>
-            <nav aria-label="Navegação principal">
-                <ul class="nav-menu">
-                    <li><a href="#about">Sobre</a></li>
-                    <li><a href="#ecosystem">Ecossistema</a></li>
-                    <li><a href="#projects">Projetos</a></li>
-                    <li><a href="#corporate">Empresas</a></li>
-                    <li><a href="#community">Redes Sociais</a></li>
-                    <li><button class="btn-open-modal nav-cta">Entrar na Lista</button></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-
-    <main>
-        <!-- Hero -->
-        <section id="hero" class="hero-section container">
-            <div class="hero-text">
-                <h1 class="hero-title">A comunidade onde a teoria encontra a prática.</h1>
-                <p class="hero-subtitle">Conectando talentos do nível júnior ao avançado para construir o futuro através
-                    do código.</p>
-                <button class="btn-open-modal primary-cta">Demonstrar Interesse</button>
-            </div>
-        </section>
-
-        <!-- Sobre -->
-        <section id="about" class="about-section container">
-            <h2 class="section-title">O que é a Juninhos?</h2>
-            <div class="about-content">
-                <p class="about-text">
-                    A Juninhos é uma comunidade colaborativa dedicada a conectar entusiastas e profissionais de
-                    tecnologia, abrangendo as áreas de desenvolvimento de software, jogos, dados e inteligência
-                    artificial. Composta por membros que vão desde estudantes em seus primeiros passos até profissionais
-                    de nível avançado, a comunidade busca ser um ponto de encontro para a troca de conhecimento e o
-                    fortalecimento de carreiras.
-                </p>
-                <p class="about-text">
-                    Nosso propósito central é estabelecer um ambiente seguro e de apoio mútuo, focado especialmente em
-                    quem está iniciando sua jornada na tecnologia. Acreditamos na mentoria orgânica e na democratização
-                    da informação, onde o conhecimento circula de forma horizontal. Um dos pilares da nossa dinâmica são
-                    as aulas e mentorias realizadas pelos próprios membros, promovendo uma troca rica onde todos têm
-                    algo a ensinar e a aprender.
-                </p>
-                <p class="about-text">
-                    A iniciativa surgiu espontaneamente como um grupo de networking e estudos. O crescimento acelerado e
-                    o alto nível de engajamento transformaram o projeto em um ecossistema estruturado. Atualmente, a
-                    Juninhos oferece subgrupos temáticos para discussões específicas, salas de pair programming no
-                    Discord e um hub de repositórios centralizado no GitHub para o desenvolvimento de soluções em
-                    conjunto.
-                </p>
-                <p class="about-text">
-                    Na Juninhos, defendemos que a teoria deve ser rapidamente aplicada na prática. Por isso, organizamos
-                    squads para a criação de projetos colaborativos reais, incentivando o trabalho em equipe e a
-                    simulação de desafios do dia a dia profissional. Seja no desenvolvimento web, na análise de dados,
-                    no desenvolvimento de games ou na implementação de modelos de IA, a Juninhos é o espaço para quem
-                    deseja evoluir
-                    tecnicamente através da prática e da colaboração coletiva.
-                </p>
-            </div>
-        </section>
-
-        <!-- Ecossistema (cards) -->
-        <section id="ecosystem" class="ecosystem-section container">
-            <h2 class="section-title">Nosso Ecossistema</h2>
-            <div class="cards-grid">
-                <article class="card-item static-card">
-                    <h3>Aulas e Mentorias</h3>
-                    <p>Aprenda e ensine. Uma troca constante de conhecimento entre membros de todos os níveis.</p>
-                </article>
-                <article class="card-item static-card">
-                    <h3>Projetos e Squads</h3>
-                    <p>Saia da teoria. Colabore em squads para criar soluções reais e fortalecer seu portfólio.</p>
-                </article>
-                <article class="card-item static-card">
-                    <h3>Networking e Comunidade</h3>
-                    <p>Conexões valiosas e suporte mútuo através de grupos no WhatsApp e salas de pair no Discord.</p>
-                </article>
-            </div>
-        </section>
-
-        <!-- Projetos (dinâmicos da planilha) -->
-        <section id="projects" class="projects-section container">
-            <header class="section-header">
-                <h2 class="section-title">Projetos Colaborativos</h2>
-                <p class="section-subtitle">O que estamos construindo agora</p>
-            </header>
-            <div id="projects-container" class="cards-grid">
-                <!-- O JS vai injetar cards com a classe .project-card aqui dentro -->
-            </div>
-        </section>
-
-        <!-- Aulas (dinâmicas da planilha) -->
-        <section id="classes" class="classes-section container">
-            <header class="section-header">
-                <h2 class="section-title">Próximas Aulas</h2>
-                <p class="section-subtitle">Conhecimento compartilhado por quem está no mercado ou também está
-                    aprendendo</p>
-            </header>
-            <div id="classes-container" class="cards-grid">
-                <!-- O JS vai injetar cards com a classe .class-card aqui dentro -->
-            </div>
-        </section>
-
-        <!-- Presença digital (grid) -->
-        <section id="community" class="community-section container">
-            <h2 class="section-title">Nossa Presença Digital</h2>
-            <div class="social-cards-grid">
-                <article class="social-card linkedin">
-                    <h3>LinkedIn</h3>
-                    <p>Fique por dentro das atualizações da comunidade e do mercado.</p>
-                    <a href="https://linkedin.com/company/juninhos" target="_blank" class="social-link">Comunidade
-                        Juninhos</a>
-                </article>
-                <article class="social-card whatsapp">
-                    <h3>WhatsApp</h3>
-                    <p>Nossa comunidade principal para networking e avisos rápidos.</p>
-                    <span class="badge-exclusive">Link enviado no contato após a inscrição</span>
-                </article>
-                <article class="social-card discord">
-                    <h3>Discord</h3>
-                    <p>O coração da comunidade. Pair programming e chats 24/7.</p>
-                    <span class="badge-exclusive">Link enviado no contato após a inscrição</span>
-                </article>
-                <article class="social-card twitter">
-                    <h3>Twitter (X)</h3>
-                    <p>Acompanhe novidades diariamente.</p>
-                    <a href="https://x.com/devsjuninhos" target="_blank" class="social-link">@devsjuninhos</a>
-                </article>
-                <article class="social-card instagram">
-                    <h3>Instagram</h3>
-                    <p>Bastidores e conteúdos da nossa jornada.</p>
-                    <a href="https://www.instagram.com/devsjuninhos/" target="_blank"
-                        class="social-link">@devsjuninhos</a>
-                </article>
-            </div>
-        </section>
-
-        <!-- Benefícios -->
-        <section id="benefits" class="benefits-section container">
-            <h2 class="section-title">Por que entrar na lista de espera da comunidade?</h2>
-            <div class="benefits-grid">
-                <article class="benefit-item">
-                    <h3>Crescimento Exponencial</h3>
-                    <p>Alcançamos mais de 150 membros em menos de 48 horas. A lista ajuda a organizar a entrada para
-                        mantermos a qualidade e a organização.</p>
-                </article>
-                <article class="benefit-item">
-                    <h3>Prioridade nos Squads</h3>
-                    <p>Quem está na lista terá prioridade para preencher as vagas nos próximos projetos colaborativos e
-                        grupos de estudo.</p>
-                </article>
-                <article class="benefit-item">
-                    <h3>Apoio Colaborativo</h3>
-                    <p>Garanta seu lugar em um ambiente seguro para tirar dúvidas com uma rede de pessoas que estão
-                        aprendendo juntas.</p>
-                </article>
-                <article class="benefit-item">
-                    <h3>Foco em Prática Real</h3>
-                    <p>Saia dos tutoriais infinitos e venha construir soluções de verdade.</p>
-                </article>
-            </div>
-        </section>
-
-        <!-- Contato para Empresas -->
-        <section id="corporate" class="corporate-section container">
-            <div class="corporate-card">
-                <h2 class="section-title">Para Empresas</h2>
-                <p>Deseja apoiar a iniciativa, contratar talentos ou propor parcerias? Entre em contato com nossa gestão
-                    através do e-mail oficial.</p>
-                <a href="mailto:juninhosdevs@gmail.com" class="primary-cta">juninhosdevs@gmail.com</a>
-            </div>
-        </section>
-
-        <!-- Números -->
-        <section id="stats" class="stats-section container">
-            <h2 class="section-title">Juninhos em números</h2>
-            <div class="stats-grid">
-                <div class="stat-item"><strong>+200</strong> membros ativos</div>
-                <div class="stat-item">Fundada em <strong>abril de 2026</strong></div>
-                <div class="stat-item"><strong>Projetos Reais</strong> sendo codados agora</div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Modal com formulário -->
-    <div id="modal" class="modal-wrapper hidden" aria-modal="true" role="dialog">
-        <div class="modal-content">
-            <button id="btn-close-modal" class="modal-close" aria-label="Fechar modal">&times;</button>
-            <div class="form-wrapper">
-                <h2 class="section-title">Lista de Espera</h2>
-                <form id="waitlist-form" class="waitlist-form">
-                    <div class="form-group">
-                        <label for="name">Qual é o seu nome? *</label>
-                        <input type="text" id="name" name="name" required placeholder="Seu nome completo">
-                    </div>
-                    <div class="form-group">
-                        <label for="phone">Telefone (com DDD) *</label>
-                        <input type="tel" id="phone" name="phone" required placeholder="(00) 00000-0000">
-                    </div>
-                    <fieldset class="form-group">
-                        <legend>Qual é o seu nível? *</legend>
-                        <div class="radio-group">
-                            <label><input type="radio" name="level" value="Iniciante" required> Iniciante</label>
-                            <label><input type="radio" name="level" value="Júnior"> Júnior</label>
-                            <label><input type="radio" name="level" value="Pleno"> Pleno</label>
-                            <label><input type="radio" name="level" value="Sênior"> Sênior</label>
-                        </div>
-                    </fieldset>
-                    <fieldset class="form-group">
-                        <legend>Áreas de interesse *</legend>
-                        <div class="checkbox-grid">
-                            <label><input type="checkbox" name="areas" value="Front-end"> Front-end</label>
-                            <label><input type="checkbox" name="areas" value="Back-end"> Back-end</label>
-                            <label><input type="checkbox" name="areas" value="Mobile"> Mobile</label>
-                            <label><input type="checkbox" name="areas" value="Dados"> Dados</label>
-                            <label><input type="checkbox" name="areas" value="IA"> IA</label>
-                            <label><input type="checkbox" name="areas" value="DevOps"> DevOps</label>
-                            <label><input type="checkbox" name="areas" value="Cloud"> Cloud</label>
-                            <label><input type="checkbox" name="areas" value="Gamedev"> Gamedev</label>
-                            <label><input type="checkbox" name="areas" value="UI/UX"> UI/UX</label>
-                        </div>
-                    </fieldset>
-                    <div class="form-group">
-                        <label for="technologies">Tecnologias e linguagem que usa *</label>
-                        <textarea id="technologies" name="technologies" required
-                            placeholder="Exemplo: React, Angular, Java, Python..."></textarea>
-                    </div>
-                    <button type="submit" class="btn-submit">Quero entrar na lista</button>
-                </form>
-                <div id="form-feedback" class="form-feedback hidden"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <footer class="main-footer">
-        <div class="container footer-grid">
-            <div class="footer-brand">
+    <body>
+        <!-- Nav -->
+        <header class="main-header">
+            <div class="header-content container">
                 <div class="logo">Juninhos</div>
-                <p>A comunidade onde a teoria encontra a prática através do código e da colaboração coletiva.</p>
+                <nav aria-label="Navegação principal">
+                    <ul class="nav-menu">
+                        <li><a href="#about">Sobre</a></li>
+                        <li><a href="#ecosystem">Ecossistema</a></li>
+                        <li><a href="#projects">Projetos</a></li>
+                        <li><a href="#corporate">Empresas</a></li>
+                        <li><a href="#community">Redes Sociais</a></li>
+                        <li>
+                            <button class="btn-open-modal nav-cta">
+                                Entrar na Lista
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
             </div>
-            
-            <div class="footer-links">
-                <h4>Navegação</h4>
-                <ul>
-                    <li><a href="#about">Sobre</a></li>
-                    <li><a href="#ecosystem">Ecossistema</a></li>
-                    <li><a href="#projects">Projetos</a></li>
-                    <li><a href="#corporate">Empresas</a></li>
-                </ul>
-            </div>
+        </header>
 
-            <div class="footer-socials">
-                <h4>Redes Sociais</h4>
-                <ul>
-                    <li><a href="https://linkedin.com/company/juninhos" target="_blank">LinkedIn</a></li>
-                    <li><a href="https://x.com/devsjuninhos" target="_blank">Twitter (X)</a></li>
-                    <li><a href="https://www.instagram.com/devsjuninhos/" target="_blank">Instagram</a></li>
-                </ul>
+        <main>
+            <!-- Hero -->
+            <section id="hero" class="hero-section container">
+                <div class="hero-text">
+                    <h1 class="hero-title">
+                        A comunidade onde a teoria encontra a prática.
+                    </h1>
+                    <p class="hero-subtitle">
+                        Conectando talentos do nível júnior ao avançado para
+                        construir o futuro através do código.
+                    </p>
+                    <button class="btn-open-modal primary-cta">
+                        Demonstrar Interesse
+                    </button>
+                </div>
+            </section>
+
+            <!-- Sobre -->
+            <section id="about" class="about-section container">
+                <h2 class="section-title">O que é a Juninhos?</h2>
+                <div class="about-content">
+                    <p class="about-text">
+                        A Juninhos é uma comunidade colaborativa dedicada a
+                        conectar entusiastas e profissionais de tecnologia,
+                        abrangendo as áreas de desenvolvimento de software,
+                        jogos, dados e inteligência artificial. Composta por
+                        membros que vão desde estudantes em seus primeiros
+                        passos até profissionais de nível avançado, a comunidade
+                        busca ser um ponto de encontro para a troca de
+                        conhecimento e o fortalecimento de carreiras.
+                    </p>
+                    <p class="about-text">
+                        Nosso propósito central é estabelecer um ambiente seguro
+                        e de apoio mútuo, focado especialmente em quem está
+                        iniciando sua jornada na tecnologia. Acreditamos na
+                        mentoria orgânica e na democratização da informação,
+                        onde o conhecimento circula de forma horizontal. Um dos
+                        pilares da nossa dinâmica são as aulas e mentorias
+                        realizadas pelos próprios membros, promovendo uma troca
+                        rica onde todos têm algo a ensinar e a aprender.
+                    </p>
+                    <p class="about-text">
+                        A iniciativa surgiu espontaneamente como um grupo de
+                        networking e estudos. O crescimento acelerado e o alto
+                        nível de engajamento transformaram o projeto em um
+                        ecossistema estruturado. Atualmente, a Juninhos oferece
+                        subgrupos temáticos para discussões específicas, salas
+                        de pair programming no Discord e um hub de repositórios
+                        centralizado no GitHub para o desenvolvimento de
+                        soluções em conjunto.
+                    </p>
+                    <p class="about-text">
+                        Na Juninhos, defendemos que a teoria deve ser
+                        rapidamente aplicada na prática. Por isso, organizamos
+                        squads para a criação de projetos colaborativos reais,
+                        incentivando o trabalho em equipe e a simulação de
+                        desafios do dia a dia profissional. Seja no
+                        desenvolvimento web, na análise de dados, no
+                        desenvolvimento de games ou na implementação de modelos
+                        de IA, a Juninhos é o espaço para quem deseja evoluir
+                        tecnicamente através da prática e da colaboração
+                        coletiva.
+                    </p>
+                </div>
+            </section>
+
+            <!-- Ecossistema (cards) -->
+            <section id="ecosystem" class="ecosystem-section container">
+                <h2 class="section-title">Nosso Ecossistema</h2>
+                <div class="cards-grid">
+                    <article class="card-item static-card">
+                        <h3>Aulas e Mentorias</h3>
+                        <p>
+                            Aprenda e ensine. Uma troca constante de
+                            conhecimento entre membros de todos os níveis.
+                        </p>
+                    </article>
+                    <article class="card-item static-card">
+                        <h3>Projetos e Squads</h3>
+                        <p>
+                            Saia da teoria. Colabore em squads para criar
+                            soluções reais e fortalecer seu portfólio.
+                        </p>
+                    </article>
+                    <article class="card-item static-card">
+                        <h3>Networking e Comunidade</h3>
+                        <p>
+                            Conexões valiosas e suporte mútuo através de grupos
+                            no WhatsApp e salas de pair no Discord.
+                        </p>
+                    </article>
+                </div>
+            </section>
+
+            <!-- Projetos (dinâmicos da planilha) -->
+            <section id="projects" class="projects-section container">
+                <header class="section-header">
+                    <h2 class="section-title">Projetos Colaborativos</h2>
+                    <p class="section-subtitle">
+                        O que estamos construindo agora
+                    </p>
+                </header>
+                <div id="projects-container" class="cards-grid">
+                    <!-- O JS vai injetar cards com a classe .project-card aqui dentro -->
+                </div>
+            </section>
+
+            <!-- Aulas (dinâmicas da planilha) -->
+            <section id="classes" class="classes-section container">
+                <header class="section-header">
+                    <h2 class="section-title">Próximas Aulas</h2>
+                    <p class="section-subtitle">
+                        Conhecimento compartilhado por quem está no mercado ou
+                        também está aprendendo
+                    </p>
+                </header>
+                <div id="classes-container" class="cards-grid">
+                    <!-- O JS vai injetar cards com a classe .class-card aqui dentro -->
+                </div>
+            </section>
+
+            <!-- Presença digital (grid) -->
+            <section id="community" class="community-section container">
+                <h2 class="section-title">Nossa Presença Digital</h2>
+                <div class="social-cards-grid">
+                    <article class="social-card linkedin">
+                        <h3>LinkedIn</h3>
+                        <p>
+                            Fique por dentro das atualizações da comunidade e do
+                            mercado.
+                        </p>
+                        <a
+                            href="https://linkedin.com/company/juninhos"
+                            target="_blank"
+                            class="social-link"
+                            >Comunidade Juninhos</a
+                        >
+                    </article>
+                    <article class="social-card whatsapp">
+                        <h3>WhatsApp</h3>
+                        <p>
+                            Nossa comunidade principal para networking e avisos
+                            rápidos.
+                        </p>
+                        <span class="badge-exclusive"
+                            >Link enviado no contato após a inscrição</span
+                        >
+                    </article>
+                    <article class="social-card discord">
+                        <h3>Discord</h3>
+                        <p>
+                            O coração da comunidade. Pair programming e chats
+                            24/7.
+                        </p>
+                        <span class="badge-exclusive"
+                            >Link enviado no contato após a inscrição</span
+                        >
+                    </article>
+                    <article class="social-card twitter">
+                        <h3>Twitter (X)</h3>
+                        <p>Acompanhe novidades diariamente.</p>
+                        <a
+                            href="https://x.com/devsjuninhos"
+                            target="_blank"
+                            class="social-link"
+                            >@devsjuninhos</a
+                        >
+                    </article>
+                    <article class="social-card instagram">
+                        <h3>Instagram</h3>
+                        <p>Bastidores e conteúdos da nossa jornada.</p>
+                        <a
+                            href="https://www.instagram.com/devsjuninhos/"
+                            target="_blank"
+                            class="social-link"
+                            >@devsjuninhos</a
+                        >
+                    </article>
+                </div>
+            </section>
+
+            <!-- Benefícios -->
+            <section id="benefits" class="benefits-section container">
+                <h2 class="section-title">
+                    Por que entrar na lista de espera da comunidade?
+                </h2>
+                <div class="benefits-grid">
+                    <article class="benefit-item">
+                        <h3>Crescimento Exponencial</h3>
+                        <p>
+                            Alcançamos mais de 150 membros em menos de 48 horas.
+                            A lista ajuda a organizar a entrada para mantermos a
+                            qualidade e a organização.
+                        </p>
+                    </article>
+                    <article class="benefit-item">
+                        <h3>Prioridade nos Squads</h3>
+                        <p>
+                            Quem está na lista terá prioridade para preencher as
+                            vagas nos próximos projetos colaborativos e grupos
+                            de estudo.
+                        </p>
+                    </article>
+                    <article class="benefit-item">
+                        <h3>Apoio Colaborativo</h3>
+                        <p>
+                            Garanta seu lugar em um ambiente seguro para tirar
+                            dúvidas com uma rede de pessoas que estão aprendendo
+                            juntas.
+                        </p>
+                    </article>
+                    <article class="benefit-item">
+                        <h3>Foco em Prática Real</h3>
+                        <p>
+                            Saia dos tutoriais infinitos e venha construir
+                            soluções de verdade.
+                        </p>
+                    </article>
+                </div>
+            </section>
+
+            <!-- Contato para Empresas -->
+            <section id="corporate" class="corporate-section container">
+                <div class="corporate-card">
+                    <h2 class="section-title">Para Empresas</h2>
+                    <p>
+                        Deseja apoiar a iniciativa, contratar talentos ou propor
+                        parcerias? Entre em contato com nossa gestão através do
+                        e-mail oficial.
+                    </p>
+                    <a href="mailto:juninhosdevs@gmail.com" class="primary-cta"
+                        >juninhosdevs@gmail.com</a
+                    >
+                </div>
+            </section>
+
+            <!-- Números -->
+            <section id="stats" class="stats-section container">
+                <h2 class="section-title">Juninhos em números</h2>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <strong>+200</strong> membros ativos
+                    </div>
+                    <div class="stat-item">
+                        Fundada em <strong>abril de 2026</strong>
+                    </div>
+                    <div class="stat-item">
+                        <strong>Projetos Reais</strong> sendo codados agora
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Modal com formulário -->
+        <div
+            id="modal"
+            class="modal-wrapper hidden"
+            aria-modal="true"
+            role="dialog"
+        >
+            <div class="modal-content">
+                <button
+                    id="btn-close-modal"
+                    class="modal-close"
+                    aria-label="Fechar modal"
+                >
+                    &times;
+                </button>
+                <div class="form-wrapper">
+                    <h2 class="section-title">Lista de Espera</h2>
+                    <form id="waitlist-form" class="waitlist-form">
+                        <div class="form-group">
+                            <label for="name">Qual é o seu nome? *</label>
+                            <input
+                                type="text"
+                                id="name"
+                                name="name"
+                                required
+                                placeholder="Seu nome completo"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Telefone (com DDD) *</label>
+                            <input
+                                type="tel"
+                                id="phone"
+                                name="phone"
+                                required
+                                placeholder="(00) 00000-0000"
+                            />
+                        </div>
+                        <fieldset class="form-group">
+                            <legend>Qual é o seu nível? *</legend>
+                            <div class="radio-group">
+                                <label
+                                    ><input
+                                        type="radio"
+                                        name="level"
+                                        value="Iniciante"
+                                        required
+                                    />
+                                    Iniciante</label
+                                >
+                                <label
+                                    ><input
+                                        type="radio"
+                                        name="level"
+                                        value="Júnior"
+                                    />
+                                    Júnior</label
+                                >
+                                <label
+                                    ><input
+                                        type="radio"
+                                        name="level"
+                                        value="Pleno"
+                                    />
+                                    Pleno</label
+                                >
+                                <label
+                                    ><input
+                                        type="radio"
+                                        name="level"
+                                        value="Sênior"
+                                    />
+                                    Sênior</label
+                                >
+                            </div>
+                        </fieldset>
+                        <fieldset class="form-group">
+                            <legend>Áreas de interesse *</legend>
+                            <div class="checkbox-grid">
+                                <label
+                                    ><input
+                                        type="checkbox"
+                                        name="areas"
+                                        value="Front-end"
+                                    />
+                                    Front-end</label
+                                >
+                                <label
+                                    ><input
+                                        type="checkbox"
+                                        name="areas"
+                                        value="Back-end"
+                                    />
+                                    Back-end</label
+                                >
+                                <label
+                                    ><input
+                                        type="checkbox"
+                                        name="areas"
+                                        value="Mobile"
+                                    />
+                                    Mobile</label
+                                >
+                                <label
+                                    ><input
+                                        type="checkbox"
+                                        name="areas"
+                                        value="Dados"
+                                    />
+                                    Dados</label
+                                >
+                                <label
+                                    ><input
+                                        type="checkbox"
+                                        name="areas"
+                                        value="IA"
+                                    />
+                                    IA</label
+                                >
+                                <label
+                                    ><input
+                                        type="checkbox"
+                                        name="areas"
+                                        value="DevOps"
+                                    />
+                                    DevOps</label
+                                >
+                                <label
+                                    ><input
+                                        type="checkbox"
+                                        name="areas"
+                                        value="Cloud"
+                                    />
+                                    Cloud</label
+                                >
+                                <label
+                                    ><input
+                                        type="checkbox"
+                                        name="areas"
+                                        value="Gamedev"
+                                    />
+                                    Gamedev</label
+                                >
+                                <label
+                                    ><input
+                                        type="checkbox"
+                                        name="areas"
+                                        value="UI/UX"
+                                    />
+                                    UI/UX</label
+                                >
+                            </div>
+                        </fieldset>
+                        <div class="form-group">
+                            <label for="technologies"
+                                >Tecnologias e linguagem que usa *</label
+                            >
+                            <textarea
+                                id="technologies"
+                                name="technologies"
+                                required
+                                placeholder="Exemplo: React, Angular, Java, Python..."
+                            ></textarea>
+                        </div>
+                        <button type="submit" class="btn-submit">
+                            Quero entrar na lista
+                        </button>
+                    </form>
+                    <div id="form-feedback" class="form-feedback hidden"></div>
+                </div>
             </div>
         </div>
-        
-        <div class="footer-bottom container">
-            <p>&copy; 2026 Juninhos. Desenvolvido pela nossa comunidade.</p>
+
+        <!-- Footer -->
+        <footer class="main-footer">
+            <div class="container footer-grid">
+                <div class="footer-brand">
+                    <div class="logo">Juninhos</div>
+                    <p>
+                        A comunidade onde a teoria encontra a prática através do
+                        código e da colaboração coletiva.
+                    </p>
+                </div>
+
+                <div class="footer-links">
+                    <h4>Navegação</h4>
+                    <ul>
+                        <li><a href="#about">Sobre</a></li>
+                        <li><a href="#ecosystem">Ecossistema</a></li>
+                        <li><a href="#projects">Projetos</a></li>
+                        <li><a href="#corporate">Empresas</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-socials">
+                    <h4>Redes Sociais</h4>
+                    <ul>
+                        <li>
+                            <a
+                                href="https://linkedin.com/company/juninhos"
+                                target="_blank"
+                                >LinkedIn</a
+                            >
+                        </li>
+                        <li>
+                            <a href="https://x.com/devsjuninhos" target="_blank"
+                                >Twitter (X)</a
+                            >
+                        </li>
+                        <li>
+                            <a
+                                href="https://www.instagram.com/devsjuninhos/"
+                                target="_blank"
+                                >Instagram</a
+                            >
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom container">
+                <p>&copy; 2026 Juninhos. Desenvolvido pela nossa comunidade.</p>
+            </div>
+        </footer>
+
+        <!-- Overlay de carregamento -->
+        <div id="loading" class="loading-overlay hidden">
+            <div class="spinner"></div>
+            <p>Carregando...</p>
         </div>
-    </footer>
 
-    <!-- Overlay de carregamento -->
-    <div id="loading" class="loading-overlay hidden">
-        <div class="spinner"></div>
-        <p>Carregando...</p>
-    </div>
-
-    <script src="main.js"></script>
-</body>
-
+        <script src="main.js"></script>
+    </body>
 </html>
