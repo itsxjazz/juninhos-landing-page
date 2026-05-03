@@ -1,8 +1,10 @@
 .main-footer {
+    position: relative;
     background-color: var(--clr-secondary);
     color: #fff;
     padding: 4rem 0 2rem;
-    margin-top: 4rem;
+    margin-top: auto;
+    border-top: 1px solid rgba(168, 85, 247, 0.25);
 }
 
 .footer-grid {
