@@ -12,16 +12,16 @@
     margin-bottom: 3rem;
 }
 
-.footer-links ul li, .footer-socials ul li {
+.footer-links ul li, .footer-socials ul li, .footer-apoia ul li {
     margin-bottom: 0.5rem;
 }
 
-.footer-links a, .footer-socials a {
+.footer-links a, .footer-socials a, .footer-apoia a {
     color: #ccc;
     transition: color var(--transition-fast);
 }
 
-.footer-links a:hover, .footer-socials a:hover {
+.footer-links a:hover, .footer-socials a:hover, .footer-apoia a:hover {
     color: var(--clr-primary);
 }
 

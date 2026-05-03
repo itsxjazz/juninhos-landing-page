@@ -7,10 +7,11 @@ section {
     font-weight: 800;
     margin-bottom: 3rem;
     text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
+}
+
+.modal-content .section-title {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
 }
 
 .section-title::before {
@@ -42,24 +43,30 @@ section {
     color: var(--clr-text-muted);
 }
 
-.corporate-card {
-    background-color: var(--clr-primary);
-    color: #fff;
+.corporate-card, .support-card {
+    background-color: var(--clr-surface);
+    border: 2px solid var(--clr-primary);
+    color: var(--clr-text-main);
     padding: 3rem;
     border-radius: var(--radius-lg);
     text-align: center;
 }
 
-.corporate-card p {
+.corporate-card p, .support-card p {
     margin-bottom: 2.5rem; 
     font-size: 1.1rem;
-    max-width: 600px;
+    max-width: 650px;
     margin-left: auto;
     margin-right: auto;
 }
 
-.corporate-card .section-title {
-    color: #fff;
+.corporate-card .section-title, .support-card .section-title {
+    margin-bottom: 1.5rem;
+}
+
+.support-actions {
+    display: flex;
+    justify-content: center;
 }
 
 .stat-item {
@@ -72,6 +79,21 @@ section {
     display: block;
     font-size: 2.5rem;
     color: var(--clr-primary);
+    line-height: 1.1;
+    margin-bottom: 0.25rem;
+}
+
+.stat-item span {
+    display: block;
+    font-size: 1rem;
+    color: var(--clr-text-muted);
+    line-height: 1.2;
+}
+
+.support-content {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
 }
 
 section[id] {

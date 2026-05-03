@@ -25,8 +25,12 @@
     margin-bottom: 0.75rem;
 }
 
-.card-item:hover h3, .social-card:hover h3, .static-card:hover h3, .benefit-item:hover h3, .stat-item:hover strong {
+.card-item:hover h3, .social-card:hover h3, .static-card:hover h3, .benefit-item:hover h3, .stat-item:hover strong, .social-card:hover .badge-exclusive, .card-item:hover .status-badge {
     color: var(--clr-cyan);
+}
+
+.social-card:hover .badge-exclusive, .card-item:hover .status-badge {
+    background-color: rgba(0, 243, 255, 0.1);
 }
 
 .project-image img {

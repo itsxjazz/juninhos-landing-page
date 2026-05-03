@@ -3,7 +3,8 @@ const CONFIG = {
     ENDPOINTS: {
         PROJECTS: '/projects',
         CLASSES: '/classes',
-        WAITLIST: '/waitlist'
+        WAITLIST: '/waitlist',
+        INSTRUCTOR: '/instructor'
     },
     RETRY_DELAY: 5000
 };
@@ -12,11 +13,16 @@ const UI = { // Cache de elementos do DOM para fácil acesso e manipulação
     projectsContainer: document.getElementById('projects-container'),
     classesContainer: document.getElementById('classes-container'),
     waitlistForm: document.getElementById('waitlist-form'),
+    instructorForm: document.getElementById('instructor-form'),
     loadingOverlay: document.getElementById('loading'),
     formFeedback: document.getElementById('form-feedback'),
+    instructorFeedback: document.getElementById('instructor-feedback'),
     modal: document.getElementById('modal'),
+    modalInstructor: document.getElementById('modal-instructor'),
     closeModalBtn: document.getElementById('btn-close-modal'),
+    closeInstructorModalBtn: document.getElementById('btn-close-instructor-modal'),
     openModalBtns: document.querySelectorAll('.btn-open-modal'),
+    openInstructorModalBtn: document.querySelector('.btn-open-instructor-modal'),
     mobileMenuBtn: document.getElementById('btn-mobile-menu'),
     navMenu: document.getElementById('nav-menu'),
     navLinks: document.querySelectorAll('.nav-menu a'),
@@ -30,28 +36,40 @@ const AppUtils = { // Funções auxiliares para manipulação de UI e formataç�
         if (!status) return 'default';
         return status.toLowerCase().replace(/\s+/g, '-').normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     },
-    showMessage: (text, type = 'success') => {
-        UI.formFeedback.textContent = text;
-        UI.formFeedback.className = `form-feedback ${type}`;
-        UI.formFeedback.classList.remove('hidden');
+    showMessage: (text, type = 'success', feedbackEl = UI.formFeedback) => {
+        feedbackEl.textContent = text;
+        feedbackEl.className = `form-feedback ${type}`;
+        feedbackEl.classList.remove('hidden');
+    },
+    getDirectDriveLink: (url) => { // Converte link de visualização do Drive para link direto de imagem
+        if (!url || !url.includes('drive.google.com')) return url;
+        const match = url.match(/\/d\/([^/]+)/);
+        // Usando o formato googleusercontent que é mais estável para embeds
+        return match ? `https://lh3.googleusercontent.com/d/${match[1]}` : url;
     }
 };
 
-const ModalLogic = { // Lógica para abrir e fechar o modal, incluindo a restauração do conteúdo original do formulário se necessário
-    open: () => { // Abre o modal e impede o scroll do body para focar a atenção do usuário
-        UI.modal.classList.remove('hidden');
+const ModalLogic = { // Lóigica para abrir e fechar o modal, incluindo a restauração do conteúdo original do formulário se necessário
+    open: (modalEl = UI.modal) => { // Abre o modal e impede o scroll do body para focar a atenção do usuário
+        modalEl.classList.remove('hidden');
         document.body.style.overflow = 'hidden';
     },
-    close: () => { // Fecha o modal e permite o scroll do body novamente, além de restaurar o conteúdo original do formulário se ele tiver sido modificado
-        UI.modal.classList.add('hidden');
+    close: (modalEl = UI.modal) => { // Fecha o modal e permite o scroll do body novamente
+        modalEl.classList.add('hidden');
         document.body.style.overflow = 'auto';
 
-        const formWrapper = UI.modal.querySelector('.form-wrapper');
-        if (UI.modal.dataset.originalContent) {
-            formWrapper.innerHTML = UI.modal.dataset.originalContent;
-            UI.waitlistForm = document.getElementById('waitlist-form');
-            UI.waitlistForm.addEventListener('submit', Handlers.handleFormSubmit);
-            delete UI.modal.dataset.originalContent;
+        const formWrapper = modalEl.querySelector('.form-wrapper');
+        if (modalEl.dataset.originalContent) {
+            formWrapper.innerHTML = modalEl.dataset.originalContent;
+            // Re-bind events based on which modal it is
+            if (modalEl === UI.modal) {
+                UI.waitlistForm = document.getElementById('waitlist-form');
+                UI.waitlistForm.addEventListener('submit', Handlers.handleFormSubmit);
+            } else {
+                UI.instructorForm = document.getElementById('instructor-form');
+                UI.instructorForm.addEventListener('submit', Handlers.handleInstructorSubmit);
+            }
+            delete modalEl.dataset.originalContent;
         }
     }
 };
@@ -91,14 +109,33 @@ const Renderers = { // Funções para renderizar dados na tela, incluindo skelet
     renderProjects(projects) { // Função para renderizar os projetos na tela, com tratamento de casos onde não há projetos ou campos faltando
         if (!projects || projects.length === 0) return false;
         UI.projectsContainer.innerHTML = projects.map(p => {
-            // Se o link da imagem não termina com extensão de imagem, usa um placeholder 
-            const imageSrc = (p.links.imagem && p.links.imagem.match(/\.(jpeg|jpg|gif|png|webp)$/i))
-                ? p.links.imagem
+            const rawImage = p.links.imagem;
+            const convertedImage = AppUtils.getDirectDriveLink(rawImage);
+            
+            // Verifica se é uma imagem válida após a conversão
+            const isImage = convertedImage && (
+                convertedImage.match(/\.(jpeg|jpg|gif|png|webp|svg)(\?.*)?$/i) || 
+                convertedImage.includes('drive.google.com') ||
+                convertedImage.includes('googleusercontent.com') ||
+                convertedImage.includes('images.unsplash.com') ||
+                convertedImage.startsWith('http')
+            );
+            
+            if (!isImage && rawImage) {
+                console.warn(`Imagem inválida para o projeto "${p.titulo}":`, rawImage);
+            }
+
+            const imageSrc = isImage
+                ? convertedImage
                 : 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=400';
 
             return `
                 <article class="card-item project-card">
-                    <div class="project-image"><img src="${imageSrc}" alt="${p.titulo}"></div>
+                    <div class="project-image">
+                        <img src="${imageSrc}" 
+                             alt="${p.titulo}" 
+                             onerror="this.src='https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=400'; this.onerror=null;">
+                    </div>
                     <div class="card-body">
                         <span class="status-badge ${AppUtils.formatStatusClass(p.status)}">${p.status}</span>
                         <h3>${p.titulo}</h3>
@@ -173,7 +210,7 @@ const Handlers = { // Funções para lidar com eventos e formulários
                 <div class="success-state">
                     <h3>Tudo certo!</h3>
                     <p class="success-msg">${res.message}</p>
-                    <button class="nav-cta btn-success-close" onclick="ModalLogic.close()">Entendido</button>
+                    <button class="nav-cta btn-success-close" onclick="ModalLogic.close(UI.modal)">Entendido</button>
                 </div>
             `;
         } catch (err) {
@@ -181,6 +218,52 @@ const Handlers = { // Funções para lidar com eventos e formulários
             submitBtn.disabled = false;
             submitBtn.textContent = originalText;
             delete UI.modal.dataset.originalContent;
+        } finally {
+            AppUtils.hideLoading();
+        }
+    },
+
+    async handleInstructorSubmit(e) {
+        e.preventDefault();
+        const formWrapper = UI.modalInstructor.querySelector('.form-wrapper');
+        const submitBtn = e.target.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+
+        if (!UI.modalInstructor.dataset.originalContent) {
+            UI.modalInstructor.dataset.originalContent = formWrapper.innerHTML;
+        }
+
+        const formData = {
+            name: document.getElementById('inst-name').value,
+            discord: document.getElementById('inst-discord').value,
+            whatsapp: document.getElementById('inst-whatsapp').value,
+            theme: document.querySelector('input[name="theme"]:checked')?.value,
+            title: document.getElementById('inst-title').value,
+            description: document.getElementById('inst-desc').value,
+            level: document.querySelector('input[name="level"]:checked')?.value,
+            days: Array.from(document.querySelectorAll('input[name="days"]:checked')).map(cb => cb.value),
+            shift: document.querySelector('input[name="shift"]:checked')?.value,
+            support: document.querySelector('input[name="support"]:checked')?.value
+        };
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Enviando proposta...';
+        AppUtils.showLoading();
+
+        try {
+            const res = await ApiService.postData(CONFIG.ENDPOINTS.INSTRUCTOR, formData);
+            formWrapper.innerHTML = `
+                <div class="success-state">
+                    <h3>Proposta Enviada!</h3>
+                    <p class="success-msg">${res.message}</p>
+                    <button class="nav-cta btn-success-close" onclick="ModalLogic.close(UI.modalInstructor)">Entendido</button>
+                </div>
+            `;
+        } catch (err) {
+            AppUtils.showMessage(err.message, 'error', UI.instructorFeedback);
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
+            delete UI.modalInstructor.dataset.originalContent;
         } finally {
             AppUtils.hideLoading();
         }
@@ -250,15 +333,36 @@ async function init() { // Função de inicialização para carregar os projetos
     load();
 }
 
-UI.openModalBtns.forEach(btn => btn.addEventListener('click', ModalLogic.open));
-UI.closeModalBtn.addEventListener('click', ModalLogic.close);
-UI.waitlistForm.addEventListener('submit', Handlers.handleFormSubmit);
-window.addEventListener('DOMContentLoaded', init);
+// Eventos de Modal
+UI.openModalBtns.forEach(btn => btn.addEventListener('click', () => ModalLogic.open(UI.modal)));
+UI.closeModalBtn.addEventListener('click', () => ModalLogic.close(UI.modal));
 
+if (UI.openInstructorModalBtn) {
+    UI.openInstructorModalBtn.addEventListener('click', () => ModalLogic.open(UI.modalInstructor));
+}
+if (UI.closeInstructorModalBtn) {
+    UI.closeInstructorModalBtn.addEventListener('click', () => ModalLogic.close(UI.modalInstructor));
+}
+
+// Eventos de Formulário
+UI.waitlistForm.addEventListener('submit', Handlers.handleFormSubmit);
+if (UI.instructorForm) {
+    UI.instructorForm.addEventListener('submit', Handlers.handleInstructorSubmit);
+}
+
+// Máscaras e Inputs
 UI.phoneInput.addEventListener('input', (e) => {
     e.target.value = FormMasks.phone(e.target.value);
 });
 
+const instPhone = document.getElementById('inst-whatsapp');
+if (instPhone) {
+    instPhone.addEventListener('input', (e) => {
+        e.target.value = FormMasks.phone(e.target.value);
+    });
+}
+
+// Navegação
 if (UI.mobileMenuBtn) {
     UI.mobileMenuBtn.addEventListener('click', NavLogic.toggleMenu);
 };
@@ -276,6 +380,12 @@ UI.navMenu.addEventListener('click',(e)=>{
     if(e.target=== UI.navMenu){
         NavLogic.closeMenu();
     };
+});
+
+// Fechar modais ao clicar fora
+window.addEventListener('click', (e) => {
+    if (e.target === UI.modal) ModalLogic.close(UI.modal);
+    if (e.target === UI.modalInstructor) ModalLogic.close(UI.modalInstructor);
 });
 
 window.addEventListener('DOMContentLoaded', init);

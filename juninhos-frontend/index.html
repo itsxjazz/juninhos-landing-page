@@ -7,7 +7,9 @@
     <title>Juninhos</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="styles/main.css">
 </head>
 
@@ -32,8 +34,9 @@
                     <li><a href="#about">Sobre</a></li>
                     <li><a href="#ecosystem">Ecossistema</a></li>
                     <li><a href="#projects">Projetos</a></li>
-                    <li><a href="#corporate">Empresas</a></li>
-                    <li><a href="#community">Redes Sociais</a></li>
+                    <li><a href="#community">Redes</a></li>
+                    <li><a href="#benefits">Benefícios</a></li>
+                    <li><a href="#contribute">Apoiar</a></li>
                     <li><button class="btn-open-modal nav-cta">Entrar na Lista</button></li>
                 </ul>
             </nav>
@@ -45,7 +48,8 @@
         <section id="hero" class="hero-section container">
             <div class="hero-text">
                 <h1 class="hero-title">A comunidade onde a teoria encontra a prática.</h1>
-                <p class="hero-subtitle">Conectando talentos do nível júnior ao avançado para construir o futuro através do código.</p>
+                <p class="hero-subtitle">Conectando talentos do nível júnior ao avançado para construir o futuro através
+                    do código.</p>
                 <button class="btn-open-modal primary-cta">Demonstrar Interesse</button>
             </div>
             <a href="#about" class="hero-scroll-down" aria-label="Rolar para baixo"></a>
@@ -85,6 +89,13 @@
                     tecnicamente através da prática e da colaboração coletiva.
                 </p>
             </div>
+
+            <!-- Números integrados ao Sobre (fora do narrow content) -->
+            <div class="stats-grid" style="margin-top: 4rem;">
+                <div class="stat-item card-item"><strong>+300</strong><span>membros ativos</span></div>
+                <div class="stat-item card-item"><span>Fundada em</span><strong>abril de 2026</strong></div>
+                <div class="stat-item card-item"><strong>Projetos Reais</strong><span>sendo codados agora</span></div>
+            </div>
         </section>
 
         <!-- Ecossistema (cards) -->
@@ -94,6 +105,8 @@
                 <article class="card-item static-card">
                     <h3>Aulas e Mentorias</h3>
                     <p>Aprenda e ensine. Uma troca constante de conhecimento entre membros de todos os níveis.</p>
+                    <button class="link-btn primary btn-open-instructor-modal"
+                        style="margin-top: 1rem; width: 100%;">Quero ser instrutor</button>
                 </article>
                 <article class="card-item static-card">
                     <h3>Projetos e Squads</h3>
@@ -136,8 +149,7 @@
                 <article class="social-card linkedin">
                     <h3>LinkedIn</h3>
                     <p>Fique por dentro das atualizações da comunidade e do mercado.</p>
-                    <a href="https://linkedin.com/company/juninhos" target="_blank" class="social-link">Comunidade
-                        Juninhos</a>
+                    <a href="https://linkedin.com/company/juninhos" target="_blank" class="badge-exclusive">Acesse o LinkedIn</a>
                 </article>
                 <article class="social-card whatsapp">
                     <h3>WhatsApp</h3>
@@ -152,63 +164,58 @@
                 <article class="social-card twitter">
                     <h3>Twitter (X)</h3>
                     <p>Acompanhe novidades diariamente.</p>
-                    <a href="https://x.com/devsjuninhos" target="_blank" class="social-link">@devsjuninhos</a>
+                    <a href="https://x.com/devsjuninhos" target="_blank" class="badge-exclusive">Acesse nosso Twitter</a>
                 </article>
                 <article class="social-card instagram">
                     <h3>Instagram</h3>
                     <p>Bastidores e conteúdos da nossa jornada.</p>
                     <a href="https://www.instagram.com/devsjuninhos/" target="_blank"
-                        class="social-link">@devsjuninhos</a>
+                        class="badge-exclusive">Acesse nosso Instagram</a>
                 </article>
             </div>
         </section>
 
-        <!-- Benefícios -->
+        <!-- Por que entrar -->
         <section id="benefits" class="benefits-section container">
-            <h2 class="section-title">Por que entrar na lista de espera da comunidade?</h2>
-            <div class="benefits-grid">
-                <article class="benefit-item">
+            <h2 class="section-title">Por que entrar na lista?</h2>
+            <div class="cards-grid">
+                <article class="card-item benefit-card">
                     <h3>Crescimento Exponencial</h3>
                     <p>Alcançamos mais de 150 membros em menos de 48 horas. A lista ajuda a organizar a entrada para
                         mantermos a qualidade e a organização.</p>
                 </article>
-                <article class="benefit-item">
+                <article class="card-item benefit-card">
                     <h3>Prioridade nos Squads</h3>
                     <p>Quem está na lista terá prioridade para preencher as vagas nos próximos projetos colaborativos e
                         grupos de estudo.</p>
                 </article>
-                <article class="benefit-item">
+                <article class="card-item benefit-card">
                     <h3>Apoio Colaborativo</h3>
                     <p>Garanta seu lugar em um ambiente seguro para tirar dúvidas com uma rede de pessoas que estão
                         aprendendo juntas.</p>
                 </article>
-                <article class="benefit-item">
+                <article class="card-item benefit-card">
                     <h3>Foco em Prática Real</h3>
                     <p>Saia dos tutoriais infinitos e venha construir soluções de verdade.</p>
                 </article>
             </div>
         </section>
 
-        <!-- Contato para Empresas -->
-        <section id="corporate" class="corporate-section container">
-            <div class="corporate-card">
-                <h2 class="section-title">Para Empresas</h2>
-                <p>Deseja apoiar a iniciativa, contratar talentos ou propor parcerias? Entre em contato com nossa gestão
-                    através do e-mail oficial.</p>
-                <a href="mailto:juninhosdevs@gmail.com" class="primary-cta">juninhosdevs@gmail.com</a>
+        <!-- Apoie e Empresas -->
+        <section id="contribute" class="contribute-section container">
+            <div class="cards-grid contribute-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                <div class="card-item contribute-card" style="padding: 2rem; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <h2 class="section-title" style="font-size: 1.5rem; margin-bottom: 1rem;">Apoie nossa Causa</h2>
+                    <p style="margin-bottom: 1.5rem;">A Juninhos é feita de pessoas para pessoas. Sua contribuição ajuda a manter servidores e infraestrutura gratuitos.</p>
+                    <a href="https://apoia.se/juninhos" target="_blank" class="link-btn primary">Apoiar no Apoia.se</a>
+                </div>
+                <div class="card-item contribute-card" style="padding: 2rem; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <h2 class="section-title" style="font-size: 1.5rem; margin-bottom: 1rem;">Para Empresas</h2>
+                    <p style="margin-bottom: 1.5rem;">Deseja apoiar a iniciativa, contratar talentos ou propor parcerias? Entre em contato com nossa gestão.</p>
+                    <a href="mailto:juninhosdevs@gmail.com" class="link-btn secondary">juninhosdevs@gmail.com</a>
+                </div>
             </div>
         </section>
-
-        <!-- Números -->
-        <section id="stats" class="stats-section container">
-            <h2 class="section-title">Juninhos em números</h2>
-            <div class="stats-grid">
-                <div class="stat-item"><strong>+300</strong> membros ativos</div>
-                <div class="stat-item">Fundada em <strong>abril de 2026</strong></div>
-                <div class="stat-item"><strong>Projetos Reais</strong> sendo codados agora</div>
-            </div>
-        </section>
-    </main>
 
     <!-- Modal com formulário -->
     <div id="modal" class="modal-wrapper hidden" aria-modal="true" role="dialog">
@@ -268,14 +275,16 @@
                 <div class="logo"><img src="assets/images/logo-grande.png" alt="Juninhos"></div>
                 <p>A comunidade onde a teoria encontra a prática através do código e da colaboração coletiva.</p>
             </div>
-            
+
             <div class="footer-links">
                 <h4>Navegação</h4>
                 <ul>
                     <li><a href="#about">Sobre</a></li>
                     <li><a href="#ecosystem">Ecossistema</a></li>
                     <li><a href="#projects">Projetos</a></li>
-                    <li><a href="#corporate">Empresas</a></li>
+                    <li><a href="#community">Redes</a></li>
+                    <li><a href="#benefits">Benefícios</a></li>
+                    <li><a href="#contribute">Apoiar / Empresas</a></li>
                 </ul>
             </div>
 
@@ -287,8 +296,15 @@
                     <li><a href="https://www.instagram.com/devsjuninhos/" target="_blank">Instagram</a></li>
                 </ul>
             </div>
+
+            <div class="footer-apoia">
+                <h4>Contribua</h4>
+                <ul>
+                    <li><a href="https://apoia.se/juninhos" target="_blank">Apoia.se</a></li>
+                </ul>
+            </div>
         </div>
-        
+
         <div class="footer-bottom container">
             <p>&copy; 2026 Juninhos. Desenvolvido pela nossa comunidade.</p>
         </div>
@@ -298,6 +314,102 @@
     <div id="loading" class="loading-overlay hidden">
         <div class="spinner"></div>
         <p>Carregando...</p>
+    </div>
+
+    <!-- Modal Instrutores -->
+    <div id="modal-instructor" class="modal-wrapper hidden" aria-modal="true" role="dialog">
+        <div class="modal-content">
+            <button id="btn-close-instructor-modal" class="modal-close" aria-label="Fechar modal">&times;</button>
+            <div class="form-wrapper">
+                <h2 class="section-title">Chamada de Instrutores</h2>
+                <p style="margin-bottom: 2rem; text-align: center;">Queremos mapear quem domina os assuntos que nossos
+                    squads precisam aprender. Se você tem algo a ensinar, preencha abaixo. A gente te ajuda com o
+                    roteiro se precisar!</p>
+
+                <form id="instructor-form" class="waitlist-form">
+                    <!-- Seção 1: Quem é você -->
+                    <div class="form-group">
+                        <label for="inst-name">Nome completo *</label>
+                        <input type="text" id="inst-name" name="name" required placeholder="Seu nome">
+                    </div>
+                    <div class="form-group">
+                        <label for="inst-discord">Qual seu @ no Discord? *</label>
+                        <input type="text" id="inst-discord" name="discord" required placeholder="ex: usuario#0000">
+                    </div>
+                    <div class="form-group">
+                        <label for="inst-whatsapp">WhatsApp *</label>
+                        <input type="tel" id="inst-whatsapp" name="whatsapp" required placeholder="(00) 00000-0000">
+                    </div>
+
+                    <!-- Seção 2: Sobre a aula -->
+                    <fieldset class="form-group">
+                        <legend>Tema principal *</legend>
+                        <div class="radio-group">
+                            <label><input type="radio" name="theme" value="Front-end" required> Front-end</label>
+                            <label><input type="radio" name="theme" value="Back-end"> Back-end</label>
+                            <label><input type="radio" name="theme" value="DevOps / Cloud"> DevOps / Cloud</label>
+                            <label><input type="radio" name="theme" value="Mobile"> Mobile</label>
+                            <label><input type="radio" name="theme" value="Dados"> Dados</label>
+                            <label><input type="radio" name="theme" value="Gamedev"> Gamedev</label>
+                            <label><input type="radio" name="theme" value="Outro"> Outro</label>
+                        </div>
+                    </fieldset>
+                    <div class="form-group">
+                        <label for="inst-title">Título Sugerido para a Aula *</label>
+                        <input type="text" id="inst-title" name="title" required placeholder="Ex: Introdução ao React">
+                    </div>
+                    <div class="form-group">
+                        <label for="inst-desc">O que será ensinado? *</label>
+                        <textarea id="inst-desc" name="description" required placeholder="Breve resumo do conteúdo"></textarea>
+                    </div>
+                    <fieldset class="form-group">
+                        <legend>Nível da aula *</legend>
+                        <div class="radio-group">
+                            <label><input type="radio" name="level" value="Iniciante" required> Iniciante</label>
+                            <label><input type="radio" name="level" value="Intermediário"> Intermediário</label>
+                            <label><input type="radio" name="level" value="Avançado"> Avançado</label>
+                        </div>
+                    </fieldset>
+
+                    <!-- Seção 3: Agenda -->
+                    <fieldset class="form-group">
+                        <legend>Quais dias ficam melhores para você? *</legend>
+                        <div class="checkbox-group">
+                            <label><input type="checkbox" name="days" value="Segunda"> Segunda</label>
+                            <label><input type="checkbox" name="days" value="Terça"> Terça</label>
+                            <label><input type="checkbox" name="days" value="Quarta"> Quarta</label>
+                            <label><input type="checkbox" name="days" value="Quinta"> Quinta</label>
+                            <label><input type="checkbox" name="days" value="Sexta"> Sexta</label>
+                            <label><input type="checkbox" name="days" value="Sábado"> Sábado</label>
+                            <label><input type="checkbox" name="days" value="Domingo"> Domingo</label>
+                        </div>
+                    </fieldset>
+                    <fieldset class="form-group">
+                        <legend>Qual o melhor turno? *</legend>
+                        <div class="radio-group">
+                            <label><input type="radio" name="shift" value="Manhã" required> Manhã</label>
+                            <label><input type="radio" name="shift" value="Tarde"> Tarde</label>
+                            <label><input type="radio" name="shift" value="Noite"> Noite</label>
+                            <label><input type="radio" name="shift" value="Flexível"> Flexível</label>
+                        </div>
+                    </fieldset>
+                    <fieldset class="form-group">
+                        <legend>Suporte da Liderança *</legend>
+                        <div class="radio-group" style="flex-direction: column; align-items: flex-start;">
+                            <label><input type="radio" name="support" value="Já sei como passar" required> Já sei passar
+                                o conteúdo</label>
+                            <label><input type="radio" name="support" value="Preciso de ajuda no roteiro"> Preciso de
+                                ajuda no roteiro e/ou nos slides</label>
+                            <label><input type="radio" name="support" value="Ajuda com a vergonha"> Quero apoio para
+                                perder a vergonha</label>
+                        </div>
+                    </fieldset>
+
+                    <button type="submit" class="btn-submit" style="margin-top: 2rem;">Enviar Proposta de Aula</button>
+                </form>
+                <div id="instructor-feedback" class="form-feedback hidden"></div>
+            </div>
+        </div>
     </div>
 
     <script src="main.js"></script>

@@ -30,7 +30,7 @@ async function getSheetsClient() { // Função para obter o cliente autenticado 
 
 async function getSheetData(range) { // Função para buscar dados da planilha de projetos e aulas, com tratamento de erros 
     try {
-        const sheets = await getSheetsClient(); 
+        const sheets = await getSheetsClient();
         const response = await sheets.spreadsheets.values.get({
             spreadsheetId: process.env.GOOGLE_SHEET_ID,
             range: range,
@@ -56,7 +56,7 @@ app.get('/api/projects', async (req, res) => { // Endpoint para buscar os projet
     try {
         const rows = await getSheetData('Gestão de Projetos!A2:H');
         const projects = rows
-            .filter(row => row[0]) 
+            .filter(row => row[0])
             .map(row => ({
                 titulo: row[0] || 'Sem título',
                 descricao: row[1] || '',
@@ -127,6 +127,45 @@ app.post('/api/waitlist', async (req, res) => { // Endpoint para processar a ins
         console.error('Erro crítico:', error);
         if (!res.headersSent) {
             res.status(500).json({ error: 'Erro ao processar sua inscrição.' });
+        }
+    }
+});
+
+app.post('/api/instructor', async (req, res) => {
+    try {
+        const { name, discord, whatsapp, theme, title, description, level, days, shift, support } = req.body;
+
+        res.status(201).json({ message: 'Sua proposta de aula foi enviada! A liderança entrará em contato em breve.' });
+
+        const mailOptions = {
+            from: process.env.EMAIL_USER,
+            to: process.env.NOTIFY_EMAIL,
+            subject: 'Nova Proposta de Aula!',
+            text: `Um novo membro quer dar aula!\n\n` +
+                `--- Perfil ---\n` +
+                `Nome: ${name}\n` +
+                `Discord: ${discord}\n` +
+                `WhatsApp: ${whatsapp}\n\n` +
+                `--- Aula ---\n` +
+                `Tema: ${theme}\n` +
+                `Título: ${title}\n` +
+                `O que será ensinado: ${description}\n` +
+                `Nível: ${level}\n\n` +
+                `--- Organização ---\n` +
+                `Dias: ${days.join(', ')}\n` +
+                `Turno: ${shift}\n` +
+                `Suporte necessário: ${support}`
+        };
+
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) console.error(' Erro ao enviar e-mail de instrutor:', error);
+            else console.log('E-mail de instrutor enviado:', info.response);
+        });
+
+    } catch (error) {
+        console.error('Erro no endpoint de instrutor:', error);
+        if (!res.headersSent) {
+            res.status(500).json({ error: 'Erro ao enviar proposta.' });
         }
     }
 });
