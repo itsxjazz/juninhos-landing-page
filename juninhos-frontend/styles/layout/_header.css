@@ -19,8 +19,8 @@
 
 .main-header .header-content {
     height: 60px;
-    padding-left: 1.25rem;
-    padding-right: 1rem;
+    padding-left: 2rem;
+    padding-right: 1.75rem;
     justify-content: flex-start;
     gap: 2rem;
 }
@@ -151,8 +151,8 @@ body {
 
     .main-header .header-content {
         height: 60px;
-        padding-left: 1rem;
-        padding-right: 0.95rem;
+        padding-left: 1.5rem;
+        padding-right: 1.25rem;
     }
 
     .logo a {
