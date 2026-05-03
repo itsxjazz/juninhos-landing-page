@@ -4,17 +4,29 @@
     gap: 2rem;
 }
 
-.card-item, .social-card, .benefit-item {
+.card-item, .social-card, .benefit-item, .static-card, .stat-item {
     background-color: var(--clr-surface);
     border-radius: var(--radius-lg);
     padding: 1.5rem;
     box-shadow: var(--shadow-sm);
-    transition: box-shadow var(--transition-fast), transform var(--transition-fast);
+    border: 2px solid var(--clr-primary);
+    transition: all var(--transition-fast);
 }
 
-.card-item:hover, .social-card:hover {
+.card-item:hover, .social-card:hover, .static-card:hover, .benefit-item:hover, .stat-item:hover {
     box-shadow: var(--shadow-md);
     transform: translateY(-5px);
+    border-color: var(--clr-cyan);
+}
+
+.card-item h3, .social-card h3, .benefit-item h3, .static-card h3, .stat-item strong {
+    color: var(--clr-primary);
+    transition: color var(--transition-fast);
+    margin-bottom: 0.75rem;
+}
+
+.card-item:hover h3, .social-card:hover h3, .static-card:hover h3, .benefit-item:hover h3, .stat-item:hover strong {
+    color: var(--clr-cyan);
 }
 
 .project-image img {

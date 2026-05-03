@@ -1,9 +1,11 @@
 :root {
     /* Cores Principais */
-    ---clr-primary: #A855F7; 
+    --clr-primary: #A855F7; 
     --clr-primary-dark: #8B5CF6;
     --clr-secondary: #13101C;
     --clr-accent: #00FF9D;
+    --clr-cyan: #00E5FF;
+    --clr-hero-gradient: linear-gradient(135deg, #7924ec 0%, #db87f9 100%);
     
     /* Backgrounds e Superfícies */
     --clr-bg: #0D0B14; 
