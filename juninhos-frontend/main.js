@@ -51,26 +51,33 @@ const AppUtils = { // Funções auxiliares para manipulação de UI e formataç�
 
 const ModalLogic = { // Lóigica para abrir e fechar o modal, incluindo a restauração do conteúdo original do formulário se necessário
     open: (modalEl = UI.modal) => { // Abre o modal e impede o scroll do body para focar a atenção do usuário
-        modalEl.classList.remove('hidden');
+        const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+        modalEl.classList.add('show');
         document.body.style.overflow = 'hidden';
+        document.body.style.paddingRight = `${scrollbarWidth}px`;
     },
-    close: (modalEl = UI.modal) => { // Fecha o modal e permite o scroll do body novamente
-        modalEl.classList.add('hidden');
-        document.body.style.overflow = 'auto';
+    
+     close: (modalEl = UI.modal) => { // Fecha o modal e permite o scroll do body novamente
+        modalEl.classList.remove('show');
+        
+        setTimeout(() => {
+            document.body.style.overflow = ''; 
+            document.body.style.paddingRight = '';
 
-        const formWrapper = modalEl.querySelector('.form-wrapper');
-        if (modalEl.dataset.originalContent) {
-            formWrapper.innerHTML = modalEl.dataset.originalContent;
-            // Re-bind events based on which modal it is
-            if (modalEl === UI.modal) {
-                UI.waitlistForm = document.getElementById('waitlist-form');
-                UI.waitlistForm.addEventListener('submit', Handlers.handleFormSubmit);
-            } else {
-                UI.instructorForm = document.getElementById('instructor-form');
-                UI.instructorForm.addEventListener('submit', Handlers.handleInstructorSubmit);
+            const formWrapper = modalEl.querySelector('.form-wrapper');
+            if (modalEl.dataset.originalContent) {
+                formWrapper.innerHTML = modalEl.dataset.originalContent;
+                
+                if (modalEl === UI.modal) {
+                    UI.waitlistForm = document.getElementById('waitlist-form');
+                    UI.waitlistForm.addEventListener('submit', Handlers.handleFormSubmit);
+                } else {
+                    UI.instructorForm = document.getElementById('instructor-form');
+                    UI.instructorForm.addEventListener('submit', Handlers.handleInstructorSubmit);
+                }
+                delete modalEl.dataset.originalContent;
             }
-            delete modalEl.dataset.originalContent;
-        }
+        }, 300); // 300ms = tempo da transição no CSS
     }
 };
 
@@ -319,7 +326,9 @@ const FormMasks = {
     }
 };
 
-async function init() { // Função de inicialização para carregar os projetos e aulas, com retry automático em caso de falha
+async function init() {
+    Animations.initAll();
+
     Renderers.showSkeletons(UI.projectsContainer, 3);
     Renderers.showSkeletons(UI.classesContainer, 2);
 
@@ -328,6 +337,11 @@ async function init() { // Função de inicialização para carregar os projetos
         const c = await ApiService.fetchData(CONFIG.ENDPOINTS.CLASSES);
         if (p) Renderers.renderProjects(p);
         if (c) Renderers.renderClasses(c);
+
+        if (p || c) {
+            requestAnimationFrame(() => Animations.refreshCards());
+        }
+
         if (!p || !c) setTimeout(load, CONFIG.RETRY_DELAY);
     };
     load();

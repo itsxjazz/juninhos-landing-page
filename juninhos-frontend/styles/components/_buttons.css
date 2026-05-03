@@ -9,7 +9,7 @@ button {
 .primary-cta, .nav-cta, .btn-submit, .link-btn.primary {
     background-color: var(--clr-btn-primary);
     color: var(--clr-btn-text);
-    padding: 0.8rem 1.8rem;
+    padding: 0.5rem 1.5rem;
     border-radius: var(--radius-md);
     font-weight: 600;
     text-align: center;

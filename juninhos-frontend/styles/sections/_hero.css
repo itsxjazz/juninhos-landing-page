@@ -21,7 +21,6 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(13, 11, 20, 0.85); /* Escurece um pouco mais para dar foco no texto */
     z-index: 1;
 }
 
@@ -106,4 +105,4 @@
     60% {transform: translateX(-50%) rotate(45deg) translateY(-8px);}
 }
 
-
+
