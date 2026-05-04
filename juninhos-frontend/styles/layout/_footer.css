@@ -14,6 +14,16 @@
     margin-bottom: 3rem;
 }
 
+.footer-brand .logo {
+    margin-bottom: 1.5rem;
+}
+
+.footer-brand .logo img {
+    height: 45px; /* Altura fixa controlada */
+    width: auto;  /* Largura automática para não esticar */
+    object-fit: contain;
+}
+
 .footer-links ul li, .footer-socials ul li, .footer-apoia ul li {
     margin-bottom: 0.5rem;
 }

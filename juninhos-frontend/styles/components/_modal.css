@@ -16,6 +16,7 @@
     align-items: center;
     z-index: 2000;
     padding: 1rem;
+    overscroll-behavior: contain; /* Impede que a rolagem afete o fundo */
 }
 
 .modal-wrapper.show {
@@ -42,6 +43,7 @@
         opacity 0.4s ease,
         transform 0.45s cubic-bezier(0.22, 1.2, 0.36, 1);
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+    overscroll-behavior: contain;
 }
 
 .modal-wrapper.show .modal-content {
@@ -76,8 +78,9 @@
 
 @media (max-width: 768px) {
     .modal-content {
-        padding: 1.5rem 1rem; 
+        padding: 1.5rem 1rem 3rem; /* Aumentado o padding inferior para o botão não sumir no teclado */
         max-height: 95vh;
+        width: 95%;
     }
     
     .modal-close {

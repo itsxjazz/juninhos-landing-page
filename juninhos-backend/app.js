@@ -4,6 +4,7 @@ const cors = require('cors');
 const { google } = require('googleapis');
 const mongoose = require('mongoose');
 const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
 const Waitlist = require('./models/Waitlist');
 const path = require('path');
 
@@ -25,6 +26,7 @@ console.log('--- Diagnóstico de Ambiente ---');
 console.log('PORT:', process.env.PORT);
 console.log('MONGO_URI detectada:', !!process.env.MONGO_URI);
 console.log('GOOGLE_CREDENTIALS detectada:', !!process.env.GOOGLE_CREDENTIALS);
+console.log('RESEND_API_KEY detectada:', !!process.env.RESEND_API_KEY);
 console.log('------------------------------');
 
 const auth = new google.auth.GoogleAuth({ // Configurações para autenticação com a API do Google Sheets
@@ -58,6 +60,7 @@ async function getSheetData(range) { // Função para buscar dados da planilha d
     }
 }
 
+/* 
 const transporter = nodemailer.createTransport({ // Configurações para envio de e-mails usando o Nodemailer
     host: 'smtp.gmail.com',
     port: 465,
@@ -68,6 +71,9 @@ const transporter = nodemailer.createTransport({ // Configurações para envio d
     },
     family: 4 // Insiste no IPv4
 });
+*/
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 app.get('/api/projects', async (req, res) => { // Endpoint para buscar os projetos da planilha, com tratamento de erros e resposta adequada
     try {
@@ -131,10 +137,20 @@ app.post('/api/waitlist', async (req, res) => { // Endpoint para processar a ins
                 `Tecnologias: ${technologies}`,
         };
 
+        /*
         transporter.sendMail(mailOptions, (error, info) => { // Callback para logar o resultado do envio de e-mail
             if (error) console.error(' Erro ao enviar e-mail:', error);
             else console.log('E-mail enviado com sucesso:', info.response);
         });
+        */
+
+        resend.emails.send({
+            from: 'Juninhos <onboarding@resend.dev>',
+            to: process.env.NOTIFY_EMAIL,
+            subject: mailOptions.subject,
+            text: mailOptions.text
+        }).then(() => console.log('E-mail enviado via Resend'))
+          .catch(err => console.error('Erro Resend:', err.message));
 
         const newLead = new Waitlist({ name, phone, level, areas, technologies });
         newLead.save()
@@ -175,10 +191,20 @@ app.post('/api/instructor', async (req, res) => {
                 `Suporte necessário: ${support}`
         };
 
+        /*
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) console.error(' Erro ao enviar e-mail de instrutor:', error);
             else console.log('E-mail de instrutor enviado:', info.response);
         });
+        */
+
+        resend.emails.send({
+            from: 'Juninhos <onboarding@resend.dev>',
+            to: process.env.NOTIFY_EMAIL,
+            subject: mailOptions.subject,
+            text: mailOptions.text
+        }).then(() => console.log('E-mail de instrutor enviado via Resend'))
+          .catch(err => console.error('Erro Resend:', err.message));
 
     } catch (error) {
         console.error('Erro no endpoint de instrutor:', error);

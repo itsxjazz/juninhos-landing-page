@@ -100,7 +100,6 @@ body {
     display: block;
     width: 25px;
     height: 3px;
-    margin-top: 40px;
     background-color: var(--clr-text-main);
     position: relative;
     transition: background-color var(--transition-fast);

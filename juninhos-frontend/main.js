@@ -67,7 +67,11 @@ const ModalLogic = { // Lóigica para abrir e fechar o modal, incluindo a restau
     open: (modalEl = UI.modal) => { // Abre o modal e impede o scroll do body para focar a atenção do usuário
         const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
         modalEl.classList.add('show');
+        
+        // Trava agressiva de scroll para mobile
+        document.documentElement.style.scrollBehavior = 'auto'; // Desativa o smooth scroll global
         document.body.style.overflow = 'hidden';
+        document.body.style.height = '100%';
         document.body.style.paddingRight = `${scrollbarWidth}px`;
     },
 
@@ -76,7 +80,9 @@ const ModalLogic = { // Lóigica para abrir e fechar o modal, incluindo a restau
 
         setTimeout(() => {
             document.body.style.overflow = '';
+            document.body.style.height = '';
             document.body.style.paddingRight = '';
+            document.documentElement.style.scrollBehavior = ''; // Reativa o smooth scroll padrão
 
             const formWrapper = modalEl.querySelector('.form-wrapper');
             if (modalEl.dataset.originalContent) {
