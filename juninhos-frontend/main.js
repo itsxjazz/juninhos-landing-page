@@ -1,5 +1,4 @@
 const CONFIG = {
-    // URL direta do Render para garantir funcionamento na Vercel
     API_BASE_URL: 'https://juninhos-landing-page.onrender.com/api',
     ENDPOINTS: {
         PROJECTS: '/projects',
