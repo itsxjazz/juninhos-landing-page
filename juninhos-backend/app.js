@@ -12,11 +12,20 @@ app.use(cors());
 app.use(express.json());
 
 mongoose.connect(process.env.MONGO_URI, { // Configurações de conexão para evitar timeouts
-    serverSelectionTimeoutMS: 15000,
-    connectTimeoutMS: 15000,
+    serverSelectionTimeoutMS: 30000,
+    connectTimeoutMS: 30000,
 })
-    .then(() => console.log('Conectado ao MongoDB Atlas'))
-    .catch(err => console.error('Erro ao conectar ao MongoDB:', err.message));
+    .then(() => console.log('✅ Conectado ao MongoDB Atlas'))
+    .catch(err => {
+        console.error('❌ Erro ao conectar ao MongoDB:', err.message);
+        console.log('DICA: Verifique se o IP 0.0.0.0/0 está liberado no Atlas e se a MONGO_URI está correta no Render.');
+    });
+
+console.log('--- Diagnóstico de Ambiente ---');
+console.log('PORT:', process.env.PORT);
+console.log('MONGO_URI detectada:', !!process.env.MONGO_URI);
+console.log('GOOGLE_CREDENTIALS detectada:', !!process.env.GOOGLE_CREDENTIALS);
+console.log('------------------------------');
 
 const auth = new google.auth.GoogleAuth({ // Configurações para autenticação com a API do Google Sheets
     credentials: process.env.GOOGLE_CREDENTIALS 
@@ -50,11 +59,14 @@ async function getSheetData(range) { // Função para buscar dados da planilha d
 }
 
 const transporter = nodemailer.createTransport({ // Configurações para envio de e-mails usando o Nodemailer
-    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true, // true para porta 465
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
     },
+    family: 4 // Insiste no IPv4
 });
 
 app.get('/api/projects', async (req, res) => { // Endpoint para buscar os projetos da planilha, com tratamento de erros e resposta adequada
