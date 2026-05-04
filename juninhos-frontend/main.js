@@ -19,8 +19,12 @@ const UI = { // Cache de elementos do DOM para fácil acesso e manipulação
     instructorFeedback: document.getElementById('instructor-feedback'),
     modal: document.getElementById('modal'),
     modalInstructor: document.getElementById('modal-instructor'),
+    modalProject: document.getElementById('modal-project'),
     closeModalBtn: document.getElementById('btn-close-modal'),
     closeInstructorModalBtn: document.getElementById('btn-close-instructor-modal'),
+    closeProjectModalBtn: document.getElementById('btn-close-project-modal'),
+    projectDetailTitle: document.getElementById('project-detail-title'),
+    projectDetailBody: document.getElementById('project-detail-body'),
     openModalBtns: document.querySelectorAll('.btn-open-modal'),
     openInstructorModalBtn: document.querySelector('.btn-open-instructor-modal'),
     mobileMenuBtn: document.getElementById('btn-mobile-menu'),
@@ -41,11 +45,21 @@ const AppUtils = { // Funções auxiliares para manipulação de UI e formataç�
         feedbackEl.className = `form-feedback ${type}`;
         feedbackEl.classList.remove('hidden');
     },
-    getDirectDriveLink: (url) => { // Converte link de visualização do Drive para link direto de imagem
-        if (!url || !url.includes('drive.google.com')) return url;
-        const match = url.match(/\/d\/([^/]+)/);
-        // Usando o formato googleusercontent que é mais estável para embeds
-        return match ? `https://lh3.googleusercontent.com/d/${match[1]}` : url;
+    getDirectImageLink: (url) => { // Converte links do Drive e GitHub para links diretos de imagem
+        if (!url) return url;
+        
+        // Trata Google Drive
+        if (url.includes('drive.google.com')) {
+            const match = url.match(/\/d\/([^/]+)/);
+            return match ? `https://lh3.googleusercontent.com/d/${match[1]}` : url;
+        }
+
+        // Trata GitHub
+        if (url.includes('github.com') && url.includes('/blob/')) {
+            return url.replace('github.com', 'raw.githubusercontent.com').replace('/blob/', '/');
+        }
+
+        return url;
     }
 };
 
@@ -117,7 +131,7 @@ const Renderers = { // Funções para renderizar dados na tela, incluindo skelet
         if (!projects || projects.length === 0) return false;
         UI.projectsContainer.innerHTML = projects.map(p => {
             const rawImage = p.links.imagem;
-            const convertedImage = AppUtils.getDirectDriveLink(rawImage);
+            const convertedImage = AppUtils.getDirectImageLink(rawImage);
             
             // Verifica se é uma imagem válida após a conversão
             const isImage = convertedImage && (
@@ -146,17 +160,21 @@ const Renderers = { // Funções para renderizar dados na tela, incluindo skelet
                     <div class="card-body">
                         <span class="status-badge ${AppUtils.formatStatusClass(p.status)}">${p.status}</span>
                         <h3>${p.titulo}</h3>
-                        <p>${p.descricao}</p>
+                        <p>${p.descricao_simples || p.descricao || ''}</p>
                         
                         <div class="project-stack">
-                            <strong>Stack:</strong> ${p.stack.join(', ')}
+                            <strong>Stack:</strong> ${Array.isArray(p.stack) ? p.stack.join(', ') : p.stack}
                         </div>
                         <div class="project-members">
-                            <strong>Membros:</strong> ${p.membros.join(', ')}
+                            <strong>Membros:</strong> ${Array.isArray(p.membros) ? p.membros.join(', ') : p.membros}
                         </div>
 
-                        <div class="card-footer">
-                            ${p.links.deploy ? `<a href="${p.links.deploy}" target="_blank" class="link-btn primary">Deploy</a>` : ''}
+                        <div class="card-footer" style="flex-wrap: wrap;">
+                            <button class="link-btn primary btn-show-details" 
+                                    onclick="Handlers.showProjectDetails('${p.titulo.replace(/'/g, "\\'")}', '${(p.descricao_detalhada || 'Sem descrição detalhada disponível.').replace(/'/g, "\\'").replace(/\n/g, '<br>')}')">
+                                Saiba mais
+                            </button>
+                            ${p.links.deploy ? `<a href="${p.links.deploy}" target="_blank" class="link-btn secondary">Deploy</a>` : ''}
                             ${p.links.github ? `<a href="${p.links.github}" target="_blank" class="link-btn secondary">GitHub</a>` : ''}
                         </div>
                     </div>
@@ -176,7 +194,6 @@ const Renderers = { // Funções para renderizar dados na tela, incluindo skelet
                     <p><strong>Mentor:</strong> ${c.mentor}</p>
                     <p><strong>Data:</strong> ${c.data}</p>
                     <p><strong>Canal:</strong> ${c.canal}</p>
-                    </div>
                 </div>
             </article>
         `).join('');
@@ -274,6 +291,12 @@ const Handlers = { // Funções para lidar com eventos e formulários
         } finally {
             AppUtils.hideLoading();
         }
+    },
+
+    showProjectDetails(title, details) {
+        UI.projectDetailTitle.textContent = title;
+        UI.projectDetailBody.innerHTML = details;
+        ModalLogic.open(UI.modalProject);
     }
 };
 
@@ -400,6 +423,11 @@ UI.navMenu.addEventListener('click',(e)=>{
 window.addEventListener('click', (e) => {
     if (e.target === UI.modal) ModalLogic.close(UI.modal);
     if (e.target === UI.modalInstructor) ModalLogic.close(UI.modalInstructor);
+    if (e.target === UI.modalProject) ModalLogic.close(UI.modalProject);
 });
+
+if (UI.closeProjectModalBtn) {
+    UI.closeProjectModalBtn.addEventListener('click', () => ModalLogic.close(UI.modalProject));
+}
 
 window.addEventListener('DOMContentLoaded', init);

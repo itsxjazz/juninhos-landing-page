@@ -54,20 +54,21 @@ const transporter = nodemailer.createTransport({ // Configurações para envio d
 
 app.get('/api/projects', async (req, res) => { // Endpoint para buscar os projetos da planilha, com tratamento de erros e resposta adequada
     try {
-        const rows = await getSheetData('Gestão de Projetos!A2:H');
+        const rows = await getSheetData('Gestão de Projetos!A2:I');
         const projects = rows
             .filter(row => row[0])
             .map(row => ({
                 titulo: row[0] || 'Sem título',
-                descricao: row[1] || '',
-                status: row[2] || 'Em andamento',
+                descricao_simples: row[1] || '',
+                descricao_detalhada: row[2] || '',
+                status: row[3] || 'Em andamento',
                 links: {
-                    imagem: row[3] || '',
-                    deploy: row[4] || '',
-                    github: row[5] || '',
+                    imagem: row[4] || '',
+                    deploy: row[5] || '',
+                    github: row[6] || '',
                 },
-                stack: row[6] ? row[6].split(',').map(s => s.trim()) : [],
-                membros: row[7] ? row[7].split(',').map(m => m.trim()) : [],
+                stack: row[7] ? row[7].split(',').map(s => s.trim()) : [],
+                membros: row[8] ? row[8].split(',').map(m => m.trim()) : [],
             }));
         res.json(projects);
     } catch (error) {

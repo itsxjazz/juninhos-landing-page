@@ -3,19 +3,25 @@ gsap.registerPlugin(ScrollTrigger);
 const reveal = (target, vars = {}) => {
     const elements = gsap.utils.toArray(target);
     if (!elements.length) return;
+    
     elements.forEach((el, i) => {
-        gsap.from(el, {
-            y: vars.y ?? 40,
-            x: vars.x ?? 0,
-            opacity: 0,
-            scale: vars.scale ?? 1,
-            duration: vars.duration ?? 0.8,
+        // Garantir estado inicial
+        gsap.set(el, { opacity: 0, y: vars.y ?? 15 });
+
+        gsap.to(el, {
+            y: 0,
+            x: 0,
+            opacity: 1,
+            scale: 1,
+            duration: vars.duration ?? 0.5,
             delay: vars.stagger ? (i % (vars.staggerLimit ?? 4)) * vars.stagger : 0,
-            ease: vars.ease ?? 'power3.out',
+            ease: 'power2.out',
+            clearProps: 'transform', // Limpa o transform para o CSS hover funcionar
             scrollTrigger: {
                 trigger: el,
-                start: vars.start ?? 'top 95%',
-                toggleActions: 'play none none none'
+                start: 'top 95%',
+                toggleActions: 'play none none none',
+                once: true // Executa apenas uma vez para garantir
             }
         });
     });
@@ -23,42 +29,40 @@ const reveal = (target, vars = {}) => {
 
 const Animations = {
     initHeader: () => {
-        gsap.from('.main-header', { y: -50, opacity: 0, duration: 0.7, ease: 'power3.out' });
+        gsap.from('.main-header', { opacity: 0, duration: 0.6, ease: 'power2.out' });
         gsap.from('.logo, .nav-menu li, .mobile-menu-toggle', {
-            y: -20, opacity: 0, duration: 0.6, stagger: 0.08, delay: 0.2, ease: 'power3.out'
+            opacity: 0, duration: 0.5, stagger: 0.05, delay: 0.2, ease: 'power2.out'
         });
     },
 
     initHero: () => {
-        const ease = 'power3.out';
-        gsap.from('.container', { y: 60, opacity: 0, duration: 0.9, ease });
+        const ease = 'power2.out';
+        const heroContainer = document.querySelector('.hero-section .container');
+        if (heroContainer) {
+            gsap.set(heroContainer, { y: 20, opacity: 0 });
+            gsap.to(heroContainer, { y: 0, opacity: 1, duration: 0.8, ease, delay: 0.3 });
+        }
     },
 
     initSections: () => {
-        reveal('.section-title', { y: 40 });
-        reveal('.section-subtitle', { y: 30 });
-        reveal('section h2:not(.section-title)', { y: 40 });
-        reveal('section h3', { y: 30 });
-        reveal('.about-text', { y: 30, stagger: 0.1, staggerLimit: 4 });
-        reveal('section p:not(.section-subtitle):not(.about-text)', { y: 25 });
-        reveal('.about-content', { y: 50 });
-        reveal('.section-header', { y: 30 });
+        reveal('.section-title', { y: 30 });
+        reveal('.section-subtitle', { y: 20 });
+        reveal('.about-text', { y: 20, stagger: 0.1, staggerLimit: 4 });
+        reveal('.about-content', { y: 30 });
+        reveal('.section-header', { y: 20 });
     },
 
     initCards: () => {
-        reveal('.stat-item', { y: 40, stagger: 0.12, staggerLimit: 3 });
-        reveal('.static-card', { y: 50, stagger: 0.12, staggerLimit: 3 });
-        reveal('.benefit-card', { y: 50, stagger: 0.12, staggerLimit: 4 });
-        reveal('.social-card', { y: 50, stagger: 0.1, staggerLimit: 3 });
-        reveal('.project-card', { y: 60, stagger: 0.12, staggerLimit: 3 });
-        reveal('.class-card', { y: 60, stagger: 0.12, staggerLimit: 3 });
-        reveal('.contribute-card', { y: 50, stagger: 0.12, staggerLimit: 2 });
+        reveal('.stat-item', { y: 30, stagger: 0.1, staggerLimit: 3 });
+        reveal('.static-card', { y: 40, stagger: 0.1, staggerLimit: 3 });
+        reveal('.benefit-card', { y: 40, stagger: 0.1, staggerLimit: 4 });
+        reveal('.social-card', { y: 40, stagger: 0.08, staggerLimit: 3 });
+        reveal('.project-card', { y: 40, stagger: 0.1, staggerLimit: 3 });
+        reveal('.class-card', { y: 40, stagger: 0.1, staggerLimit: 3 });
+        reveal('.contribute-card', { y: 40, stagger: 0.1, staggerLimit: 2 });
         reveal('.badge-exclusive, .link-btn', { y: 20, scale: 0.95, stagger: 0.08, staggerLimit: 4 });
     },
 
-    initContribute: () => {
-        reveal('.contribute-section > *', { y: 40, stagger: 0.1, staggerLimit: 4 });
-    },
 
     initFooter: () => {
         reveal('.footer-brand, .footer-links, .footer-socials, .footer-apoia', {
@@ -83,7 +87,6 @@ const Animations = {
         Animations.initHero();
         Animations.initSections();
         Animations.initCards();
-        Animations.initContribute();
         Animations.initFooter();
         ScrollTrigger.refresh();
     },
