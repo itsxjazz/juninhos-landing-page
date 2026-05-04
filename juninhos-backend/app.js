@@ -19,7 +19,12 @@ mongoose.connect(process.env.MONGO_URI, { // Configurações de conexão para ev
     .catch(err => console.error('Erro ao conectar ao MongoDB:', err.message));
 
 const auth = new google.auth.GoogleAuth({ // Configurações para autenticação com a API do Google Sheets
-    keyFile: path.join(__dirname, 'credentials.json'),
+    credentials: process.env.GOOGLE_CREDENTIALS 
+        ? JSON.parse(process.env.GOOGLE_CREDENTIALS) 
+        : undefined,
+    keyFile: !process.env.GOOGLE_CREDENTIALS 
+        ? path.join(__dirname, 'credentials.json') 
+        : undefined,
     scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
 });
 

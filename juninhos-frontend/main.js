@@ -1,5 +1,6 @@
 const CONFIG = {
-    API_BASE_URL: 'http://localhost:5000/api',
+    // URL direta do Render para garantir funcionamento na Vercel
+    API_BASE_URL: 'https://juninhos-landing-page.onrender.com/api',
     ENDPOINTS: {
         PROJECTS: '/projects',
         CLASSES: '/classes',
@@ -47,7 +48,7 @@ const AppUtils = { // Funções auxiliares para manipulação de UI e formataç�
     },
     getDirectImageLink: (url) => { // Converte links do Drive e GitHub para links diretos de imagem
         if (!url) return url;
-        
+
         // Trata Google Drive
         if (url.includes('drive.google.com')) {
             const match = url.match(/\/d\/([^/]+)/);
@@ -70,18 +71,18 @@ const ModalLogic = { // Lóigica para abrir e fechar o modal, incluindo a restau
         document.body.style.overflow = 'hidden';
         document.body.style.paddingRight = `${scrollbarWidth}px`;
     },
-    
-     close: (modalEl = UI.modal) => { // Fecha o modal e permite o scroll do body novamente
+
+    close: (modalEl = UI.modal) => { // Fecha o modal e permite o scroll do body novamente
         modalEl.classList.remove('show');
-        
+
         setTimeout(() => {
-            document.body.style.overflow = ''; 
+            document.body.style.overflow = '';
             document.body.style.paddingRight = '';
 
             const formWrapper = modalEl.querySelector('.form-wrapper');
             if (modalEl.dataset.originalContent) {
                 formWrapper.innerHTML = modalEl.dataset.originalContent;
-                
+
                 if (modalEl === UI.modal) {
                     UI.waitlistForm = document.getElementById('waitlist-form');
                     UI.waitlistForm.addEventListener('submit', Handlers.handleFormSubmit);
@@ -132,16 +133,16 @@ const Renderers = { // Funções para renderizar dados na tela, incluindo skelet
         UI.projectsContainer.innerHTML = projects.map(p => {
             const rawImage = p.links.imagem;
             const convertedImage = AppUtils.getDirectImageLink(rawImage);
-            
+
             // Verifica se é uma imagem válida após a conversão
             const isImage = convertedImage && (
-                convertedImage.match(/\.(jpeg|jpg|gif|png|webp|svg)(\?.*)?$/i) || 
+                convertedImage.match(/\.(jpeg|jpg|gif|png|webp|svg)(\?.*)?$/i) ||
                 convertedImage.includes('drive.google.com') ||
                 convertedImage.includes('googleusercontent.com') ||
                 convertedImage.includes('images.unsplash.com') ||
                 convertedImage.startsWith('http')
             );
-            
+
             if (!isImage && rawImage) {
                 console.warn(`Imagem inválida para o projeto "${p.titulo}":`, rawImage);
             }
@@ -300,19 +301,19 @@ const Handlers = { // Funções para lidar com eventos e formulários
     }
 };
 
-const NavLogic ={ // Lóigica de funcionamento do menu para destktop / celular
-    toggleMenu:() =>{
+const NavLogic = { // Lóigica de funcionamento do menu para destktop / celular
+    toggleMenu: () => {
         UI.navMenu.classList.toggle('active');
         UI.mobileMenuBtn.classList.toggle('active');
 
         if (UI.navMenu.classList.contains('active')) {
-            document.body.style.overflow= 'hidden';
+            document.body.style.overflow = 'hidden';
         } else {
-            document.body.style.overflow ='auto';
+            document.body.style.overflow = 'auto';
         }
     },
 
-    closeMenu: ()=> {
+    closeMenu: () => {
         UI.navMenu.classList.remove('active');
         UI.mobileMenuBtn.classList.remove('active');
         document.body.style.overflow = 'auto';
@@ -322,9 +323,9 @@ const NavLogic ={ // Lóigica de funcionamento do menu para destktop / celular
         e.preventDefault();
         const targetId = e.currentTarget.getAttribute('href');
         const targetSection = document.querySelector(targetId);
-        
+
         if (targetSection) {
-            const headerHeight = 80; 
+            const headerHeight = 80;
             const sectionPosition = targetSection.offsetTop - headerHeight;
 
             window.scrollTo({
@@ -332,7 +333,7 @@ const NavLogic ={ // Lóigica de funcionamento do menu para destktop / celular
                 behavior: 'smooth'
             });
 
-            
+
             NavLogic.closeMenu();
         }
     }
@@ -404,7 +405,7 @@ if (UI.mobileMenuBtn) {
     UI.mobileMenuBtn.addEventListener('click', NavLogic.toggleMenu);
 };
 
-UI.navLinks.forEach(link =>{
+UI.navLinks.forEach(link => {
     link.addEventListener('click', NavLogic.closeMenu);
 });
 
@@ -413,8 +414,8 @@ if (navCtaBtn) {
     navCtaBtn.addEventListener('click', NavLogic.closeMenu);
 };
 
-UI.navMenu.addEventListener('click',(e)=>{
-    if(e.target=== UI.navMenu){
+UI.navMenu.addEventListener('click', (e) => {
+    if (e.target === UI.navMenu) {
         NavLogic.closeMenu();
     };
 });
