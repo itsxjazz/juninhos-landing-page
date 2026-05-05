@@ -1,8 +1,8 @@
 const jwt = require('jsonwebtoken');
 
 // Middleware de autenticação para proteger rotas que exigem autenticação, verificando a presença e validade do token JWT
-const authMiddleware = (req, res, next) => {
-    protect: (req, res, next) => {
+const authMiddleware = {
+    protect: async (req, res, next) => {
         try {
             const authHeader = req.headers.authorization;
 
@@ -25,7 +25,7 @@ const authMiddleware = (req, res, next) => {
 
             // Busca usuário no banco
             // Verificando para caso tenha sido deletado ou desativado
-            const user = User.findById(decoded.sub).select('-password');
+            const user = await User.findById(decoded.sub).select('-password');
 
             // Valida se encontrou o usuário
             if (!user) {
@@ -47,7 +47,7 @@ const authMiddleware = (req, res, next) => {
             }
             res.status(500).json({ message: 'Erro interno' });
         }
-    };
+    },
 
     authorize: (...roles) => {
         return (req, res, next) => {
@@ -61,7 +61,7 @@ const authMiddleware = (req, res, next) => {
             }
             next();
         };
-    };
+    }
 };
 
-odule.exports = authMiddleware;
+module.exports = authMiddleware;

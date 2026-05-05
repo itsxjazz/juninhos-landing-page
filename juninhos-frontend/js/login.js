@@ -1,8 +1,6 @@
-const API_BASE_URL = 'https://localhost:5500/api';
+const API_BASE_URL = 'https://localhost:5000/api';
 const loginForm = document.getElementById('form-login');
 const registerForm = document.getElementById('form-register');
-const msgFeedback = document.getElementById('msg');
-
 // File: frontend/js/auth.js
 
 const AuthUI = {
@@ -76,34 +74,24 @@ if (loginForm) {
     loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
+        const email = document.getElementById('login-email').value;
+        const password = document.getElementById('login-password').value;
 
         try {
-            const response = await fetch(
-                `${process.env.API_BASE_URL}/api/login`,
-                {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password })
-                }
-            );
-
+            const response = await fetch('http://localhost:5000/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
             const data = await response.json();
-
             if (response.ok) {
-                AuthLogic.saveToken(data.token);
-                Window.location.href = 'portal.html';
-
-                AuthUI.showMessage('Erro ao fazer login.', 'error');
-                // if (msgFeedback) {
-                //     msgFeedback.textContent =
-                //         data.error || data.message || 'Erro ao fazer login.';
-                //     msgFeedback.style.color = 'red';
-                // }
+                localStorage.setItem('auth_token', data.token);
+                window.location.href = 'portal.html';
+            } else {
+                AuthUI.showMessage(data.error, 'error');
             }
         } catch (error) {
-            if (msgFeedback) msgFeedback.textContent = 'Servidor indisponível.';
+            AuthUI.showMessage('Servidor indisponível.', 'error');
         }
     });
 }
@@ -153,55 +141,23 @@ if (registerForm) {
         }
 
         try {
-            const response = fetch(`${process.env.API_BASE_URL}/api/register`, {
+            const response = await fetch('http://localhost:5000/api/register', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    body: JSON.stringify({ name, email, password: senha })
-                }
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name, email, password })
             });
 
-            const dados = response.json();
-
+            const data = await response.json();
             if (response.ok) {
-                AuthLogic.saveToken(data.token);
-                Window.location.href = 'login.html';
-
-                if (msgFeedback) {
-                    msgFeedback.textContent =
-                        data.error || data.message || 'Erro ao fazer login.';
-                    msgFeedback.style.color = 'red';
-                }
+                alert('Usuário cadastrado com sucesso.');
+                AuthUI.showLogin();
+            } else {
+                AuthUI.showMessage(data.error, 'error');
             }
         } catch (error) {
             AuthUI.showMessage('Servidor indisponível.', 'error');
         }
     });
-}
-
-async function login(email, senha) {
-    try {
-        // Envia o email e senha para validação na api
-        const resposta = await fetch('https://localhost:5500/api/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                body: JSON.stringify({ email, password: senha })
-            }
-        });
-
-        // Recebe a resposta da api transformada em json
-        const dados = await responsta.json();
-
-        // Se a requisição/login for realizado com sucesso
-        if (resposta.ok) {
-            // Salva o token no storage do navegador
-            localStorage.setItem('auth_token', dados.token);
-
-            // Redireciona para o portal
-            window.location.href = 'portal.html';
-        } else {
-            alert('Erro: ' + dados.error);
-        }
-    } catch (error) {}
 }

@@ -13,28 +13,18 @@ const authController = {
     // Cadastro de usuário
     async register(req, res) {
         try {
-            const { email, password } = req.body;
+            const { name, email, password } = req.body;
 
             // Verifica se o usuário já existe no banco de dados
             const userExists = await User.findOne({ email });
             if (userExists) {
                 return res.status(400).json({ error: 'E-mail já cadastrado.' });
             }
-
             // Cria um novo usuário e salva no banco de dados
-            const newUser = await User.create({ email, password });
-
-            // Gerar jwt
-            const token = generateToken(user._id);
-
+            const newUser = await User.create({ name, email, password });
             return res.status(201).json({
-                token,
                 message: 'Usuário registrado com sucesso.',
-                user: {
-                    id: user._id,
-                    name: user.name,
-                    email: user.email
-                }
+                newUser
             });
         } catch (error) {
             return res
@@ -56,13 +46,13 @@ const authController = {
             }
 
             // Verifica se o usuário existe no banco de dados
-            const user = await User.findOne({ email }.select('+password'));
+            const user = await User.findOne({ email }).select('+password');
+
             if (!user) {
                 return res
                     .status(401)
                     .json({ error: 'E-mail ou senha inválidos.' });
             }
-
             // Verifica se a senha fornecida é válida
             const isMatch = await user.comparePassword(password);
             if (!user || !isMatch) {
