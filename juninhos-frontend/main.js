@@ -148,9 +148,11 @@ const Renderers = { // Funções para renderizar dados na tela, incluindo skelet
                 convertedImage.startsWith('http')
             );
 
+            /* 
             if (!isImage && rawImage) {
                 console.warn(`Imagem inválida para o projeto "${p.titulo}":`, rawImage);
             }
+            */
 
             const imageSrc = isImage
                 ? convertedImage

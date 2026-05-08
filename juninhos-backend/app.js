@@ -16,25 +16,20 @@ mongoose.connect(process.env.MONGO_URI, { // Configurações de conexão para ev
     serverSelectionTimeoutMS: 30000,
     connectTimeoutMS: 30000,
 })
-    .then(() => console.log('✅ Conectado ao MongoDB Atlas'))
+    .then(() => {})
     .catch(err => {
         console.error('❌ Erro ao conectar ao MongoDB:', err.message);
-        console.log('DICA: Verifique se o IP 0.0.0.0/0 está liberado no Atlas e se a MONGO_URI está correta no Render.');
+        // Dica de conexão suprimida em produção
     });
 
-console.log('--- Diagnóstico de Ambiente ---');
-console.log('PORT:', process.env.PORT);
-console.log('MONGO_URI detectada:', !!process.env.MONGO_URI);
-console.log('GOOGLE_CREDENTIALS detectada:', !!process.env.GOOGLE_CREDENTIALS);
-console.log('RESEND_API_KEY detectada:', !!process.env.RESEND_API_KEY);
-console.log('------------------------------');
+// Diagnóstico de Ambiente suprimido em produção
 
 const auth = new google.auth.GoogleAuth({ // Configurações para autenticação com a API do Google Sheets
-    credentials: process.env.GOOGLE_CREDENTIALS 
-        ? JSON.parse(process.env.GOOGLE_CREDENTIALS) 
+    credentials: process.env.GOOGLE_CREDENTIALS
+        ? JSON.parse(process.env.GOOGLE_CREDENTIALS)
         : undefined,
-    keyFile: !process.env.GOOGLE_CREDENTIALS 
-        ? path.join(__dirname, 'credentials.json') 
+    keyFile: !process.env.GOOGLE_CREDENTIALS
+        ? path.join(__dirname, 'credentials.json')
         : undefined,
     scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
 });
@@ -145,16 +140,16 @@ app.post('/api/waitlist', async (req, res) => { // Endpoint para processar a ins
         */
 
         resend.emails.send({
-            from: 'Juninhos <onboarding@resend.dev>',
-            to: process.env.NOTIFY_EMAIL,
+            from: 'Juninhos <contato@juninhos.com>',
+            to: ['contato@juninhos.com', 'juninhosdevs@gmail.com'],
             subject: mailOptions.subject,
             text: mailOptions.text
-        }).then(() => console.log('E-mail enviado via Resend'))
-          .catch(err => console.error('Erro Resend:', err.message));
+        }).then(() => {})
+            .catch(err => console.error('Erro Resend:', err.message));
 
         const newLead = new Waitlist({ name, phone, level, areas, technologies });
         newLead.save()
-            .then(() => console.log('Lead salvo no MongoDB'))
+            .then(() => {})
             .catch(err => console.error('Erro MongoDB:', err.message));
 
     } catch (error) {
@@ -199,12 +194,12 @@ app.post('/api/instructor', async (req, res) => {
         */
 
         resend.emails.send({
-            from: 'Juninhos <onboarding@resend.dev>',
-            to: process.env.NOTIFY_EMAIL,
+            from: 'Juninhos <contato@juninhos.com>',
+            to: ['educacional@juninhos.com', 'juninhosdevs@gmail.com', 'juninhosedu@gmail.com'],
             subject: mailOptions.subject,
             text: mailOptions.text
-        }).then(() => console.log('E-mail de instrutor enviado via Resend'))
-          .catch(err => console.error('Erro Resend:', err.message));
+        }).then(() => {})
+            .catch(err => console.error('Erro Resend:', err.message));
 
     } catch (error) {
         console.error('Erro no endpoint de instrutor:', error);
@@ -216,5 +211,4 @@ app.post('/api/instructor', async (req, res) => {
 
 const PORT = process.env.PORT || 5000; // Inicia o servidor na porta definida nas variáveis de ambiente ou na porta 5000 por padrão
 app.listen(PORT, () => {
-    console.log(` Servidor rodando na porta ${PORT}`);
 });
