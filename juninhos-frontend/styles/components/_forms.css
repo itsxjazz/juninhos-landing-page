@@ -1,0 +1,75 @@
+.form-group {
+    margin-bottom: 1.5rem;
+    border: none;
+}
+
+.form-group label,
+.form-group legend {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+input[type='text'],
+input[type='tel'],
+input[type='email'],
+input[type='password'],
+textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--clr-surface-alt);
+    border-radius: var(--radius-md);
+    background-color: var(--clr-surface-alt);
+    color: var(--clr-text-main);
+    font-family: var(--font-main);
+}
+
+.checkbox-grid,
+.radio-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 0.5rem;
+}
+
+.checkbox-grid label,
+.radio-group label {
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.form-feedback {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: var(--radius-md);
+    text-align: center;
+}
+
+#technologies {
+    width: 100%;
+    height: 120px;
+    resize: none;
+
+    padding: 0.75rem;
+    border: 1px solid var(--clr-surface-alt);
+    border-radius: var(--radius-md);
+    font-family: var(--font-main);
+    background-color: var(--clr-surface-alt);
+    color: var(--clr-text-main);
+}
+
+#technologies:focus {
+    outline: none;
+    border-color: var(--clr-primary);
+    box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.2);
+}
+
+.form-feedback.success {
+    background-color: #d4edda;
+    color: var(--clr-success);
+}
+.form-feedback.error {
+    background-color: #f8d7da;
+    color: var(--clr-error);
+}

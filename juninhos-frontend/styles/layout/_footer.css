@@ -1,0 +1,34 @@
+.main-footer {
+    background-color: var(--clr-secondary);
+    color: #fff;
+    padding: 4rem 0 2rem;
+    margin-top: 4rem;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.footer-links ul li, .footer-socials ul li {
+    margin-bottom: 0.5rem;
+}
+
+.footer-links a, .footer-socials a {
+    color: #ccc;
+    transition: color var(--transition-fast);
+}
+
+.footer-links a:hover, .footer-socials a:hover {
+    color: var(--clr-primary);
+}
+
+.footer-bottom {
+    text-align: center;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 2rem;
+    color: #aaa;
+    font-size: 0.9rem;
+}

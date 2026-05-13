@@ -1,6 +1,7 @@
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const nodemailer = require('nodemailer');
 
 //Helper - Geração do token centralizada
 const generateToken = (userId) => {
@@ -78,21 +79,71 @@ const authController = {
     },
 
     async forgotPassword(req, res) {
-        // Busca usuário por email
-        const user = await User.findOne({ email: req.body.email });
+        try {
+            // Busca usuário por email
+            const user = await User.findOne({ email: req.body.email });
 
-        // Valida se existe usuário com o email
-        if (!user) {
-            return res.status(401).json({
-                message: 'Email não encontrado'
+            // Valida se existe usuário com o email
+            if (!user) {
+                return res.status(401).json({
+                    message: 'Email não encontrado'
+                });
+            }
+
+            const rawToken = user.createPasswordResetToken();
+            await user.save({ validateBeforeSave: false });
+
+            const resetURL = `http://localhost:5500/juninhos-frontend/reset-password.html?token=${rawToken}`;
+
+            const transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                    user: process.env.EMAIL_USER,
+                    pass: process.env.EMAIL_PASS
+                }
+            });
+            console.log(user.email, user);
+
+            const mailOptions = {
+                from: `Equipe Juninhos`,
+                to: user.email,
+                subject: 'Redefinição de Senha - Portal Juninhos',
+                text:
+                    `Olá, ${user.name}!\n\n` +
+                    `Você solicitou a redefinição da sua senha.\n` +
+                    `Clique no link abaixo para criar uma nova senha (este link expira em 1 hora):\n\n` +
+                    `${resetURL}\n\n` +
+                    `Se você não solicitou isso, por favor ignore este e-mail.`
+            };
+
+            try {
+                await transporter.sendMail(mailOptions);
+            } catch (error) {
+                return res.json(
+                    'Erro ao enviar email de redefinição.',
+                    'error'
+                );
+            }
+
+            return res.status(200).json({
+                message: 'Email de recuperação enviado com sucesso! '
+            });
+
+            // Envia email aqui
+            res.json({ message: 'Email enviado' });
+        } catch (error) {
+            console.error('Erro no forgotPassword: ', error);
+
+            if (user) {
+                user.passwordResetToken = undefined;
+                user.passwordResetExpires = undefined;
+                await user.save({ validateBeforaSave: false });
+            }
+
+            return res.status(500).json({
+                error: 'Erro ao enviar o e-mail. Tente novamente mais tarde.'
             });
         }
-
-        const rawToken = user.createPasswordResetToken();
-        await user.save({ validateBeforeSave: false });
-
-        // Envia email aqui
-        res.json({ message: 'Email enviado' });
     },
 
     async ResetPassword(req, res) {

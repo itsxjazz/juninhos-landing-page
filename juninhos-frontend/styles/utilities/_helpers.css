@@ -1,0 +1,37 @@
+/* Utilizado amplamente no JS para alternar visibilidade */
+.hidden {
+    display: none !important;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+::-webkit-scrollbar {
+    width: 1px;
+    height: 1px;
+    background: none;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.mt-2 {
+    margin-top: 2rem;
+}
+
+.flex {
+    display: flex;
+}
+
+.flex-center {
+    justify-content: center;
+    align-items: center;
+}
+
+.gap-1 {
+    gap: 1rem;
+}

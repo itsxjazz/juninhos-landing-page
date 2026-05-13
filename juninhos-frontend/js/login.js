@@ -1,6 +1,7 @@
 const API_BASE_URL = 'https://localhost:5000/api';
 const loginForm = document.getElementById('form-login');
 const registerForm = document.getElementById('form-register');
+const resetPassword = document.getElementById('form-forgot');
 // File: frontend/js/auth.js
 
 const AuthUI = {
@@ -155,6 +156,38 @@ if (registerForm) {
                 AuthUI.showLogin();
             } else {
                 AuthUI.showMessage(data.error, 'error');
+            }
+        } catch (error) {
+            AuthUI.showMessage('Servidor indisponível.', 'error');
+        }
+    });
+}
+
+if (resetPassword) {
+    resetPassword.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const email = document.getElementById('forgot-email').value;
+
+        try {
+            const response = await fetch(
+                'http://localhost:5000/api/forgot-password',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email })
+                }
+            );
+
+            const data = await response.json();
+            console.log(data);
+
+            if (response.ok) {
+                alert('E-mail de redefinição enviado com sucesso.');
+            } else {
+                AuthUI.showMessage(data.error || data.message, 'error');
             }
         } catch (error) {
             AuthUI.showMessage('Servidor indisponível.', 'error');

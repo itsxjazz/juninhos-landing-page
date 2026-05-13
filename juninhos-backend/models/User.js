@@ -64,7 +64,7 @@ UserSchema.methods.createPasswordResetToken = function () {
     const rawToken = crypto.randomBytes(32).toString('hex');
 
     // Hash do token
-    this.passwordResetToken = bcrypt.hash(this.rawToken, 10);
+    this.passwordResetToken = bcrypt.hash(rawToken, 10);
 
     //Expira em 10 minutos
     this.passwordResetExpires = Date.now() + 10 * 60 * 1000;

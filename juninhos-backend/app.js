@@ -170,6 +170,10 @@ app.post('/api/login', async (req, res) => {
     await authController.login(req, res);
 });
 
+app.post('/api/forgot-password', async (req, res) => {
+    //Endpoint para recuperação de senha, delegando a lógica para o authController
+    await authController.forgotPassword(req, res);
+});
 // Endpoint para buscar os dados e redirecionar para o portal
 
 app.get('/api/portal/auth', authMiddleware.protect, async (req, res) => {
