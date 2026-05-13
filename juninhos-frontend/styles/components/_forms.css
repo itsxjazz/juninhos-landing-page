@@ -12,8 +12,6 @@
 
 input[type='text'],
 input[type='tel'],
-input[type='email'],
-input[type='password'],
 textarea {
     width: 100%;
     padding: 0.75rem;
@@ -25,10 +23,11 @@ textarea {
 }
 
 .checkbox-grid,
-.radio-group {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 0.5rem;
+.radio-group,
+.checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
 }
 
 .checkbox-grid label,
@@ -46,11 +45,10 @@ textarea {
     text-align: center;
 }
 
-#technologies {
+textarea {
     width: 100%;
     height: 120px;
     resize: none;
-
     padding: 0.75rem;
     border: 1px solid var(--clr-surface-alt);
     border-radius: var(--radius-md);
@@ -59,7 +57,7 @@ textarea {
     color: var(--clr-text-main);
 }
 
-#technologies:focus {
+textarea:focus {
     outline: none;
     border-color: var(--clr-primary);
     box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.2);

@@ -4,6 +4,8 @@ const cors = require('cors');
 const { google } = require('googleapis');
 const mongoose = require('mongoose');
 const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
+const Waitlist = require('./models/Waitlist');
 const path = require('path');
 
 const Waitlist = require('./models/Waitlist');
@@ -19,15 +21,25 @@ app.use(express.json());
 mongoose
     .connect(process.env.MONGO_URI, {
         // Configurações de conexão para evitar timeouts
-        serverSelectionTimeoutMS: 15000,
-        connectTimeoutMS: 15000
+        serverSelectionTimeoutMS: 30000,
+        connectTimeoutMS: 30000
     })
-    .then(() => console.log('Conectado ao MongoDB Atlas'))
-    .catch((err) => console.error('Erro ao conectar ao MongoDB:', err.message));
+    .then(() => {})
+    .catch((err) => {
+        console.error('❌ Erro ao conectar ao MongoDB:', err.message);
+        // Dica de conexão suprimida em produção
+    });
+
+// Diagnóstico de Ambiente suprimido em produção
 
 const auth = new google.auth.GoogleAuth({
     // Configurações para autenticação com a API do Google Sheets
-    keyFile: path.join(__dirname, 'credentials.json'),
+    credentials: process.env.GOOGLE_CREDENTIALS
+        ? JSON.parse(process.env.GOOGLE_CREDENTIALS)
+        : undefined,
+    keyFile: !process.env.GOOGLE_CREDENTIALS
+        ? path.join(__dirname, 'credentials.json')
+        : undefined,
     scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly']
 });
 
@@ -59,32 +71,39 @@ async function getSheetData(range) {
     }
 }
 
-const transporter = nodemailer.createTransport({
-    // Configurações para envio de e-mails usando o Nodemailer
-    service: 'gmail',
+/* 
+const transporter = nodemailer.createTransport({ // Configurações para envio de e-mails usando o Nodemailer
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true, // true para porta 465
     auth: {
         user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-    }
+        pass: process.env.EMAIL_PASS,
+    },
+    family: 4 // Insiste no IPv4
 });
+*/
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 app.get('/api/projects', async (req, res) => {
     // Endpoint para buscar os projetos da planilha, com tratamento de erros e resposta adequada
     try {
-        const rows = await getSheetData('Gestão de Projetos!A2:H');
+        const rows = await getSheetData('Gestão de Projetos!A2:I');
         const projects = rows
             .filter((row) => row[0])
             .map((row) => ({
                 titulo: row[0] || 'Sem título',
-                descricao: row[1] || '',
-                status: row[2] || 'Em andamento',
+                descricao_simples: row[1] || '',
+                descricao_detalhada: row[2] || '',
+                status: row[3] || 'Em andamento',
                 links: {
-                    imagem: row[3] || '',
-                    deploy: row[4] || '',
-                    github: row[5] || ''
+                    imagem: row[4] || '',
+                    deploy: row[5] || '',
+                    github: row[6] || ''
                 },
-                stack: row[6] ? row[6].split(',').map((s) => s.trim()) : [],
-                membros: row[7] ? row[7].split(',').map((m) => m.trim()) : []
+                stack: row[7] ? row[7].split(',').map((s) => s.trim()) : [],
+                membros: row[8] ? row[8].split(',').map((m) => m.trim()) : []
             }));
         res.json(projects);
     } catch (error) {
@@ -135,11 +154,22 @@ app.post('/api/waitlist', async (req, res) => {
                 `Tecnologias: ${technologies}`
         };
 
-        transporter.sendMail(mailOptions, (error, info) => {
-            // Callback para logar o resultado do envio de e-mail
+        /*
+        transporter.sendMail(mailOptions, (error, info) => { // Callback para logar o resultado do envio de e-mail
             if (error) console.error(' Erro ao enviar e-mail:', error);
             else console.log('E-mail enviado com sucesso:', info.response);
         });
+        */
+
+        resend.emails
+            .send({
+                from: 'Juninhos <contato@juninhos.com>',
+                to: ['contato@juninhos.com', 'juninhosdevs@gmail.com'],
+                subject: mailOptions.subject,
+                text: mailOptions.text
+            })
+            .then(() => {})
+            .catch((err) => console.error('Erro Resend:', err.message));
 
         const newLead = new Waitlist({
             name,
@@ -150,7 +180,7 @@ app.post('/api/waitlist', async (req, res) => {
         });
         newLead
             .save()
-            .then(() => console.log('Lead salvo no MongoDB'))
+            .then(() => {})
             .catch((err) => console.error('Erro MongoDB:', err.message));
     } catch (error) {
         console.error('Erro crítico:', error);
@@ -195,7 +225,74 @@ app.get('/api/portal/auth', authMiddleware.protect, async (req, res) => {
     }
 });
 
-const PORT = process.env.PORT || 5000; // Inicia o servidor na porta definida nas variáveis de ambiente ou na porta 5000 por padrão
-app.listen(PORT, () => {
-    console.log(` Servidor rodando na porta ${PORT}`);
+app.post('/api/instructor', async (req, res) => {
+    try {
+        const {
+            name,
+            discord,
+            whatsapp,
+            theme,
+            title,
+            description,
+            level,
+            days,
+            shift,
+            support
+        } = req.body;
+
+        res.status(201).json({
+            message:
+                'Sua proposta de aula foi enviada! A liderança entrará em contato em breve.'
+        });
+
+        const mailOptions = {
+            from: process.env.EMAIL_USER,
+            to: process.env.NOTIFY_EMAIL,
+            subject: 'Nova Proposta de Aula!',
+            text:
+                `Um novo membro quer dar aula!\n\n` +
+                `--- Perfil ---\n` +
+                `Nome: ${name}\n` +
+                `Discord: ${discord}\n` +
+                `WhatsApp: ${whatsapp}\n\n` +
+                `--- Aula ---\n` +
+                `Tema: ${theme}\n` +
+                `Título: ${title}\n` +
+                `O que será ensinado: ${description}\n` +
+                `Nível: ${level}\n\n` +
+                `--- Organização ---\n` +
+                `Dias: ${days.join(', ')}\n` +
+                `Turno: ${shift}\n` +
+                `Suporte necessário: ${support}`
+        };
+
+        /*
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) console.error(' Erro ao enviar e-mail de instrutor:', error);
+            else console.log('E-mail de instrutor enviado:', info.response);
+        });
+        */
+
+        resend.emails
+            .send({
+                from: 'Juninhos <contato@juninhos.com>',
+                to: [
+                    'educacional@juninhos.com',
+                    'juninhosdevs@gmail.com',
+                    'juninhosedu@gmail.com'
+                ],
+                subject: mailOptions.subject,
+                text: mailOptions.text
+            })
+            .then(() => {})
+            .catch((err) => console.error('Erro Resend:', err.message));
+    } catch (error) {
+        console.error('Erro no endpoint de instrutor:', error);
+        if (!res.headersSent) {
+            res.status(500).json({ error: 'Erro ao enviar proposta.' });
+        }
+    }
 });
+
+const PORT = process.env.PORT || 5000; // Inicia o servidor na porta definida nas variáveis de ambiente ou na porta 5000 por padrão
+app.listen(PORT, () => {});

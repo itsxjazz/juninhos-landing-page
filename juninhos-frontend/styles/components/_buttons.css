@@ -3,13 +3,18 @@ button {
     cursor: pointer;
     border: none;
     outline: none;
-    transition: background-color var(--transition-fast), transform var(--transition-fast);
+    transition:
+        background-color var(--transition-fast),
+        transform var(--transition-fast);
 }
 
-.primary-cta, .nav-cta, .btn-submit, .link-btn.primary {
+.primary-cta,
+.nav-cta,
+.btn-submit,
+.link-btn.primary {
     background-color: var(--clr-btn-primary);
     color: var(--clr-btn-text);
-    padding: 0.8rem 1.8rem;
+    padding: 0.5rem 1.5rem;
     border-radius: var(--radius-md);
     font-weight: 600;
     text-align: center;
@@ -19,7 +24,10 @@ button {
     box-shadow: var(--shadow-sm);
 }
 
-.primary-cta:hover, .nav-cta:hover, .btn-submit:hover, .link-btn.primary:hover {
+.primary-cta:hover,
+.nav-cta:hover,
+.btn-submit:hover,
+.link-btn.primary:hover {
     background-color: var(--clr-btn-primary-hover);
     transform: translateY(-2px);
     box-shadow: var(--btn-glow, var(--shadow-md));
@@ -42,8 +50,8 @@ button {
 
 /* Botão de Sucesso (usado no feedback do formulário via JS) */
 .btn-success-close {
-    background-color: var(--clr-accent);
-    color: #0D0B14; 
+    background-color: var(--clr-cyan);
+    color: #0d0b14;
     margin-top: 1rem;
     width: 100%;
 }

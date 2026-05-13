@@ -1,0 +1,20 @@
+# Porta do servidor local
+PORT=5000
+
+# String de conexão do MongoDB Atlas (Substitua os campos entre < >)
+MONGO_URI=mongodb+srv://<usuario>:<senha>@cluster.mongodb.net/juninhos_db
+
+# ID da Planilha do Google (presente na URL da planilha)
+GOOGLE_SHEET_ID=seu_google_sheet_id_aqui
+
+# E-mail de envio de notificações (gmail)
+EMAIL_USER=email@gmail.com
+
+# JSON da conta de serviço do Google Cloud (deve ser o conteúdo do arquivo .json)
+GOOGLE_CREDENTIALS={"type":"service_account","project_id":"seu_projeto","private_key":"sua_chave_privada"}
+
+# Chave de API do Resend para envio de e-mails
+RESEND_API_KEY=re_sua_chave_aqui
+
+# E-mail de destino para notificações (dominio personalizado)
+NOTIFY_EMAIL=email@seu-dominio.com
