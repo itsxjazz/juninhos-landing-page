@@ -14,6 +14,14 @@ const LOGOS = [
   { src: `${BG_BASE}/c-sharp-programming-language-icon.svg`, alt: 'C#' },
   { src: `${BG_BASE}/c-program-icon.svg`, alt: 'C' },
   { src: `${BG_BASE}/logo_php.png`, alt: 'PHP' },
+  { src: `${BG_BASE}/ruby-programming-language-icon.svg`, alt: 'Ruby' },
+  { src: `${BG_BASE}/rust-programming-language-icon.svg`, alt: 'Rust' },
+  { src: `${BG_BASE}/kotlin-programming-language-icon.svg`, alt: 'Kotlin' },
+  { src: `${BG_BASE}/flutter-icon.svg`, alt: 'Flutter' },
+  { src: `${BG_BASE}/laravel-icon.svg`, alt: 'Laravel' },
+  { src: `${BG_BASE}/mysql-icon.svg`, alt: 'MySQL' },
+  { src: `${BG_BASE}/postgresql-icon.svg`, alt: 'PostgreSQL' },
+  { src: `${BG_BASE}/sql-server-icon.svg`, alt: 'SQL Server' },
 ];
 
 const POSITIONS = [
@@ -132,7 +140,7 @@ export function Hero() {
           onClick={openWaitlist}
           className="primary-cta !bg-transparent !text-cyan !border-2 !border-cyan !px-[1.8rem] !py-[0.9rem] !rounded-xl !font-semibold !text-base flex items-center transition-all duration-300 hover:!bg-cyan hover:!text-bg hover:!shadow-[0_0_20px_rgba(0,229,255,0.4)] before:content-['>_'] before:font-mono"
         >
-          Demonstrar Interesse
+          _Demonstrar Interesse
         </button>
       </div>
       <a

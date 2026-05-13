@@ -60,14 +60,14 @@ export function Header() {
 
   return (
     <header
-      className={`main-header fixed top-0 left-0 right-0 mx-auto w-full z-[100] bg-[rgba(20,17,30,0.78)] backdrop-blur-[18px] backdrop-saturate-[160%] border border-[rgba(168,85,247,0.22)] shadow-[0_10px_30px_rgba(0,0,0,0.45),0_0_0_1px_rgba(255,255,255,0.02)_inset] transition-[max-width,margin-top,border-radius] duration-[400ms] [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] max-md:max-w-[calc(100%-1rem)] max-md:!mt-2 max-md:backdrop-blur-none max-md:bg-[rgba(20,17,30,0.92)] max-md:!rounded-full ${
+      className={`main-header fixed top-0 left-0 right-0 mx-auto w-full z-[100] bg-[rgba(20,17,30,0.78)] backdrop-blur-[18px] backdrop-saturate-[160%] border border-[rgba(168,85,247,0.22)] shadow-[0_10px_30px_rgba(0,0,0,0.45),0_0_0_1px_rgba(255,255,255,0.02)_inset] transition-[max-width,margin-top,border-radius] duration-[400ms] [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] max-md:backdrop-blur-none max-md:bg-[rgba(20,17,30,0.92)] ${
         scrolled
           ? 'mt-3 max-w-[min(1080px,calc(100%-2rem))] rounded-full'
           : 'mt-0 max-w-full rounded-none'
       }`}
     >
       <div
-        className={`container flex items-center justify-start gap-8 !pl-8 !pr-7 max-md:!pl-6 max-md:!pr-5 max-md:!h-[60px] transition-[height] duration-[400ms] [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] ${
+        className={`container flex items-center justify-start gap-8 !pl-8 !pr-7 max-md:!pl-6 max-md:!pr-5 transition-[height] duration-[400ms] [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] ${
           scrolled ? 'h-[60px]' : 'h-[80px]'
         }`}
       >

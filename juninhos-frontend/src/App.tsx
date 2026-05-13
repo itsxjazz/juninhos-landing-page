@@ -23,6 +23,24 @@ export function App() {
   useEffect(() => {
     if (initialized.current) return;
     initialized.current = true;
+
+    // Desativa a restauração automática de scroll do browser e força topo no reload.
+    // Se a URL tiver um hash (ex: /#projects), respeita o anchor e rola até a seção.
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+    const hash = window.location.hash;
+    if (hash && hash.length > 1) {
+      const target = document.querySelector(hash) as HTMLElement | null;
+      if (target) {
+        window.scrollTo({ top: target.offsetTop - 80, behavior: 'auto' });
+      } else {
+        window.scrollTo(0, 0);
+      }
+    } else {
+      window.scrollTo(0, 0);
+    }
+
     Animations.initAll();
   }, []);
 

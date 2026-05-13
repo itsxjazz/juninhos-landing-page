@@ -8,6 +8,9 @@ const { Resend } = require('resend');
 const Waitlist = require('./models/Waitlist');
 const path = require('path');
 
+const authController = require('./controllers/authController');
+const authMiddleware = require('./middlewares/authMiddleware');
+
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -68,7 +71,11 @@ const transporter = nodemailer.createTransport({ // Configurações para envio d
 });
 */
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Lazy: só instancia se a key existir, evitando crash quando o backend roda em dev sem Resend configurado.
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
+if (!resend) {
+    console.warn('⚠️  RESEND_API_KEY ausente — envios de e-mail desabilitados.');
+}
 
 app.get('/api/projects', async (req, res) => { // Endpoint para buscar os projetos da planilha, com tratamento de erros e resposta adequada
     try {
@@ -139,13 +146,15 @@ app.post('/api/waitlist', async (req, res) => { // Endpoint para processar a ins
         });
         */
 
-        resend.emails.send({
-            from: 'Juninhos <contato@juninhos.com>',
-            to: ['contato@juninhos.com', 'juninhosdevs@gmail.com'],
-            subject: mailOptions.subject,
-            text: mailOptions.text
-        }).then(() => {})
-            .catch(err => console.error('Erro Resend:', err.message));
+        if (resend) {
+            resend.emails.send({
+                from: 'Juninhos <contato@juninhos.com>',
+                to: ['contato@juninhos.com', 'juninhosdevs@gmail.com'],
+                subject: mailOptions.subject,
+                text: mailOptions.text
+            }).then(() => {})
+                .catch(err => console.error('Erro Resend:', err.message));
+        }
 
         const newLead = new Waitlist({ name, phone, level, areas, technologies });
         newLead.save()
@@ -193,19 +202,52 @@ app.post('/api/instructor', async (req, res) => {
         });
         */
 
-        resend.emails.send({
-            from: 'Juninhos <contato@juninhos.com>',
-            to: ['educacional@juninhos.com', 'juninhosdevs@gmail.com', 'juninhosedu@gmail.com'],
-            subject: mailOptions.subject,
-            text: mailOptions.text
-        }).then(() => {})
-            .catch(err => console.error('Erro Resend:', err.message));
+        if (resend) {
+            resend.emails.send({
+                from: 'Juninhos <contato@juninhos.com>',
+                to: ['educacional@juninhos.com', 'juninhosdevs@gmail.com', 'juninhosedu@gmail.com'],
+                subject: mailOptions.subject,
+                text: mailOptions.text
+            }).then(() => {})
+                .catch(err => console.error('Erro Resend:', err.message));
+        }
 
     } catch (error) {
         console.error('Erro no endpoint de instrutor:', error);
         if (!res.headersSent) {
             res.status(500).json({ error: 'Erro ao enviar proposta.' });
         }
+    }
+});
+
+// ============================
+// Rotas de autenticação
+// ============================
+app.post('/api/register', (req, res) => authController.register(req, res));
+app.post('/api/login', (req, res) => authController.login(req, res));
+app.post('/api/forgot-password', (req, res) => authController.forgotPassword(req, res));
+app.post('/api/reset-password/:token', (req, res) => authController.resetPassword(req, res));
+
+// Endpoint protegido — usado pelo portal pra validar token e devolver dados do usuário.
+app.get('/api/portal/auth', authMiddleware.protect, async (req, res) => {
+    try {
+        return res.json({
+            success: true,
+            user: {
+                id: req.user._id,
+                name: req.user.name,
+                email: req.user.email,
+                role: req.user.role
+            },
+            mensagem: `Bem-vindo(a), ${req.user.name}!`,
+            links: [
+                { titulo: 'Discord da Comunidade', url: process.env.DISCORD_INVITE_URL || '#' },
+                { titulo: 'Repositórios no GitHub', url: 'https://github.com/juninhos-devs' }
+            ]
+        });
+    } catch (error) {
+        console.error('Erro /api/portal/auth:', error.message);
+        return res.status(500).json({ error: 'Erro ao carregar dados do portal.' });
     }
 });
 

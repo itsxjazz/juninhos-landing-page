@@ -1,6 +1,6 @@
 import { useDiscordStats } from '../../hooks/useDiscordStats';
 
-const DISCORD_GUILD_ID = import.meta.env.VITE_DISCORD_GUILD_ID as string | undefined;
+const DISCORD_INVITE_CODE = import.meta.env.VITE_DISCORD_INVITE_CODE as string | undefined;
 
 const ABOUT_BLOCKS = [
   {
@@ -22,14 +22,12 @@ const ABOUT_BLOCKS = [
 ];
 
 export function About() {
-  const discord = useDiscordStats(DISCORD_GUILD_ID);
+  const discord = useDiscordStats(DISCORD_INVITE_CODE);
   const memberCount = discord.total ?? discord.online;
-  const membersDisplay = memberCount !== null ? `+${memberCount}` : '+300';
-  const membersLabel = discord.total !== null
-    ? 'membros no Discord'
-    : discord.online !== null
-    ? 'membros online agora'
-    : 'membros ativos';
+  const roundedMemberCount = Math.floor(memberCount !== null ? memberCount / 100 : 0) * 100;
+  const formattedMemberCount = roundedMemberCount >= 1000 ? `${roundedMemberCount / 1000}K` : roundedMemberCount.toString();
+  const membersDisplay = memberCount !== null ? `+${formattedMemberCount}` : '+300';
+  const membersLabel = discord.total !== null ? 'Membros na Comunidade' : 'Membros na Comunidade';
 
   return (
     <section id="about" className="about-section container">
@@ -63,11 +61,11 @@ export function About() {
         </div>
         <div className="stat-item card-item">
           <span>Fundada em</span>
-          <strong>abril de 2026</strong>
+          <strong>Abril de 2026</strong>
         </div>
         <div className="stat-item card-item">
           <strong>Projetos Reais</strong>
-          <span>sendo codados agora</span>
+          <span>Sendo Codados Agora</span>
         </div>
       </div>
     </section>

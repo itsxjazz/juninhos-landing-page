@@ -6,19 +6,14 @@ export interface DiscordStats {
   loading: boolean;
 }
 
-interface WidgetResponse {
-  presence_count: number;
-  instant_invite: string | null;
-}
-
 interface InviteResponse {
   approximate_member_count?: number;
   approximate_presence_count?: number;
 }
 
-const REFRESH_INTERVAL_MS = 10 * 60 * 1000; //10 min
+const REFRESH_INTERVAL_MS = 10 * 60 * 1000; // 10 min
 
-export function useDiscordStats(guildId: string | undefined): DiscordStats {
+export function useDiscordStats(inviteCode: string | undefined): DiscordStats {
   const [stats, setStats] = useState<DiscordStats>({
     total: null,
     online: null,
@@ -26,7 +21,7 @@ export function useDiscordStats(guildId: string | undefined): DiscordStats {
   });
 
   useEffect(() => {
-    if (!guildId) {
+    if (!inviteCode) {
       setStats({ total: null, online: null, loading: false });
       return;
     }
@@ -35,26 +30,17 @@ export function useDiscordStats(guildId: string | undefined): DiscordStats {
 
     const load = async () => {
       try {
-        const widgetRes = await fetch(`https://discord.com/api/guilds/${guildId}/widget.json`);
-        if (!widgetRes.ok) throw new Error('Widget API failed (widget enabled?)');
-        const widget = (await widgetRes.json()) as WidgetResponse;
-
-        let total: number | null = null;
-        if (widget.instant_invite) {
-          const code = widget.instant_invite.split('/').pop();
-          if (code) {
-            const inviteRes = await fetch(
-              `https://discord.com/api/v10/invites/${code}?with_counts=true`,
-            );
-            if (inviteRes.ok) {
-              const invite = (await inviteRes.json()) as InviteResponse;
-              total = invite.approximate_member_count ?? null;
-            }
-          }
-        }
-
+        const res = await fetch(
+          `https://discord.com/api/v10/invites/${inviteCode}?with_counts=true`,
+        );
+        if (!res.ok) throw new Error(`Invite API failed (${res.status})`);
+        const data = (await res.json()) as InviteResponse;
         if (!cancelled) {
-          setStats({ total, online: widget.presence_count, loading: false });
+          setStats({
+            total: data.approximate_member_count ?? null,
+            online: data.approximate_presence_count ?? null,
+            loading: false,
+          });
         }
       } catch {
         if (!cancelled) {
@@ -70,7 +56,7 @@ export function useDiscordStats(guildId: string | undefined): DiscordStats {
       cancelled = true;
       window.clearInterval(intervalId);
     };
-  }, [guildId]);
+  }, [inviteCode]);
 
   return stats;
 }
