@@ -181,7 +181,7 @@ export function PortalPreviewPage() {
         {/* ====== MAIN ====== */}
         <main className="flex-1 md:ml-[240px] max-md:pt-[56px]">
           {/* Banner de capa com avatar overlapping */}
-          <section className="relative">
+          <section className="relative !pt-0">
             <div
               className="h-[180px] md:h-[200px] relative overflow-hidden"
               style={{
@@ -237,9 +237,8 @@ export function PortalPreviewPage() {
           </section>
 
           {/* Content sections */}
-          <div className="px-6 md:px-10 pt-3 pb-8 space-y-3">
+          <div className="px-6 md:px-10 pb-8">
             {/* ====== STATS ====== */}
-            <section>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 {[
                   { label: 'Aulas assistidas', value: MOCK_USER.stats.aulasAssistidas, color: 'text-primary' },
@@ -253,7 +252,6 @@ export function PortalPreviewPage() {
                   </div>
                 ))}
               </div>
-            </section>
 
             {/* ====== GRID PRINCIPAL: 2 col em desktop ====== */}
             <section className="grid lg:grid-cols-3 gap-3">
