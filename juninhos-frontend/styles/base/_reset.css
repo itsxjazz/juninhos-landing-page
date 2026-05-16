@@ -44,27 +44,39 @@ body > *:not(.bg-layer):not(.main-header):not(.modal-wrapper) {
 }
 
 .bg-blob.b1 {
-    width: 520px; height: 520px;
+    width: 520px;
+    height: 520px;
     background: radial-gradient(circle, var(--clr-primary) 0%, transparent 70%);
-    top: -15%; left: -10%;
+    top: -15%;
+    left: -10%;
     opacity: 0.45;
 }
 .bg-blob.b2 {
-    width: 420px; height: 420px;
+    width: 420px;
+    height: 420px;
     background: radial-gradient(circle, var(--clr-cyan) 0%, transparent 70%);
-    bottom: -10%; right: -10%;
+    bottom: -10%;
+    right: -10%;
     opacity: 0.28;
 }
 .bg-blob.b3 {
-    width: 360px; height: 360px;
-    background: radial-gradient(circle, var(--clr-primary-dark) 0%, transparent 70%);
-    top: 35%; left: 45%;
+    width: 360px;
+    height: 360px;
+    background: radial-gradient(
+        circle,
+        var(--clr-primary-dark) 0%,
+        transparent 70%
+    );
+    top: 35%;
+    left: 45%;
     opacity: 0.25;
 }
 .bg-blob.b4 {
-    width: 280px; height: 280px;
+    width: 280px;
+    height: 280px;
     background: radial-gradient(circle, var(--clr-accent) 0%, transparent 70%);
-    top: 60%; left: 5%;
+    top: 60%;
+    left: 5%;
     opacity: 0.15;
 }
 
@@ -82,11 +94,23 @@ body > *:not(.bg-layer):not(.main-header):not(.modal-wrapper) {
     position: absolute;
     inset: -10%;
     background-image:
-        linear-gradient(to right, rgba(168, 85, 247, 0.06) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(168, 85, 247, 0.06) 1px, transparent 1px);
+        linear-gradient(
+            to right,
+            rgba(168, 85, 247, 0.06) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            to bottom,
+            rgba(168, 85, 247, 0.06) 1px,
+            transparent 1px
+        );
     background-size: 64px 64px;
     mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
-    -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+    -webkit-mask-image: radial-gradient(
+        ellipse at center,
+        black 30%,
+        transparent 75%
+    );
     will-change: transform;
 }
 

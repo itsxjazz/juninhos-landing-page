@@ -113,7 +113,9 @@ body {
     height: 3px;
     background-color: var(--clr-text-main);
     left: 0;
-    transition: transform var(--transition-fast), top var(--transition-fast);
+    transition:
+        transform var(--transition-fast),
+        top var(--transition-fast);
 }
 
 .hamburger::before {

@@ -43,7 +43,8 @@ section {
     color: var(--clr-text-muted);
 }
 
-.corporate-card, .support-card {
+.corporate-card,
+.support-card {
     background-color: var(--clr-surface);
     border: 2px solid var(--clr-primary);
     color: var(--clr-text-main);
@@ -52,15 +53,17 @@ section {
     text-align: center;
 }
 
-.corporate-card p, .support-card p {
-    margin-bottom: 2.5rem; 
+.corporate-card p,
+.support-card p {
+    margin-bottom: 2.5rem;
     font-size: 1.1rem;
     max-width: 650px;
     margin-left: auto;
     margin-right: auto;
 }
 
-.corporate-card .section-title, .support-card .section-title {
+.corporate-card .section-title,
+.support-card .section-title {
     margin-bottom: 1.5rem;
 }
 
@@ -73,7 +76,6 @@ section {
     text-align: center;
     font-size: 1.2rem;
 }
-
 
 .stat-item strong {
     display: block;
@@ -97,7 +99,7 @@ section {
 }
 
 section[id] {
-    scroll-margin-top: 80px; 
+    scroll-margin-top: 80px;
 }
 
 html {

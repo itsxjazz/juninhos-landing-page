@@ -20,26 +20,32 @@
 
 .footer-brand .logo img {
     height: 45px; /* Altura fixa controlada */
-    width: auto;  /* Largura automática para não esticar */
+    width: auto; /* Largura automática para não esticar */
     object-fit: contain;
 }
 
-.footer-links ul li, .footer-socials ul li, .footer-apoia ul li {
+.footer-links ul li,
+.footer-socials ul li,
+.footer-apoia ul li {
     margin-bottom: 0.5rem;
 }
 
-.footer-links a, .footer-socials a, .footer-apoia a {
+.footer-links a,
+.footer-socials a,
+.footer-apoia a {
     color: #ccc;
     transition: color var(--transition-fast);
 }
 
-.footer-links a:hover, .footer-socials a:hover, .footer-apoia a:hover {
+.footer-links a:hover,
+.footer-socials a:hover,
+.footer-apoia a:hover {
     color: var(--clr-primary);
 }
 
 .footer-bottom {
     text-align: center;
-    border-top: 1px solid rgba(255,255,255,0.1);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
     padding-top: 2rem;
     color: #aaa;
     font-size: 0.9rem;

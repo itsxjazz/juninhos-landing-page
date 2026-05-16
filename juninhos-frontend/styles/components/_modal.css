@@ -10,7 +10,11 @@
     display: flex;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.35s ease, visibility 0.35s ease, background-color 0.35s ease, backdrop-filter 0.35s ease;
+    transition:
+        opacity 0.35s ease,
+        visibility 0.35s ease,
+        background-color 0.35s ease,
+        backdrop-filter 0.35s ease;
 
     justify-content: center;
     align-items: center;
@@ -67,7 +71,9 @@
     color: var(--clr-text-muted);
     cursor: pointer;
     z-index: 2;
-    transition: color 0.2s ease, background-color 0.2s ease;
+    transition:
+        color 0.2s ease,
+        background-color 0.2s ease;
 }
 
 .modal-close:hover {
@@ -82,7 +88,7 @@
         max-height: 95vh;
         width: 95%;
     }
-    
+
     .modal-close {
         top: 0.5rem;
         right: 1rem;
