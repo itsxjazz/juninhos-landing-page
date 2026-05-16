@@ -6,10 +6,8 @@ const mongoose = require('mongoose');
 const nodemailer = require('nodemailer');
 const { Resend } = require('resend');
 const Waitlist = require('./models/Waitlist');
-const path = require('path');
-
-const Waitlist = require('./models/Waitlist');
 const User = require('./models/User');
+const path = require('path');
 
 const authController = require('./controllers/authController');
 const authMiddleware = require('./middlewares/authMiddleware');
@@ -30,6 +28,7 @@ mongoose
         // Dica de conexão suprimida em produção
     });
 
+console.log(`Rodando em:${process.env.PORT}`);
 // Diagnóstico de Ambiente suprimido em produção
 
 const auth = new google.auth.GoogleAuth({
@@ -204,8 +203,13 @@ app.post('/api/forgot-password', async (req, res) => {
     //Endpoint para recuperação de senha, delegando a lógica para o authController
     await authController.forgotPassword(req, res);
 });
-// Endpoint para buscar os dados e redirecionar para o portal
 
+app.post('/api/reset-password/:token', async (req, res) => {
+    //Endpoint para redifnir a senha, delegando a lógica para o authController
+    await authController.resetPassword(req, res);
+});
+
+// Endpoint para buscar os dados e redirecionar para o portaal
 app.get('/api/portal/auth', authMiddleware.protect, async (req, res) => {
     try {
         return res.json({

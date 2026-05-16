@@ -59,12 +59,15 @@ UserSchema.methods.comparePassword = async function (candidatePassword) {
     return await bcrypt.compare(candidatePassword, this.password);
 };
 
-UserSchema.methods.createPasswordResetToken = function () {
+UserSchema.methods.createPasswordResetToken = async function () {
     // Token aleatório
     const rawToken = crypto.randomBytes(32).toString('hex');
 
     // Hash do token
-    this.passwordResetToken = bcrypt.hash(rawToken, 10);
+    this.passwordResetToken = crypto
+        .createHash('sha256')
+        .update(rawToken)
+        .digest('hex');
 
     //Expira em 10 minutos
     this.passwordResetExpires = Date.now() + 10 * 60 * 1000;

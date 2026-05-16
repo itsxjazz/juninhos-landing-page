@@ -1,6 +1,6 @@
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
+const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 
 //Helper - Geração do token centralizada
@@ -90,10 +90,10 @@ const authController = {
                 });
             }
 
-            const rawToken = user.createPasswordResetToken();
+            const rawToken = await user.createPasswordResetToken();
             await user.save({ validateBeforeSave: false });
 
-            const resetURL = `http://localhost:5500/juninhos-frontend/reset-password.html?token=${rawToken}`;
+            const resetURL = `http://localhost:5500/juninhos-frontend/resetPassword.html?token=${rawToken}`;
 
             const transporter = nodemailer.createTransport({
                 service: 'gmail',
@@ -102,7 +102,6 @@ const authController = {
                     pass: process.env.EMAIL_PASS
                 }
             });
-            console.log(user.email, user);
 
             const mailOptions = {
                 from: `Equipe Juninhos`,
@@ -146,32 +145,42 @@ const authController = {
         }
     },
 
-    async ResetPassword(req, res) {
-        // Refaz o hash do token recebido para comparar com o banco
-        const hashedToken = bcrypt.hash(req.params.token, 10);
+    async resetPassword(req, res) {
+        try {
+            // Refaz o hash do token recebido para comparar com o banco
+            const hashedToken = await crypto
+                .createHash('sha256')
+                .update(req.params.token)
+                .digest('hex');
 
-        // Busca usuario com o token hasheado
-        const user = await User.findOne({
-            passwordResetToken: hashedToken,
-            passwordResetExpires: { $gt: Date.now() }
-        }).select('+passwordResetToken +passwordResetExpires');
+            // Busca usuario com o token hasheado
+            const user = await User.findOne({
+                passwordResetToken: hashedToken,
+                passwordResetExpires: { $gt: Date.now() }
+            }).select('+passwordResetToken +passwordResetExpires');
 
-        // Valida se encontrou usuário com o token
-        if (!user) {
+            // Valida se encontrou usuário com o token
+            if (!user) {
+                return res
+                    .status(400)
+                    .json({ message: 'Token inválido ou expirado' });
+            }
+
+            // Troca a senha e limpa o token de reset
+            user.password = req.body.password;
+            user.passwordResetToken = undefined;
+            user.passwordResetExpires = undefined;
+            await user.save();
+
+            // Já loga o usuário novamente com um jwt novo
+            const token = generateToken(user._id);
+            res.json({ token });
+        } catch (error) {
+            console.error(error);
             return res
-                .status(400)
-                .json({ message: 'Token inválido ou expirado' });
+                .status(500)
+                .json({ error: 'Erro no servidor ao resetar a senha.' });
         }
-
-        // Troca a senha e limpa o token de reset
-        user.password = req.body.passowrd;
-        user.passwordResetToken = undefined;
-        user.passwordResetExpires = undefined;
-        await user.save();
-
-        // Já loga o usuário novamente com um jwt novo
-        const token = generateToken(user._id);
-        res.json({ token });
     }
 };
 

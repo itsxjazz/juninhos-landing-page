@@ -1,5 +1,5 @@
 const CONFIG = {
-    API_BASE_URL: 'https://juninhos-landing-page.onrender.com/api',
+    API_BASE_URL: `http://localhost:${PORT}`, //'https://juninhos-landing-page.onrender.com/api',
     ENDPOINTS: {
         PROJECTS: '/projects',
         CLASSES: '/classes',
