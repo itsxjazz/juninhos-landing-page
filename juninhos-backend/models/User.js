@@ -24,6 +24,15 @@ const UserSchema = new mongoose.Schema(
             minlength: [6, 'Mínimo 6 caracteres'],
             select: false
         },
+        cpf: {
+            type: String,
+            required: [true, 'CPF é obrigatório'],
+            unique: true,
+            match: [
+                /^\d{11}$/,
+                'O CPF deve conter exatamente 11 números, sem pontos ou traços'
+            ]
+        },
         role: {
             type: String,
             required: true,

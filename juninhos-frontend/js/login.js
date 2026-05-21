@@ -51,6 +51,14 @@ const AuthUI = {
         AuthUI.feedback.textContent = msg;
         AuthUI.feedback.className = `form-feedback ${type}`; // type pode ser 'error' ou 'success'
         AuthUI.feedback.classList.remove('hidden');
+
+        // Trigger the blink animation
+        AuthUI.feedback.classList.remove('blink-animation');
+        void AuthUI.feedback.offsetWidth; // Force a reflow to restart the animation
+        AuthUI.feedback.classList.add('blink-animation');
+
+        // Scroll the screen to focus on the feedback message
+        AuthUI.feedback.scrollIntoView({ behavior: 'smooth', block: 'center' });
     },
 
     clearFeedback: () => {
@@ -70,6 +78,44 @@ AuthUI.linkBackLogin.addEventListener('click', (e) => {
     e.preventDefault();
     AuthUI.showMainFromForgot();
 });
+
+// CPF Mask
+const cpfInput = document.getElementById('register-cpf');
+if (cpfInput) {
+    cpfInput.addEventListener('input', function (e) {
+        let value = e.target.value.replace(/\D/g, '');
+
+        if (value.length > 11) {
+            value = value.slice(0, 11);
+        }
+
+        let formattedValue = value;
+        if (value.length > 9) {
+            formattedValue = value.replace(
+                /(\d{3})(\d{3})(\d{3})(\d{1,2})/,
+                '$1.$2.$3-$4'
+            );
+        } else if (value.length > 6) {
+            formattedValue = value.replace(
+                /(\d{3})(\d{3})(\d{1,3})/,
+                '$1.$2.$3'
+            );
+        } else if (value.length > 3) {
+            formattedValue = value.replace(/(\d{3})(\d{1,3})/, '$1.$2');
+        }
+
+        e.target.value = formattedValue;
+    });
+}
+
+// Name Mask (Only letters and spaces)
+const nameInput = document.getElementById('register-name');
+if (nameInput) {
+    nameInput.addEventListener('input', function (e) {
+        // Remove numbers and special characters, keeping only letters (including accents) and spaces
+        e.target.value = e.target.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ\s]/g, '');
+    });
+}
 
 if (loginForm) {
     loginForm.addEventListener('submit', async (e) => {
@@ -97,18 +143,50 @@ if (loginForm) {
     });
 }
 
+function validarCPF(cpf) {
+    cpf = cpf.replace(/[^\d]+/g, '');
+    if (cpf === '' || cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf))
+        return false;
+
+    let soma = 0;
+    for (let i = 1; i <= 9; i++) {
+        soma += parseInt(cpf.substring(i - 1, i)) * (11 - i);
+    }
+    let resto = (soma * 10) % 11;
+    if (resto === 10 || resto === 11) resto = 0;
+    if (resto !== parseInt(cpf.substring(9, 10))) return false;
+
+    soma = 0;
+    for (let i = 1; i <= 10; i++) {
+        soma += parseInt(cpf.substring(i - 1, i)) * (12 - i);
+    }
+    resto = (soma * 10) % 11;
+    if (resto === 10 || resto === 11) resto = 0;
+    if (resto !== parseInt(cpf.substring(10, 11))) return false;
+
+    return true;
+}
+
 if (registerForm) {
     registerForm.addEventListener('submit', async (e) => {
         e.preventDefault();
 
         const name = document.getElementById('register-name').value;
         const email = document.getElementById('register-email').value;
+        const cpf = document.getElementById('register-cpf').value;
         const password = document.getElementById('register-password').value;
         const confirmPassword = document.getElementById(
             'confirm-register-password'
         ).value;
 
         const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!validarCPF(cpf)) {
+            AuthUI.showMessage('CPF inválido.', 'error');
+            return;
+        }
+
+        let cpfClean = cpf.replace(/\D/g, '');
 
         if (!regexEmail.test(email)) {
             AuthUI.showMessage('Formato de email inválido.', 'error');
@@ -147,13 +225,15 @@ if (registerForm) {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ name, email, password })
+                body: JSON.stringify({ name, email, cpf: cpfClean, password })
             });
 
             const data = await response.json();
             if (response.ok) {
-                alert('Usuário cadastrado com sucesso.');
-                AuthUI.showLogin();
+                AuthUI.showMessage('Usuário cadastrado com sucesso!', 'success');
+                setTimeout(() => {
+                    AuthUI.showLogin();
+                }, 3000);
             } else {
                 AuthUI.showMessage(data.error, 'error');
             }

@@ -55,3 +55,43 @@ button {
     margin-top: 1rem;
     width: 100%;
 }
+
+/* Tab Switcher for Auth */
+.auth-tabs {
+    display: inline-flex;
+    background-color: var(--clr-surface-alt);
+    padding: 0.5rem;
+    border-radius: 50px;
+    gap: 0.5rem;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.tab-btn {
+    background-color: transparent;
+    color: var(--clr-text-muted);
+    padding: 0.6rem 2rem;
+    border-radius: 50px;
+    font-weight: 600;
+    transition: all var(--transition-fast);
+    box-shadow: none;
+    border: none;
+}
+
+.tab-btn:hover {
+    color: var(--clr-text-main);
+    background-color: rgba(255, 255, 255, 0.05);
+    transform: none;
+    box-shadow: none;
+}
+
+.tab-btn.active {
+    background-color: var(--clr-btn-primary);
+    color: #fff;
+    box-shadow: var(--shadow-sm);
+}
+
+.tab-btn.active:hover {
+    background-color: var(--clr-btn-primary-hover);
+    box-shadow: var(--btn-glow, var(--shadow-md));
+    transform: translateY(-1px);
+}

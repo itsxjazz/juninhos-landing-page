@@ -105,3 +105,12 @@ section[id] {
 html {
     scroll-behavior: smooth;
 }
+
+.form-login,
+.form-register,
+#auth-forgot-view {
+    background-color: var(--clr-surface);
+    border: 1px solid rgba(168, 85, 247, 0.22);
+    border-radius: 12px;
+    padding: 1.5rem;
+}

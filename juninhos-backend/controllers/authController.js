@@ -14,15 +14,15 @@ const authController = {
     // Cadastro de usuário
     async register(req, res) {
         try {
-            const { name, email, password } = req.body;
+            const { name, email, cpf, password } = req.body;
 
             // Verifica se o usuário já existe no banco de dados
-            const userExists = await User.findOne({ email });
+            const userExists = await User.findOne({ cpf });
             if (userExists) {
-                return res.status(400).json({ error: 'E-mail já cadastrado.' });
+                return res.status(400).json({ error: 'CPF já cadastrado.' });
             }
             // Cria um novo usuário e salva no banco de dados
-            const newUser = await User.create({ name, email, password });
+            const newUser = await User.create({ name, email, cpf, password });
             return res.status(201).json({
                 message: 'Usuário registrado com sucesso.',
                 newUser

@@ -3,7 +3,7 @@ gsap.registerPlugin(ScrollTrigger);
 const reveal = (target, vars = {}) => {
     const elements = gsap.utils.toArray(target);
     if (!elements.length) return;
-    
+
     elements.forEach((el, i) => {
         // Garantir estado inicial
         gsap.set(el, { opacity: 0, y: vars.y ?? 15 });
@@ -14,7 +14,9 @@ const reveal = (target, vars = {}) => {
             opacity: 1,
             scale: 1,
             duration: vars.duration ?? 0.5,
-            delay: vars.stagger ? (i % (vars.staggerLimit ?? 4)) * vars.stagger : 0,
+            delay: vars.stagger
+                ? (i % (vars.staggerLimit ?? 4)) * vars.stagger
+                : 0,
             ease: 'power2.out',
             clearProps: 'transform', // Limpa o transform para o CSS hover funcionar
             scrollTrigger: {
@@ -29,18 +31,34 @@ const reveal = (target, vars = {}) => {
 
 const Animations = {
     initHeader: () => {
-        gsap.from('.main-header', { opacity: 0, duration: 0.6, ease: 'power2.out' });
+        gsap.from('.main-header', {
+            opacity: 0,
+            duration: 0.6,
+            ease: 'power2.out'
+        });
         gsap.from('.logo, .nav-menu li, .mobile-menu-toggle', {
-            opacity: 0, duration: 0.5, stagger: 0.05, delay: 0.2, ease: 'power2.out'
+            opacity: 0,
+            duration: 0.5,
+            stagger: 0.05,
+            delay: 0.2,
+            ease: 'power2.out'
         });
     },
 
     initHero: () => {
         const ease = 'power2.out';
-        const heroContainer = document.querySelector('.hero-section .container');
+        const heroContainer = document.querySelector(
+            '.hero-section .container'
+        );
         if (heroContainer) {
             gsap.set(heroContainer, { y: 20, opacity: 0 });
-            gsap.to(heroContainer, { y: 0, opacity: 1, duration: 0.8, ease, delay: 0.3 });
+            gsap.to(heroContainer, {
+                y: 0,
+                opacity: 1,
+                duration: 0.8,
+                ease,
+                delay: 0.3
+            });
         }
     },
 
@@ -60,24 +78,34 @@ const Animations = {
         reveal('.project-card', { y: 40, stagger: 0.1, staggerLimit: 3 });
         reveal('.class-card', { y: 40, stagger: 0.1, staggerLimit: 3 });
         reveal('.contribute-card', { y: 40, stagger: 0.1, staggerLimit: 2 });
-        reveal('.badge-exclusive, .link-btn', { y: 20, scale: 0.95, stagger: 0.08, staggerLimit: 4 });
+        reveal('.badge-exclusive, .link-btn', {
+            y: 20,
+            scale: 0.95,
+            stagger: 0.08,
+            staggerLimit: 4
+        });
     },
-
 
     initFooter: () => {
         reveal('.footer-brand, .footer-links, .footer-socials, .footer-apoia', {
-            y: 40, stagger: 0.12, staggerLimit: 4
+            y: 40,
+            stagger: 0.12,
+            staggerLimit: 4
         });
-       const footerBottom = document.querySelector('.footer-bottom');
+        const footerBottom = document.querySelector('.footer-bottom');
         if (footerBottom) {
             gsap.set(footerBottom, { y: 40, opacity: 0 });
             ScrollTrigger.create({
                 trigger: footerBottom,
                 start: 'top bottom',
                 once: true,
-                onEnter: () => gsap.to(footerBottom, {
-                    y: 0, opacity: 1, duration: 0.8, ease: 'power3.out'
-                })
+                onEnter: () =>
+                    gsap.to(footerBottom, {
+                        y: 0,
+                        opacity: 1,
+                        duration: 0.8,
+                        ease: 'power3.out'
+                    })
             });
         }
     },
