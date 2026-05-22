@@ -13,49 +13,61 @@
             <p>Carregando dados protegidos...</p>
         </div>
 
-        <header class="portal-header">
-            <div class="logo">Portal</div>
-            <nav>
-                <button id="btn-logout" class="btn-outline">
-                    Sair do Sistema
-                </button>
-            </nav>
+        <header class="main-header">
+            <div class="header-content container">
+                <div class="logo">
+                        <a href="index.html" aria-label="Ir para o topo">
+                        <img
+                            src="assets/images/logo-grande.png"
+                            alt="Juninhos"
+                        />
+                    </a>
+                </div>
+                <nav style="display: flex; align-items: center; gap: 1rem;">
+                    <a href="adminPanel.html" id="btn-admin-panel" class="primary-cta" style="padding: 0.5rem 1.5rem; text-decoration: none; font-size: 0.9rem;">
+                        Painel Admin
+                    </a>
+                    <button id="btn-logout" class="link-btn secondary">
+                        Sair do Sistema
+                    </button>
+                </nav>
+            </div>
         </header>
 
         <main class="container">
-            <section class="welcome-section">
-                <h1>Bem-vindo à sua área de membros!</h1>
-                <p>
+            <section class="welcome-section mt-2 text-center">
+                <h1 class="section-title" style="margin-bottom: 1.5rem;">Bem-vindo à sua área de membros!</h1>
+                <p class="text-muted" style="margin-bottom: 2rem;">
                     Aqui estão os materiais exclusivos liberados para o seu
                     perfil.
                 </p>
 
-                <button class="btn-open-modal btn-primary">
+                <button class="btn-open-modal primary-cta">
                     Inscrever-se na Monitoria
                 </button>
             </section>
 
-            <section class="content-section">
-                <h2>Meus Projetos</h2>
+            <section class="content-section mt-2">
+                <h2 class="section-title" style="font-size: 2rem; margin-bottom: 1.5rem;">Meus Projetos</h2>
 
-                <div id="projects-container" class="grid-container">
+                <div id="projects-container" class="cards-grid">
                 </div>
             </section>
 
-            <section class="content-section">
-                <h2>Aulas ao Vivo e Gravações</h2>
+            <section class="content-section mt-2">
+                <h2 class="section-title" style="font-size: 2rem; margin-bottom: 1.5rem;">Aulas ao Vivo e Gravações</h2>
 
-                <div id="classes-container" class="grid-container">
+                <div id="classes-container" class="cards-grid">
                 </div>
             </section>
         </main>
 
-        <div id="modal" class="hidden modal-backdrop">
-            <div class="modal-content form-wrapper">
-                <button id="btn-close-modal" class="close-btn">&times;</button>
+        <div id="modal" class="modal-wrapper hidden">
+            <div class="modal-content static-card">
+                <button id="btn-close-modal" class="modal-close">&times;</button>
 
-                <h2>Lista de Espera</h2>
-                <p>Preencha os dados para entrar na fila da próxima turma.</p>
+                <h2 class="section-title text-center" style="margin-bottom: 1.5rem; font-size: 2rem;">Lista de Espera</h2>
+                <p class="text-center text-muted" style="margin-bottom: 2rem;">Preencha os dados para entrar na fila da próxima turma.</p>
 
                 <div id="form-feedback" class="hidden form-feedback"></div>
 

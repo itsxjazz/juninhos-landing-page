@@ -4,6 +4,22 @@ const registerForm = document.getElementById('form-register');
 const resetPassword = document.getElementById('form-forgot');
 // File: frontend/js/auth.js
 
+// Check if user is already logged in
+document.addEventListener('DOMContentLoaded', () => {
+    const token = localStorage.getItem('auth_token');
+    const loadingScreen = document.getElementById('loading');
+
+    if (token) {
+        // Add a slight delay to allow the user to see the loading state
+        setTimeout(() => {
+            window.location.href = 'portal.html';
+        }, 1200);
+    } else {
+        if (loadingScreen) {
+            loadingScreen.classList.add('hidden');
+        }
+    }
+});
 const AuthUI = {
     // Pegando as abas e links
     tabLogin: document.getElementById('tab-login'),

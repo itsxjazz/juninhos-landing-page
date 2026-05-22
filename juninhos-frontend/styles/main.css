@@ -5,6 +5,7 @@
 @import url('layout/_container.css');
 @import url('layout/_header.css');
 @import url('layout/_footer.css');
+@import url('layout/_sidebar.css');
 
 @import url('components/_buttons.css');
 @import url('components/_cards.css');
