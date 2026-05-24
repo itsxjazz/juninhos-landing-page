@@ -1,68 +1,73 @@
-const User = require('../models/User');
-const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
-const nodemailer = require('nodemailer');
+const jwt = require('jsonwebtoken');
+const { Resend } = require('resend');
+const User = require('../models/User');
 
-//Helper - Geração do token centralizada
-const generateToken = (userId) => {
-    return jwt.sign({ sub: userId }, process.env.JWT_SECRET, {
+const generateToken = (userId) =>
+    jwt.sign({ sub: userId }, process.env.JWT_SECRET, {
         expiresIn: process.env.JWT_EXPIRES_IN || '1d'
     });
-};
+
+const RESET_BASE_URL =
+    process.env.RESET_PASSWORD_URL || 'http://localhost:5173/reset-password';
 
 const authController = {
-    // Cadastro de usuário
     async register(req, res) {
         try {
-            const { name, email, cpf, password } = req.body;
-
-            // Verifica se o usuário já existe no banco de dados
-            const userExists = await User.findOne({ cpf });
-            if (userExists) {
-                return res.status(400).json({ error: 'CPF já cadastrado.' });
+            const { name, email, password } = req.body;
+            if (!name || !email || !password) {
+                return res
+                    .status(400)
+                    .json({ error: 'Todos os campos são obrigatórios.' });
             }
-            // Cria um novo usuário e salva no banco de dados
-            const newUser = await User.create({ name, email, cpf, password });
+
+            const userExists = await User.findOne({ email });
+            if (userExists) {
+                return res.status(400).json({ error: 'E-mail já cadastrado.' });
+            }
+
+            const newUser = await User.create({ name, email, password });
             return res.status(201).json({
                 message: 'Usuário registrado com sucesso.',
-                newUser
+                user: {
+                    id: newUser._id,
+                    name: newUser.name,
+                    email: newUser.email,
+                    role: newUser.role
+                }
             });
         } catch (error) {
+            console.error('Erro register:', error.message);
             return res
                 .status(500)
                 .json({ error: 'Erro ao registrar usuário.' });
         }
     },
 
-    // Login de usuário
     async login(req, res) {
         try {
             const { email, password } = req.body;
-
-            // Validação de campos preenchidos
             if (!email || !password) {
-                return res.status(400).json({
-                    message: 'E-mail e senha são obrigatórios.'
-                });
+                return res
+                    .status(400)
+                    .json({ error: 'E-mail e senha são obrigatórios.' });
             }
 
-            // Verifica se o usuário existe no banco de dados
             const user = await User.findOne({ email }).select('+password');
-
             if (!user) {
                 return res
                     .status(401)
                     .json({ error: 'E-mail ou senha inválidos.' });
             }
-            // Verifica se a senha fornecida é válida
+
             const isMatch = await user.comparePassword(password);
-            if (!user || !isMatch) {
-                return res.status(401).json({ error: 'Credenciais inválidas' });
+            if (!isMatch) {
+                return res
+                    .status(401)
+                    .json({ error: 'E-mail ou senha inválidos.' });
             }
 
-            // Gera um token JWT para o usuário autenticado
             const token = generateToken(user._id);
-
             return res.json({
                 message: 'Login bem-sucedido.',
                 token,
@@ -74,112 +79,110 @@ const authController = {
                 }
             });
         } catch (error) {
+            console.error('Erro login:', error.message);
             return res.status(500).json({ error: 'Erro ao fazer login.' });
         }
     },
 
     async forgotPassword(req, res) {
+        let userRef = null;
         try {
-            // Busca usuário por email
             const user = await User.findOne({ email: req.body.email });
-
-            // Valida se existe usuário com o email
+            // Não revela existência do email.
             if (!user) {
-                return res.status(401).json({
-                    message: 'Email não encontrado'
+                return res.status(200).json({
+                    message:
+                        'Se o e-mail estiver cadastrado, um link de redefinição foi enviado.'
+                });
+            }
+            userRef = user;
+
+            const rawToken = user.createPasswordResetToken();
+            await user.save({ validateBeforeSave: false });
+
+            const resetURL = `${RESET_BASE_URL}?token=${rawToken}`;
+
+            if (process.env.RESEND_API_KEY) {
+                const resend = new Resend(process.env.RESEND_API_KEY);
+                await resend.emails.send({
+                    from: 'Juninhos <contato@juninhos.com>',
+                    to: [user.email],
+                    subject: 'Redefinição de Senha - Portal Juninhos',
+                    text:
+                        `Olá, ${user.name}!\n\n` +
+                        `Você solicitou a redefinição da sua senha.\n` +
+                        `Clique no link abaixo para criar uma nova senha (este link expira em 1 hora):\n\n` +
+                        `${resetURL}\n\n` +
+                        `Se você não solicitou isso, ignore este e-mail.`
                 });
             }
 
-            const rawToken = await user.createPasswordResetToken();
-            await user.save({ validateBeforeSave: false });
-
-            const resetURL = `http://localhost:5500/juninhos-frontend/resetPassword.html?token=${rawToken}`;
-
-            const transporter = nodemailer.createTransport({
-                service: 'gmail',
-                auth: {
-                    user: process.env.EMAIL_USER,
-                    pass: process.env.EMAIL_PASS
-                }
-            });
-
-            const mailOptions = {
-                from: `Equipe Juninhos`,
-                to: user.email,
-                subject: 'Redefinição de Senha - Portal Juninhos',
-                text:
-                    `Olá, ${user.name}!\n\n` +
-                    `Você solicitou a redefinição da sua senha.\n` +
-                    `Clique no link abaixo para criar uma nova senha (este link expira em 1 hora):\n\n` +
-                    `${resetURL}\n\n` +
-                    `Se você não solicitou isso, por favor ignore este e-mail.`
-            };
-
-            try {
-                await transporter.sendMail(mailOptions);
-            } catch (error) {
-                return res.json(
-                    'Erro ao enviar email de redefinição.',
-                    'error'
-                );
-            }
-
             return res.status(200).json({
-                message: 'Email de recuperação enviado com sucesso! '
+                message:
+                    'Se o e-mail estiver cadastrado, um link de redefinição foi enviado.'
             });
-
-            // Envia email aqui
-            res.json({ message: 'Email enviado' });
         } catch (error) {
-            console.error('Erro no forgotPassword: ', error);
-
-            if (user) {
-                user.passwordResetToken = undefined;
-                user.passwordResetExpires = undefined;
-                await user.save({ validateBeforaSave: false });
+            console.error('Erro forgotPassword:', error.message);
+            if (userRef) {
+                userRef.passwordResetToken = undefined;
+                userRef.passwordResetExpires = undefined;
+                try {
+                    await userRef.save({ validateBeforeSave: false });
+                } catch (_) {
+                    /* ignore */
+                }
             }
-
-            return res.status(500).json({
-                error: 'Erro ao enviar o e-mail. Tente novamente mais tarde.'
-            });
+            return res
+                .status(500)
+                .json({
+                    error: 'Erro ao enviar o e-mail. Tente novamente mais tarde.'
+                });
         }
     },
 
     async resetPassword(req, res) {
         try {
-            // Refaz o hash do token recebido para comparar com o banco
-            const hashedToken = await crypto
+            const { password } = req.body;
+            if (!password || password.length < 6) {
+                return res
+                    .status(400)
+                    .json({ error: 'Senha deve ter no mínimo 6 caracteres.' });
+            }
+
+            const hashedToken = crypto
                 .createHash('sha256')
                 .update(req.params.token)
                 .digest('hex');
-
-            // Busca usuario com o token hasheado
             const user = await User.findOne({
                 passwordResetToken: hashedToken,
                 passwordResetExpires: { $gt: Date.now() }
             }).select('+passwordResetToken +passwordResetExpires');
 
-            // Valida se encontrou usuário com o token
             if (!user) {
                 return res
                     .status(400)
-                    .json({ message: 'Token inválido ou expirado' });
+                    .json({ error: 'Token inválido ou expirado.' });
             }
 
-            // Troca a senha e limpa o token de reset
-            user.password = req.body.password;
+            user.password = password;
             user.passwordResetToken = undefined;
             user.passwordResetExpires = undefined;
             await user.save();
 
-            // Já loga o usuário novamente com um jwt novo
             const token = generateToken(user._id);
-            res.json({ token });
+            return res.json({
+                message: 'Senha redefinida com sucesso.',
+                token,
+                user: {
+                    id: user._id,
+                    name: user.name,
+                    email: user.email,
+                    role: user.role
+                }
+            });
         } catch (error) {
-            console.error(error);
-            return res
-                .status(500)
-                .json({ error: 'Erro no servidor ao resetar a senha.' });
+            console.error('Erro resetPassword:', error.message);
+            return res.status(500).json({ error: 'Erro ao redefinir senha.' });
         }
     }
 };

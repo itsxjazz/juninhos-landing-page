@@ -4,7 +4,6 @@ const crypto = require('crypto');
 
 const UserSchema = new mongoose.Schema(
     {
-        // Define o esquema para a coleção de usuários, que é usada para armazenar informações sobre os usuários do sistema
         name: {
             type: String,
             required: [true, 'Nome é obrigatório'],
@@ -13,7 +12,7 @@ const UserSchema = new mongoose.Schema(
         },
         email: {
             type: String,
-            required: [, 'E-mail é obrigatório'],
+            required: [true, 'E-mail é obrigatório'],
             unique: true,
             lowercase: true,
             match: [/^\S+@\S+\.\S+$/, 'Email inválido']
@@ -39,51 +38,37 @@ const UserSchema = new mongoose.Schema(
             enum: ['admin', 'user'],
             default: 'user'
         },
-        passwordResetToken: {
-            type: String,
-            select: false
-        },
-        passwordResetExpires: {
-            type: Date,
-            select: false
-        }
+        passwordResetToken: { type: String, select: false },
+        passwordResetExpires: { type: Date, select: false }
     },
-    // Cria createdAt e UpdatedAt
     { timestamps: true }
 );
 
-UserSchema.pre('save', async function () {
-    // Middleware para hash da senha antes de salvar o usuário no banco de dados, garantindo segurança das senhas armazenadas
-    if (!this.isModified('password')) return;
-
+UserSchema.pre('save', async function (next) {
+    if (!this.isModified('password')) return next();
     try {
         this.password = await bcrypt.hash(this.password, 10);
+        next();
     } catch (error) {
-        console.loeg(error);
+        next(error);
     }
 });
 
-UserSchema.methods.comparePassword = async function (candidatePassword) {
-    // Método para comparar a senha fornecida pelo usuário com a senha armazenada no banco de dados, usado para autenticação
-    return await bcrypt.compare(candidatePassword, this.password);
+UserSchema.methods.comparePassword = function (candidatePassword) {
+    return bcrypt.compare(candidatePassword, this.password);
 };
 
-UserSchema.methods.createPasswordResetToken = async function () {
-    // Token aleatório
+// Token criptograficamente seguro + hash SHA-256 do mesmo armazenado no banco.
+// Retorna o token RAW (vai no e-mail). Apenas o hash fica persistido se vazar
+// o DB, ninguém consegue resetar senha sem o token original.
+UserSchema.methods.createPasswordResetToken = function () {
     const rawToken = crypto.randomBytes(32).toString('hex');
-
-    // Hash do token
     this.passwordResetToken = crypto
         .createHash('sha256')
         .update(rawToken)
         .digest('hex');
-
-    //Expira em 10 minutos
-    this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
-
-    // Retorna o token puro - que vai no email
+    this.passwordResetExpires = Date.now() + 60 * 60 * 1000; // 1h
     return rawToken;
 };
 
-// UserSchema.methods.sendEmailPasswordRest = async function ()
 module.exports = mongoose.model('User', UserSchema);
