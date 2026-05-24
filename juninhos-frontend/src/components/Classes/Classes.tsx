@@ -17,6 +17,8 @@ export function Classes({ onCardsRendered }: ClassesProps) {
     }
   }, [loaded, onCardsRendered]);
 
+  const reversedClasses = classes?.slice().reverse()
+
   return (
     <section id="classes" className="classes-section container">
       <header className="section-header-left">
@@ -42,10 +44,10 @@ export function Classes({ onCardsRendered }: ClassesProps) {
                 <div className="h-6 bg-surface-alt rounded-full w-20" />
               </li>
             ))
-          : classes.map((c, idx) => (
+          : reversedClasses?.map((c, idx) => (
               <li
                 key={`${c.titulo}-${idx}`}
-                className="class-card grid grid-cols-1 md:grid-cols-[160px_1fr_auto] gap-3 md:gap-8 py-6 group transition-colors hover:bg-white/[0.015]"
+                className="class-card grid grid-cols-1 md:grid-cols-[160px_1fr_auto] gap-3 md:gap-8 py-6 group transition-colors hover:bg-white/[0.015] px-2"
               >
                 <div className="font-mono text-sm text-text-muted md:pt-1 flex flex-col gap-1">
                   <span className="text-primary group-hover:text-cyan transition-colors">{c.data}</span>

@@ -118,7 +118,7 @@
     }
 
     button {
-        @apply font-[var(--font-main)] cursor-pointer border-none outline-none transition-[background-color,transform] duration-200 ease-in-out;
+        @apply font-[var(--font-main)] cursor-pointer border-none outline-none transition-[background-color, transform] duration-200 ease-in-out;
     }
 
     section {
@@ -158,6 +158,8 @@
         color: var(--color-primary);
         font-family: monospace;
         font-weight: 800;
+        margin-right: 16px;
+        font-size: 1.7rem;
     }
 
     .modal-content .section-title {
@@ -218,7 +220,7 @@
     .benefit-item,
     .static-card,
     .stat-item {
-        @apply relative bg-[rgba(30,26,41,0.55)] rounded-2xl p-7 transition-all duration-300 overflow-hidden;
+        @apply relative bg-[rgba(30, 26, 41, 0.55)] rounded-2xl p-7 transition-all duration-300 overflow-hidden;
         border: 1px solid rgba(255, 255, 255, 0.06);
         backdrop-filter: blur(12px);
         -webkit-backdrop-filter: blur(12px);
