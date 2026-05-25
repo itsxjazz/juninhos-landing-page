@@ -60,6 +60,7 @@ const Animations = {
         reveal('.project-card', { y: 40, stagger: 0.1, staggerLimit: 3 });
         reveal('.class-card', { y: 40, stagger: 0.1, staggerLimit: 3 });
         reveal('.contribute-card', { y: 40, stagger: 0.1, staggerLimit: 2 });
+        reveal('.supporter-card', { y: 40, stagger: 0.08, staggerLimit: 4 });
         reveal('.badge-exclusive, .link-btn', { y: 20, scale: 0.95, stagger: 0.08, staggerLimit: 4 });
     },
 

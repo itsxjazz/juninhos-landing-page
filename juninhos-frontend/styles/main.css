@@ -14,5 +14,6 @@
 
 @import url('sections/_hero.css');
 @import url('sections/_general.css');
+@import url('sections/_supporters.css');
 
 @import url('utilities/_helpers.css');

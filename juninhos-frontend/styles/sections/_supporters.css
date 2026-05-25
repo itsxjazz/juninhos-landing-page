@@ -1,0 +1,112 @@
+/* ========== Apoiadores ========== */
+
+.supporter-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.75rem;
+    padding: 1.5rem 1.25rem;
+}
+
+.supporter-avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.75rem;
+    background: linear-gradient(135deg, var(--clr-primary) 0%, var(--clr-cyan) 100%);
+    box-shadow: 0 0 24px rgba(168, 85, 247, 0.35);
+}
+
+.supporter-name {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--clr-text-main);
+    margin: 0;
+}
+
+.supporter-tier {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: 'Fira Code', Menlo, Consolas, monospace;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-weight: 600;
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
+    border: 1px solid;
+}
+
+.supporter-tier::before {
+    content: '';
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: currentColor;
+    box-shadow: 0 0 6px currentColor;
+}
+
+.supporter-tier.junior {
+    color: #10B981;
+    background: rgba(16, 185, 129, 0.1);
+    border-color: rgba(16, 185, 129, 0.4);
+}
+
+.supporter-tier.pleno {
+    color: var(--clr-cyan);
+    background: rgba(0, 229, 255, 0.1);
+    border-color: rgba(0, 229, 255, 0.4);
+}
+
+.supporter-tier.senior {
+    color: #F59E0B;
+    background: rgba(245, 158, 11, 0.1);
+    border-color: rgba(245, 158, 11, 0.4);
+}
+
+.supporter-tier.especialista {
+    color: #FF4D9D;
+    background: rgba(255, 77, 157, 0.1);
+    border-color: rgba(255, 77, 157, 0.4);
+}
+
+.supporter-links {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.supporter-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.4rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--clr-text-muted);
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    transition: all var(--transition-fast);
+}
+
+.supporter-link:hover {
+    color: var(--clr-cyan);
+    background: rgba(0, 229, 255, 0.08);
+    border-color: rgba(0, 229, 255, 0.3);
+    transform: translateY(-1px);
+}
+
+.supporter-link svg {
+    width: 14px;
+    height: 14px;
+}

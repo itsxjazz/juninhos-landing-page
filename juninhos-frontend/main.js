@@ -4,14 +4,28 @@ const CONFIG = {
         PROJECTS: '/projects',
         CLASSES: '/classes',
         WAITLIST: '/waitlist',
-        INSTRUCTOR: '/instructor'
+        INSTRUCTOR: '/instructor',
+        SUPPORTERS: '/supporters' // preparado pro endpoint real quando o backend implementar
     },
     RETRY_DELAY: 5000
 };
 
+// MOCK temporário enquanto o backend não tem /api/supporters.
+// Quando o endpoint estiver pronto, basta remover este array — o init() já tenta
+// a API primeiro e só usa o mock como fallback.
+const MOCK_SUPPORTERS = [
+    { name: 'Ana Costa', tier: 'senior', github: 'https://github.com/anacosta', linkedin: 'https://linkedin.com/in/anacosta', portfolio: 'https://anacosta.dev' },
+    { name: 'Bruno Lima', tier: 'pleno', github: 'https://github.com/brunolima', linkedin: 'https://linkedin.com/in/brunolima' },
+    { name: 'Carla Mendes', tier: 'junior', github: 'https://github.com/carlamendes', portfolio: 'https://carlamendes.com.br' },
+    { name: 'Diego Rocha', tier: 'senior', linkedin: 'https://linkedin.com/in/diegorocha', portfolio: 'https://diegorocha.io' },
+    { name: 'Elena Souza', tier: 'pleno', github: 'https://github.com/elenasouza', linkedin: 'https://linkedin.com/in/elenasouza' },
+    { name: 'Felipe Alves', tier: 'junior', github: 'https://github.com/felipealves', linkedin: 'https://linkedin.com/in/felipealves' }
+];
+
 const UI = { // Cache de elementos do DOM para fácil acesso e manipulação 
     projectsContainer: document.getElementById('projects-container'),
     classesContainer: document.getElementById('classes-container'),
+    supportersContainer: document.getElementById('supporters-container'),
     waitlistForm: document.getElementById('waitlist-form'),
     instructorForm: document.getElementById('instructor-form'),
     loadingOverlay: document.getElementById('loading'),
@@ -206,6 +220,36 @@ const Renderers = { // Funções para renderizar dados na tela, incluindo skelet
             </article>
         `).join('');
         return true;
+    },
+    renderSupporters(supporters) { // Renderiza apoiadores; cada item tem name, tier (junior/pleno/senior), github?, portfolio?, linkedin?
+        if (!supporters || supporters.length === 0 || !UI.supportersContainer) return false;
+
+        const TIER_LABEL = { junior: 'Júnior', pleno: 'Pleno', senior: 'Sênior', especialista: 'Especialista' };
+
+        const iconGithub = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.6.5.5 5.6.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.4-2.3 1.1-3.1-.1-.3-.5-1.4.1-3 0 0 1-.3 3.3 1.2 1-.3 2-.4 3-.4s2 .1 3 .4c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.7.1 3 .7.8 1.1 1.8 1.1 3.1 0 4.5-2.7 5.5-5.3 5.8.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.6 18.4.5 12 .5z"/></svg>';
+        const iconLinkedin = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 0H5C2.2 0 0 2.2 0 5v14c0 2.8 2.2 5 5 5h14c2.8 0 5-2.2 5-5V5c0-2.8-2.2-5-5-5zM8 19H5V8h3v11zM6.5 6.7C5.5 6.7 4.8 6 4.8 5s.7-1.7 1.7-1.7S8.2 4 8.2 5s-.7 1.7-1.7 1.7zM20 19h-3v-5.6c0-3.4-4-3.1-4 0V19h-3V8h3v1.8c1.4-2.6 7-2.8 7 2.5V19z"/></svg>';
+        const iconLink = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>';
+
+        UI.supportersContainer.innerHTML = supporters.map(s => {
+            const initial = (s.name || '?').trim().charAt(0).toUpperCase();
+            const tierKey = (s.tier || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+            const tierLabel = TIER_LABEL[tierKey] || s.tier || 'Apoiador';
+
+            const links = [];
+            if (s.github) links.push(`<a href="${s.github}" target="_blank" rel="noreferrer" class="supporter-link" aria-label="GitHub de ${s.name}">${iconGithub} GitHub</a>`);
+            if (s.portfolio) links.push(`<a href="${s.portfolio}" target="_blank" rel="noreferrer" class="supporter-link" aria-label="Portfolio de ${s.name}">${iconLink} Portfolio</a>`);
+            if (s.linkedin) links.push(`<a href="${s.linkedin}" target="_blank" rel="noreferrer" class="supporter-link" aria-label="LinkedIn de ${s.name}">${iconLinkedin} LinkedIn</a>`);
+
+            return `
+                <article class="card-item supporter-card">
+                    <div class="supporter-avatar" aria-hidden="true">${initial}</div>
+                    <h3 class="supporter-name">${s.name}</h3>
+                    <span class="supporter-tier ${tierKey}">${tierLabel}</span>
+                    <div class="supporter-links">${links.join('')}</div>
+                </article>
+            `;
+        }).join('');
+        return true;
     }
 };
 
@@ -362,6 +406,15 @@ async function init() {
 
     Renderers.showSkeletons(UI.projectsContainer, 3);
     Renderers.showSkeletons(UI.classesContainer, 2);
+
+    // Apoiadores: tenta API; se ainda não existir o endpoint, usa MOCK_SUPPORTERS.
+    // Quando o backend implementar /api/supporters, automaticamente passa a usar dados reais.
+    (async () => {
+        const live = await ApiService.fetchData(CONFIG.ENDPOINTS.SUPPORTERS);
+        const data = (live && live.length) ? live : MOCK_SUPPORTERS;
+        Renderers.renderSupporters(data);
+        requestAnimationFrame(() => Animations.refreshCards());
+    })();
 
     const load = async () => {
         const p = await ApiService.fetchData(CONFIG.ENDPOINTS.PROJECTS);
