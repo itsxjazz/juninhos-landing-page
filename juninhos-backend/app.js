@@ -1,3 +1,10 @@
+if (typeof fetch === 'undefined') {
+    const fetch = require('node-fetch');
+    global.fetch = fetch;
+    global.Headers = fetch.Headers;
+    global.Request = fetch.Request;
+    global.Response = fetch.Response;
+}
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
@@ -13,6 +20,8 @@ app.use(cors());
 app.use(express.json());
 
 mongoose.connect(process.env.MONGO_URI, { // Configurações de conexão para evitar timeouts
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
     serverSelectionTimeoutMS: 30000,
     connectTimeoutMS: 30000,
 })
@@ -111,6 +120,24 @@ app.get('/api/classes', async (req, res) => {
         res.json(classes);
     } catch (error) {
         res.status(500).json({ error: 'Erro ao buscar aulas' });
+    }
+});
+
+app.get('/api/supporters', async (req, res) => {
+    try {
+        const rows = await getSheetData('Apoiadores!A2:E');
+        const supporters = rows
+            .filter(row => row[0]) // Ignora linhas sem nome
+            .map(row => ({
+                name: row[0] || 'Apoiador Anônimo',
+                github: row[1] || '',
+                portfolio: row[2] || '',
+                linkedin: row[3] || '',
+                // tier: row[4] || '', // Comentado por enquanto 
+            }));
+        res.json(supporters);
+    } catch (error) {
+        res.status(500).json({ error: 'Erro ao buscar apoiadores' });
     }
 });
 

@@ -10,9 +10,8 @@ const CONFIG = {
     RETRY_DELAY: 5000
 };
 
-// MOCK temporário enquanto o backend não tem /api/supporters.
-// Quando o endpoint estiver pronto, basta remover este array — o init() já tenta
-// a API primeiro e só usa o mock como fallback.
+// MOCK temporário comentado
+/*
 const MOCK_SUPPORTERS = [
     { name: 'Ana Costa', tier: 'senior', github: 'https://github.com/anacosta', linkedin: 'https://linkedin.com/in/anacosta', portfolio: 'https://anacosta.dev' },
     { name: 'Bruno Lima', tier: 'pleno', github: 'https://github.com/brunolima', linkedin: 'https://linkedin.com/in/brunolima' },
@@ -21,6 +20,7 @@ const MOCK_SUPPORTERS = [
     { name: 'Elena Souza', tier: 'pleno', github: 'https://github.com/elenasouza', linkedin: 'https://linkedin.com/in/elenasouza' },
     { name: 'Felipe Alves', tier: 'junior', github: 'https://github.com/felipealves', linkedin: 'https://linkedin.com/in/felipealves' }
 ];
+*/
 
 const UI = { // Cache de elementos do DOM para fácil acesso e manipulação 
     projectsContainer: document.getElementById('projects-container'),
@@ -244,7 +244,7 @@ const Renderers = { // Funções para renderizar dados na tela, incluindo skelet
                 <article class="card-item supporter-card">
                     <div class="supporter-avatar" aria-hidden="true">${initial}</div>
                     <h3 class="supporter-name">${s.name}</h3>
-                    <span class="supporter-tier ${tierKey}">${tierLabel}</span>
+                    <!-- <span class="supporter-tier ${tierKey}">${tierLabel}</span> -->
                     <div class="supporter-links">${links.join('')}</div>
                 </article>
             `;
@@ -407,11 +407,10 @@ async function init() {
     Renderers.showSkeletons(UI.projectsContainer, 3);
     Renderers.showSkeletons(UI.classesContainer, 2);
 
-    // Apoiadores: tenta API; se ainda não existir o endpoint, usa MOCK_SUPPORTERS.
-    // Quando o backend implementar /api/supporters, automaticamente passa a usar dados reais.
+    // Apoiadores: tenta API; se ainda não existir o endpoint ou estiver vazio, usa um array vazio.
     (async () => {
         const live = await ApiService.fetchData(CONFIG.ENDPOINTS.SUPPORTERS);
-        const data = (live && live.length) ? live : MOCK_SUPPORTERS;
+        const data = (live && live.length) ? live : [];
         Renderers.renderSupporters(data);
         requestAnimationFrame(() => Animations.refreshCards());
     })();
