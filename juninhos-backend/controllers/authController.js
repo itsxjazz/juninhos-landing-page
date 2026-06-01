@@ -96,7 +96,6 @@ const authController = {
                 });
             }
             userRef = user;
-
             const rawToken = user.createPasswordResetToken();
             await user.save({ validateBeforeSave: false });
 
@@ -132,11 +131,9 @@ const authController = {
                     /* ignore */
                 }
             }
-            return res
-                .status(500)
-                .json({
-                    error: 'Erro ao enviar o e-mail. Tente novamente mais tarde.'
-                });
+            return res.status(500).json({
+                error: 'Erro ao enviar o e-mail. Tente novamente mais tarde.'
+            });
         }
     },
 

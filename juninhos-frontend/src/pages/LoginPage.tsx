@@ -1,4 +1,4 @@
-import { useMemo, useState, type FormEvent } from 'react';
+import { useMemo, useState, useEffect, type FormEvent } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { CONFIG } from '../config';
 import { useAuth, type AuthUser } from '../context/AuthContext';
@@ -63,7 +63,7 @@ export function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [registerPassword, setRegisterPassword] = useState('');
 
-  const { login } = useAuth();
+  const { login, user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const from = (location.state as { from?: { pathname: string } } | null)?.from?.pathname || '/portal';
@@ -151,6 +151,13 @@ export function LoginPage() {
         <circle cx="12" cy="12" r="3" />
       </svg>
     );
+  
+  useEffect(() => {
+    if (user) {
+      navigate(from, { replace: true })
+    }
+  }, [user, navigate, from]);
+
 
   return (
     <div className="min-h-screen relative overflow-hidden -mt-20 pt-20">

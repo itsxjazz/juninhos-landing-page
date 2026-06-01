@@ -1,31 +1,31 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @theme {
     /* Cores Principais */
-    --color-primary: #A855F7;
-    --color-primary-dark: #8B5CF6;
-    --color-secondary: #13101C;
-    --color-accent: #00FF9D;
-    --color-cyan: #00E5FF;
+    --color-primary: #a855f7;
+    --color-primary-dark: #8b5cf6;
+    --color-secondary: #13101c;
+    --color-accent: #00ff9d;
+    --color-cyan: #00e5ff;
 
     /* Backgrounds e Superfícies */
-    --color-bg: #0D0B14;
-    --color-surface: #1E1A29;
-    --color-surface-alt: #2D2442;
+    --color-bg: #0d0b14;
+    --color-surface: #1e1a29;
+    --color-surface-alt: #2d2442;
 
     /* Textos */
-    --color-text-main: #F3F4F6;
-    --color-text-muted: #9CA3AF;
+    --color-text-main: #f3f4f6;
+    --color-text-muted: #9ca3af;
 
     /* Status */
-    --color-success: #00FF9D;
-    --color-error: #FF4D4D;
+    --color-success: #00ff9d;
+    --color-error: #ff4d4d;
 
     /* Botões (modo escuro) */
-    --color-btn-primary: #A855F7;
-    --color-btn-primary-hover: #BC7AFA;
-    --color-btn-secondary: #2D2442;
-    --color-btn-secondary-hover: #3D3259;
+    --color-btn-primary: #a855f7;
+    --color-btn-primary-hover: #bc7afa;
+    --color-btn-secondary: #2d2442;
+    --color-btn-secondary-hover: #3d3259;
 
     /* Tipografia */
     --font-main: 'Poppins', sans-serif;
@@ -51,7 +51,6 @@
 }
 
 @keyframes float-logo {
-
     0%,
     100% {
         transform: translateY(0);
@@ -63,7 +62,6 @@
 }
 
 @keyframes bounce-arrow {
-
     0%,
     20%,
     50%,
@@ -118,7 +116,7 @@
     }
 
     button {
-        @apply font-[var(--font-main)] cursor-pointer border-none outline-none transition-[background-color, transform] duration-200 ease-in-out;
+        @apply font-[var(--font-main)] cursor-pointer border-none outline-none transition-[background-color,transform] duration-200 ease-in-out;
     }
 
     section {
@@ -220,7 +218,7 @@
     .benefit-item,
     .static-card,
     .stat-item {
-        @apply relative bg-[rgba(30, 26, 41, 0.55)] rounded-2xl p-7 transition-all duration-300 overflow-hidden;
+        @apply relative bg-[rgba(30,26,41,0.55)] rounded-2xl p-7 transition-all duration-300 overflow-hidden;
         border: 1px solid rgba(255, 255, 255, 0.06);
         backdrop-filter: blur(12px);
         -webkit-backdrop-filter: blur(12px);
@@ -234,9 +232,16 @@
     .stat-item::before {
         content: '';
         @apply absolute top-0 left-0 right-0 h-px;
-        background: linear-gradient(90deg, transparent 10%, rgba(168, 85, 247, 0.6) 50%, transparent 90%);
+        background: linear-gradient(
+            90deg,
+            transparent 10%,
+            rgba(168, 85, 247, 0.6) 50%,
+            transparent 90%
+        );
         opacity: 0.5;
-        transition: opacity 0.3s ease, background 0.3s ease;
+        transition:
+            opacity 0.3s ease,
+            background 0.3s ease;
     }
 
     .card-item:hover,
@@ -257,7 +262,12 @@
     .static-card:hover::before,
     .stat-item:hover::before {
         opacity: 1;
-        background: linear-gradient(90deg, transparent 5%, rgba(0, 229, 255, 0.7) 50%, transparent 95%);
+        background: linear-gradient(
+            90deg,
+            transparent 5%,
+            rgba(0, 229, 255, 0.7) 50%,
+            transparent 95%
+        );
     }
 
     .card-item h3,
@@ -356,8 +366,10 @@
     }
 
     /* Inputs */
-    input[type="text"],
-    input[type="tel"],
+    input[type='text'],
+    input[type='email'],
+    input[type='password'],
+    input[type='tel'],
     textarea {
         @apply w-full p-3 border border-surface-alt rounded-md bg-surface-alt text-text-main;
         font-family: var(--font-main);
@@ -373,7 +385,6 @@
         border-color: var(--color-primary);
         box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.2);
     }
-
 
     /* Form groups */
     .form-group {

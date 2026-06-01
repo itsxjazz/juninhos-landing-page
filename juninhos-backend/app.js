@@ -191,44 +191,12 @@ app.post('/api/waitlist', async (req, res) => {
             .save()
             .then(() => {})
             .catch((err) => console.error('Erro Resend:', err.message));
-
-        const newLead = new Waitlist({
-            name,
-            phone,
-            level,
-            areas,
-            technologies
-        });
-        newLead
-            .save()
-            .then(() => {})
-            .catch((err) => console.error('Erro MongoDB:', err.message));
     } catch (error) {
         console.error('Erro crítico:', error);
         if (!res.headersSent) {
             res.status(500).json({ error: 'Erro ao processar sua inscrição.' });
         }
     }
-});
-
-app.post('/api/register', async (req, res) => {
-    // Endpoint para registro de novos usuários, delegando a lógica para o authController
-    await authController.register(req, res);
-});
-
-app.post('/api/login', async (req, res) => {
-    // Endpoint para login de usuários, delegando a lógica para o authController
-    await authController.login(req, res);
-});
-
-app.post('/api/forgot-password', async (req, res) => {
-    //Endpoint para recuperação de senha, delegando a lógica para o authController
-    await authController.forgotPassword(req, res);
-});
-
-app.post('/api/reset-password/:token', async (req, res) => {
-    //Endpoint para redifnir a senha, delegando a lógica para o authController
-    await authController.resetPassword(req, res);
 });
 
 // Endpoint para buscar os dados e redirecionar para o portaal

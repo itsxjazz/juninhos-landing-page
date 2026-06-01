@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useModal } from "../../context/ModalContext";
+import { Link } from "react-router-dom";
 
 const NAV_LINKS = [
   { href: "#about", label: "Sobre" },
@@ -129,6 +130,15 @@ export function Header() {
               >
                 Entrar na Lista
               </button>
+            </li>
+            <li className="max-md:w-full max-md:text-center">
+              <Link
+                to="/login"
+                onClick={closeMenu}
+                className="nav-cta !px-[1.1rem] !py-2 !text-[0.9rem] max-md:!w-[min(80%,300px)] max-md:mx-auto rounded-full"
+              >
+                Login
+              </Link>
             </li>
           </ul>
         </nav>
