@@ -35,12 +35,12 @@ export function Projects({ onCardsRendered }: ProjectsProps) {
 					<SkeletonCards count={3} />
 				) : (
 					projects.map((p, idx) => {
-						const imageSrc = resolveProjectImage(p.links?.imagem)
 						const stack = Array.isArray(p.stack) ? p.stack.join(", ") : p.stack
 						const membros = Array.isArray(p.membros) ? p.membros.join(", ") : p.membros
 
 						return (
 							<article key={`${p.titulo}-${idx}`} className="card-item project-card">
+								{/* 
 								<div className="project-image">
 									<img
 										src={imageSrc}
@@ -52,6 +52,7 @@ export function Projects({ onCardsRendered }: ProjectsProps) {
 										}}
 									/>
 								</div>
+								*/}
 								<div>
 									<span className={`status-badge ${formatStatusClass(p.status)}`}>{p.status}</span>
 									<h3>{p.titulo}</h3>

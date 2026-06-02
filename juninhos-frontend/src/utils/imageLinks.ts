@@ -5,8 +5,15 @@ export function getDirectImageLink(url?: string): string | undefined {
 	if (!url) return url
 
 	if (url.includes("drive.google.com")) {
-		const match = url.match(/\/d\/([^/]+)/)
-		return match ? `https://lh3.googleusercontent.com/d/${match[1]}` : url
+		const matchD = url.match(/\/d\/([^/&#?]+)/)
+		if (matchD) {
+			return `https://lh3.googleusercontent.com/d/${matchD[1]}`
+		}
+		const matchId = url.match(/[?&]id=([^/&#?]+)/)
+		if (matchId) {
+			return `https://lh3.googleusercontent.com/d/${matchId[1]}`
+		}
+		return url
 	}
 
 	if (url.includes("github.com") && url.includes("/blob/")) {

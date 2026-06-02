@@ -22,6 +22,7 @@ export interface ClassItem {
 	mentor: string
 	data: string
 	canal: string
+	tema?: string
 }
 
 export interface Supporter {

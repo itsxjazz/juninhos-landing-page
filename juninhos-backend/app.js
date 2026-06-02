@@ -115,7 +115,7 @@ app.get('/api/classes', async (req, res) => {
                 data: row[3] || '',
                 status: row[4] || 'Próxima',
                 canal: row[5] || '',
-                link: row[6] || '',
+                tema: row[6] || '',
             }));
         res.json(classes);
     } catch (error) {

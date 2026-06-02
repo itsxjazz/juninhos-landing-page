@@ -4,7 +4,6 @@ const NAV_LINKS = [
 	{ href: "#projects", label: "Projetos" },
 	{ href: "#community", label: "Redes" },
 	{ href: "#benefits", label: "Benefícios" },
-	{ href: "#contribute", label: "Apoiar / Empresas" },
 ]
 
 const SOCIALS = [
@@ -19,7 +18,7 @@ export function Footer() {
 	return (
 		<footer className="main-footer relative bg-secondary text-white pt-16 pb-8 mt-auto border-t border-[rgba(168,85,247,0.25)] text-sm">
 			<div className="container grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-8 mb-12">
-				<div className="footer-bran mx-auto">
+				<div className="footer-brand w-full md:mx-auto">
 					<div className="mb-6">
 						<img
 							src="/assets/images/logo-grande.png"
@@ -33,7 +32,7 @@ export function Footer() {
 					</p>
 				</div>
 
-				<div className="footer-links mx-auto">
+				<div className="footer-links w-full md:mx-auto">
 					<h4 className="font-medium mb-2">Navegação</h4>
 					<ul>
 						{NAV_LINKS.map(l => (
@@ -46,7 +45,7 @@ export function Footer() {
 					</ul>
 				</div>
 
-				<div className="footer-socials mx-auto">
+				<div className="footer-socials w-full md:mx-auto">
 					<h4 className="font-medium mb-2">Redes Sociais</h4>
 					<ul>
 						{SOCIALS.map(s => (
@@ -59,7 +58,7 @@ export function Footer() {
 					</ul>
 				</div>
 
-				<div className="footer-apoia mx-auto">
+				<div className="footer-apoia w-full md:mx-auto">
 					<h4 className="font-medium mb-2">Contribua</h4>
 					<ul>
 						<li className="mb-2">
