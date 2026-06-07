@@ -1,6 +1,5 @@
 import { useMemo } from "react"
 import Typewriter from "typewriter-effect"
-import { useModal } from "../../context/ModalContext"
 
 const BG_BASE = "/assets/images/background"
 
@@ -75,7 +74,8 @@ function pick<T>(arr: T[]): T {
 }
 
 export function Hero() {
-	const { openWaitlist } = useModal()
+	// Antes: abríamos o modal de lista de espera.
+	// const { openWaitlist } = useModal()
 
 	const floatingLogos = useMemo(() => {
 		const pool = shuffle(LOGOS)
@@ -148,12 +148,14 @@ export function Hero() {
 				<p className="hero-subtitle text-[1.1rem] text-text-muted max-w-[600px] mb-14">
 					Conectando talentos do nível júnior ao avançado para construir o futuro através do código.
 				</p>
-				<button
-					onClick={openWaitlist}
+				<a
+					href="https://discord.gg/3VmKgv8Yny"
+					target="_blank"
+					rel="noopener noreferrer"
 					className="primary-cta !bg-transparent !text-cyan !border-2 !border-cyan !px-[1.8rem] !py-[0.9rem] !rounded-xl !font-semibold !text-base flex items-center transition-all duration-300 hover:!bg-cyan hover:!text-bg hover:!shadow-[0_0_20px_rgba(0,229,255,0.4)] before:content-['>_'] before:font-mono"
 				>
-					_Demonstrar Interesse
-				</button>
+					Entre na comunidade
+				</a>
 			</div>
 			<a
 				href="#about"
