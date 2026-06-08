@@ -84,6 +84,22 @@ export function Header() {
 						<img src="/assets/images/logo-grande.png" alt="Juninhos" className="h-[90%]" />
 					</a>
 				</div>
+				
+				<button
+					aria-label="Abrir Menu"
+					onClick={toggleMenu}
+					className={`hidden max-md:flex bg-transparent border-none cursor-pointer w-10 h-10 p-0 items-center justify-center z-[1000] relative ${
+						mobileOpen ? "mobile-toggle-active" : ""
+					}`}
+				>
+					<span
+						className={`block w-[25px] h-[3px] relative transition-[background-color] duration-200 before:content-[''] before:absolute before:w-full before:h-[3px] before:bg-text-main before:left-0 before:transition-[transform,top] before:duration-200 after:content-[''] after:absolute after:w-full after:h-[3px] after:bg-text-main after:left-0 after:transition-[transform,top] after:duration-200 ${
+							mobileOpen
+								? "bg-transparent before:rotate-45 before:top-0 after:-rotate-45 after:top-0"
+								: "bg-text-main before:-top-2 after:top-2"
+						}`}
+					/>
+				</button>
 
 				<nav aria-label="Navegação principal">
 					<ul
