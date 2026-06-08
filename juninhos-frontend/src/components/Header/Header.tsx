@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from "react"
-import { useModal } from "../../context/ModalContext"
 
 const NAV_LINKS = [
 	{ href: "#about", label: "Sobre" },
@@ -11,7 +10,8 @@ const NAV_LINKS = [
 ]
 
 export function Header() {
-	const { openWaitlist } = useModal()
+	// Antes: o botão abria o modal de lista de espera.
+	// const { openWaitlist } = useModal()
 	const [mobileOpen, setMobileOpen] = useState(false)
 	const [scrolled, setScrolled] = useState(false)
 
@@ -56,10 +56,10 @@ export function Header() {
 		closeMenu()
 	}
 
-	const handleCtaClick = () => {
-		closeMenu()
-		openWaitlist()
-	}
+// 	const handleCtaClick = () => {
+// 		closeMenu()
+// 		openWaitlist()
+// 	}
 
 	return (
 		<header
@@ -85,27 +85,11 @@ export function Header() {
 					</a>
 				</div>
 
-				<button
-					aria-label="Abrir Menu"
-					onClick={toggleMenu}
-					className={`hidden max-md:flex bg-transparent border-none cursor-pointer w-10 h-10 p-0 items-center justify-center z-[1000] relative ${
-						mobileOpen ? "mobile-toggle-active" : ""
-					}`}
-				>
-					<span
-						className={`block w-[25px] h-[3px] relative transition-[background-color] duration-200 before:content-[''] before:absolute before:w-full before:h-[3px] before:bg-text-main before:left-0 before:transition-[transform,top] before:duration-200 after:content-[''] after:absolute after:w-full after:h-[3px] after:bg-text-main after:left-0 after:transition-[transform,top] after:duration-200 ${
-							mobileOpen
-								? "bg-transparent before:rotate-45 before:top-0 after:-rotate-45 after:top-0"
-								: "bg-text-main before:-top-2 after:top-2"
-						}`}
-					/>
-				</button>
-
 				<nav aria-label="Navegação principal">
 					<ul
 						className={`nav-menu flex items-center gap-6 max-md:fixed max-md:inset-0 max-md:left-auto max-md:w-screen max-md:h-screen max-md:m-0 max-md:bg-bg max-md:rounded-none max-md:flex-col max-md:justify-center max-md:gap-8 max-md:transition-[right] max-md:duration-[350ms] max-md:[transition-timing-function:cubic-bezier(0.22,1,0.36,1)] max-md:z-[999] max-md:pt-20 max-md:pb-8 max-md:px-6 max-md:-top-[10px] ${
-							mobileOpen ? "max-md:right-0" : "max-md:-right-[150%]"
-						}`}
+						mobileOpen ? "max-md:right-0" : "max-md:-right-[150%]"
+					}`}
 					>
 						{NAV_LINKS.map(link => (
 							<li key={link.href} className="max-md:w-full max-md:text-center">
@@ -119,12 +103,15 @@ export function Header() {
 							</li>
 						))}
 						<li className="max-md:w-full max-md:text-center">
-							<button
-								onClick={handleCtaClick}
+							<a
+								href="https://discord.gg/3VmKgv8Yny"
+								target="_blank"
+								rel="noopener noreferrer"
+								onClick={closeMenu}
 								className="nav-cta !px-[1.1rem] !py-2 !text-[0.9rem] max-md:!w-[min(80%,300px)] max-md:mx-auto rounded-full"
 							>
-								Entrar na Lista
-							</button>
+								Entre na comunidade
+							</a>
 						</li>
 					</ul>
 				</nav>
