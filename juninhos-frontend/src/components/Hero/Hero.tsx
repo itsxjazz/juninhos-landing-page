@@ -152,7 +152,7 @@ export function Hero() {
 					href="https://discord.gg/3VmKgv8Yny"
 					target="_blank"
 					rel="noopener noreferrer"
-					className="primary-cta !bg-transparent !text-cyan !border-2 !border-cyan !px-[1.8rem] !py-[0.9rem] !rounded-xl !font-semibold !text-base flex items-center transition-all duration-300 hover:!bg-cyan hover:!text-bg hover:!shadow-[0_0_20px_rgba(0,229,255,0.4)] before:content-['>_'] before:font-mono"
+					className="primary-cta !bg-transparent !text-cyan !border-2 !border-cyan !px-[1.8rem] !py-[0.9rem] !rounded-xl !font-semibold !text-base flex items-center transition-all duration-300 hover:!bg-cyan hover:!text-bg hover:!shadow-[0_0_20px_rgba(0,229,255,0.4)] before:content-['>_'] before:font-mono before:pr-2"
 				>
 					Entre na comunidade
 				</a>
