@@ -13,8 +13,6 @@ export function Classes({ onCardsRendered }: ClassesProps) {
     CONFIG.ENDPOINTS.CLASSES,
   );
   const [showCompleted, setShowCompleted] = useState<boolean>(false);
-  // const [selectedTheme, setSelectedTheme] = useState<string>("Todos")
-  // const [selectedStatus, setSelectedStatus] = useState<string>("Todos")
 
   useEffect(() => {
     if (loaded && onCardsRendered) {
@@ -40,45 +38,6 @@ export function Classes({ onCardsRendered }: ClassesProps) {
           aprendendo.
         </p>
       </header>
-
-      {/* <div className="flex flex-wrap gap-4 mb-8 bg-white/[0.02] p-4 rounded-xl border border-white/[0.05] max-w-[760px]">
-				<div className="flex flex-col gap-1.5 min-w-[200px] flex-1">
-					<label htmlFor="theme-filter" className="text-xs uppercase tracking-wider text-text-muted font-semibold">
-						Filtrar por Tema
-					</label>
-					<select
-						id="theme-filter"
-						value={selectedTheme}
-						onChange={(e) => setSelectedTheme(e.target.value)}
-						className="w-full p-2.5 border border-white/[0.08] rounded-md bg-surface text-text-main focus:outline-none focus:border-primary text-sm cursor-pointer"
-					>
-						<option value="Todos">Todos os Temas</option>
-						<option value="Dados">Dados</option>
-						<option value="Front-end">Front-end</option>
-						<option value="Back-end">Back-end</option>
-						<option value="Full-stack">Full-stack</option>
-						<option value="IA">IA</option>
-						<option value="DevOps">DevOps</option>
-						<option value="Outro">Outro</option>
-						<option value="Carreira/Soft Skills">Carreira/Soft Skills</option>
-					</select>
-				</div>
-				<div className="flex flex-col gap-1.5 min-w-[200px] flex-1">
-					<label htmlFor="status-filter" className="text-xs uppercase tracking-wider text-text-muted font-semibold">
-						Filtrar por Status
-					</label>
-					<select
-						id="status-filter"
-						value={selectedStatus}
-						onChange={(e) => setSelectedStatus(e.target.value)}
-						className="w-full p-2.5 border border-white/[0.08] rounded-md bg-surface text-text-main focus:outline-none focus:border-primary text-sm cursor-pointer"
-					>
-						<option value="Todos">Todos os Status</option>
-						<option value="Concluída">Concluída</option>
-						<option value="Vem por aí">Vem por aí</option>
-					</select>
-				</div>
-			</div> */}
 
       <ul className="flex flex-col divide-y divide-white/6 border-y border-white/6">
         {!loaded || !classes ? (
