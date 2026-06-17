@@ -19,6 +19,7 @@ type TeamMember = {
 
 type ProjectRegistrationFormData = {
   teamName: string;
+  description: string;
   leaderIndex: number;
   members: TeamMember[];
 };
@@ -38,6 +39,7 @@ export function ProjectsFormModal() {
 
   const [form, setForm] = useState<ProjectRegistrationFormData>({
     teamName: "",
+    description: "",
     leaderIndex: 0,
     members: [createEmptyMember(), createEmptyMember(), createEmptyMember()],
   });
@@ -54,6 +56,7 @@ export function ProjectsFormModal() {
   const reset = () => {
     setForm({
       teamName: "",
+      description: "",
       leaderIndex: 0,
       members: [createEmptyMember(), createEmptyMember(), createEmptyMember()],
     });
@@ -135,7 +138,7 @@ export function ProjectsFormModal() {
 
     try {
       const res = await ApiService.postData<ApiResponse>(
-        CONFIG.ENDPOINTS.PROJECTS,
+        CONFIG.ENDPOINTS.PROJECT_REGISTRATION,
         form,
       );
 
@@ -189,6 +192,18 @@ export function ProjectsFormModal() {
                   placeholder="Ex: Code Hunters"
                   value={form.teamName}
                   onChange={(e) => updateForm("teamName", e.target.value)}
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="project-description">Descrição do Projeto *</label>
+
+                <textarea
+                  id="project-description"
+                  required
+                  placeholder="Descreva brevemente o projeto que a equipe irá desenvolver..."
+                  value={form.description}
+                  onChange={(e) => updateForm("description", e.target.value)}
                 />
               </div>
 
