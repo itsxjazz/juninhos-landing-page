@@ -161,12 +161,12 @@ export function Hero() {
             Entre na comunidade
           </a>
 
-          <button
+          {/* <button
             className="primary-cta !bg-cyan !text-bg !border-2 !border-cyan !px-[1.8rem] !py-[0.9rem] !rounded-xl !font-semibold !text-base flex items-center transition-all duration-300 hover:!bg-transparent hover:!text-cyan hover:!shadow-[0_0_20px_rgba(0,229,255,0.4)] before:content-['>_'] before:font-mono before:pr-2"
             onClick={openProjectForm}
           >
             Nosso hackathon
-          </button>
+          </button> */}
         </div>
       </div>
       <a

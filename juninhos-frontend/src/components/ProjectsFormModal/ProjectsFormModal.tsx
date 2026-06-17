@@ -49,6 +49,7 @@ export function ProjectsFormModal() {
 
   const [submitting, setSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [openMemberIndex, setOpenMemberIndex] = useState<number | null>(0);
 
   const reset = () => {
     setForm({
@@ -99,10 +100,16 @@ export function ProjectsFormModal() {
   const addMember = () => {
     if (form.members.length >= 4) return;
 
-    setForm((prev) => ({
-      ...prev,
-      members: [...prev.members, createEmptyMember()],
-    }));
+    setForm((prev) => {
+      const updatedMembers = [...prev.members, createEmptyMember()];
+
+      setOpenMemberIndex(updatedMembers.length - 1);
+
+      return {
+        ...prev,
+        members: updatedMembers,
+      };
+    });
   };
 
   const removeMember = (index: number) => {
@@ -185,127 +192,160 @@ export function ProjectsFormModal() {
                 />
               </div>
 
-              {form.members.map((member, index) => (
-                <div
-                  key={index}
-                  className="border border-white/10 rounded-xl p-5 mb-6"
-                >
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold">
-                      Participante {index + 1}
-                    </h3>
+              {form.members.map((member, index) => {
+                const isOpen = openMemberIndex === index;
 
-                    {form.members.length > 3 && (
-                      <button
-                        type="button"
-                        className="text-red-400 text-sm"
-                        onClick={() => removeMember(index)}
-                      >
-                        Remover
-                      </button>
+                return (
+                  <div
+                    key={index}
+                    className="border border-white/10 rounded-xl mb-6 overflow-hidden"
+                  >
+                    <button
+                      type="button"
+                      onClick={() => setOpenMemberIndex(isOpen ? null : index)}
+                      className="w-full flex items-center justify-between p-5 text-left"
+                    >
+                      <h3 className="text-lg font-semibold">
+                        Participante {index + 1}
+                      </h3>
+
+                      <div className="flex items-center gap-4">
+                        {form.members.length > 3 && (
+                          <span
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              removeMember(index);
+                            }}
+                            className="text-red-400 text-sm cursor-pointer"
+                          >
+                            Remover
+                          </span>
+                        )}
+
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          fill="#9CA3AF"
+                          viewBox="0 0 256 256"
+                          className={`transition-transform duration-300 ease-in-out ${
+                            isOpen ? "rotate-180" : "rotate-0"
+                          }`}
+                        >
+                          <path d="M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z"></path>
+                        </svg>
+                      </div>
+                    </button>
+
+                    {isOpen && (
+                      <div className="px-5 pb-5">
+                        <div className="form-group">
+                          <label>Nome Completo *</label>
+
+                          <input
+                            type="text"
+                            required
+                            placeholder="Nome completo"
+                            value={member.fullName}
+                            onChange={(e) =>
+                              updateMember(index, "fullName", e.target.value)
+                            }
+                          />
+                        </div>
+
+                        <div className="form-group">
+                          <label>E-mail *</label>
+
+                          <input
+                            type="email"
+                            required
+                            placeholder="Mesmo e-mail cadastrado na Nortjobs"
+                            value={member.email}
+                            onChange={(e) =>
+                              updateMember(index, "email", e.target.value)
+                            }
+                          />
+                        </div>
+
+                        <div className="form-group">
+                          <label>Telefone *</label>
+
+                          <input
+                            type="tel"
+                            required
+                            placeholder="(00) 00000-0000"
+                            value={member.phone}
+                            onChange={(e) =>
+                              updateMember(
+                                index,
+                                "phone",
+                                maskPhone(e.target.value),
+                              )
+                            }
+                          />
+                        </div>
+
+                        <div className="form-group">
+                          <label>GitHub *</label>
+
+                          <input
+                            type="text"
+                            required
+                            placeholder="github.com/seuuser"
+                            value={member.github}
+                            onChange={(e) =>
+                              updateMember(index, "github", e.target.value)
+                            }
+                          />
+                        </div>
+
+                        <div className="form-group">
+                          <label>LinkedIn *</label>
+
+                          <input
+                            type="text"
+                            required
+                            placeholder="linkedin.com/in/seuperfil"
+                            value={member.linkedin}
+                            onChange={(e) =>
+                              updateMember(index, "linkedin", e.target.value)
+                            }
+                          />
+                        </div>
+
+                        <div className="form-group">
+                          <label>Discord *</label>
+
+                          <input
+                            type="text"
+                            required
+                            placeholder="@usuario"
+                            value={member.discord}
+                            onChange={(e) =>
+                              updateMember(index, "discord", e.target.value)
+                            }
+                          />
+                        </div>
+
+                        <div className="form-group">
+                          <label className="flex items-center gap-2 cursor-pointer">
+                            <input
+                              type="radio"
+                              name="leader"
+                              checked={form.leaderIndex === index}
+                              onChange={() => updateForm("leaderIndex", index)}
+                            />
+
+                            <span>Este participante é o líder da equipe</span>
+                          </label>
+                        </div>
+                      </div>
                     )}
                   </div>
+                );
+              })}
 
-                  <div className="form-group">
-                    <label>Nome Completo *</label>
-
-                    <input
-                      type="text"
-                      required
-                      placeholder="Nome completo"
-                      value={member.fullName}
-                      onChange={(e) =>
-                        updateMember(index, "fullName", e.target.value)
-                      }
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label>E-mail *</label>
-
-                    <input
-                      type="email"
-                      required
-                      placeholder="Mesmo e-mail cadastrado na Nortjobs"
-                      value={member.email}
-                      onChange={(e) =>
-                        updateMember(index, "email", e.target.value)
-                      }
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label>Telefone *</label>
-
-                    <input
-                      type="tel"
-                      required
-                      placeholder="(00) 00000-0000"
-                      value={member.phone}
-                      onChange={(e) =>
-                        updateMember(index, "phone", maskPhone(e.target.value))
-                      }
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label>GitHub *</label>
-
-                    <input
-                      type="text"
-                      required
-                      placeholder="github.com/seuuser"
-                      value={member.github}
-                      onChange={(e) =>
-                        updateMember(index, "github", e.target.value)
-                      }
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label>LinkedIn *</label>
-
-                    <input
-                      type="text"
-                      required
-                      placeholder="linkedin.com/in/seuperfil"
-                      value={member.linkedin}
-                      onChange={(e) =>
-                        updateMember(index, "linkedin", e.target.value)
-                      }
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label>Discord *</label>
-
-                    <input
-                      type="text"
-                      required
-                      placeholder="@usuario"
-                      value={member.discord}
-                      onChange={(e) =>
-                        updateMember(index, "discord", e.target.value)
-                      }
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="leader"
-                        checked={form.leaderIndex === index}
-                        onChange={() => updateForm("leaderIndex", index)}
-                      />
-
-                      <span>Este participante é o líder da equipe</span>
-                    </label>
-                  </div>
-                </div>
-              ))}
-
-              <footer className="flex flex-col md:flex-row justify-center items-center gap-5">
+              <footer className="flex flex-col md:flex-row justify-center items-center gap-6 pt-4">
                 {form.members.length < 4 && (
                   <button
                     type="button"
