@@ -9,6 +9,7 @@ export const CONFIG = {
 	AUTH_BASE_URL: ENV_AUTH_BASE || ENV_API_BASE || PUBLIC_FALLBACK,
 	ENDPOINTS: {
 		PROJECTS: "/projects",
+		PROJECT_REGISTRATION: "/project-registration",
 		CLASSES: "/classes",
 		WAITLIST: "/waitlist",
 		INSTRUCTOR: "/instructor",

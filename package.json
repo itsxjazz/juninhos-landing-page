@@ -1,0 +1,21 @@
+{
+  "name": "juninhos-landing-page",
+  "version": "1.0.0",
+  "description": "Juninhos landing page and backend root workspace config",
+  "scripts": {
+    "install:backend": "npm install --prefix juninhos-backend",
+    "install:frontend": "npm install --prefix juninhos-frontend",
+    "install-all": "npm run install:backend && npm run install:frontend",
+    "start:backend": "npm start --prefix juninhos-backend",
+    "start:frontend": "npm run dev --prefix juninhos-frontend",
+    "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
+    "dev:backend": "npm run dev --prefix juninhos-backend",
+    "dev:frontend": "npm run dev --prefix juninhos-frontend",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "build:frontend": "npm run build --prefix juninhos-frontend",
+    "build": "npm run build:frontend"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.3"
+  }
+}
